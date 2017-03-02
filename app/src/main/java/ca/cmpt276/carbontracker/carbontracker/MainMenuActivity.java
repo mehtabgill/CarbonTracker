@@ -1,10 +1,14 @@
-package ca.cmpt213.carbontracker.carbontracker;
+package ca.cmpt276.carbontracker.carbontracker;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import ca.cmpt276.carbontracker.carbontracker.R;
+import ca.cmpt276.carbontracker.carbontracker.SelectTransportationModeActivity;
+import ca.cmpt276.carbontracker.carbontracker.ViewCarbonFootprintActivity;
 
 public class MainMenuActivity extends AppCompatActivity {
 
