@@ -2,10 +2,6 @@ package ca.cmpt276.carbontracker.carbontracker;
 
 import java.util.ArrayList;
 
-/**
- * Created by Khang Buin on 2017-03-02.
- */
-
 public class RouteCollection {
     private ArrayList<Route> routes = new ArrayList<Route>();
 
@@ -22,6 +18,10 @@ public class RouteCollection {
                 remove(route);
             }
         }
+    }
+
+    public Route getRoute(int index){
+        return routes.get(index);
     }
 
     public ArrayList<Route> getAllRoutes(){

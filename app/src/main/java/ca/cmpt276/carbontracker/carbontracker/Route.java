@@ -1,9 +1,5 @@
 package ca.cmpt276.carbontracker.carbontracker;
 
-/**
- * Created by Khang Buin on 2017-03-02.
- */
-
 public class Route {
     private String name;
     private float cityDriveDistance;
