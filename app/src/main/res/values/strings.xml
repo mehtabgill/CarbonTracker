@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CarbonTracker</string>
+    <string name="create_journey_button">CREATE NEW JOURNEY</string>
+    <string name="view_carbon_footprint_button">VIEW CARBON FOOTPRINT</string>
+</resources>
