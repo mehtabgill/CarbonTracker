@@ -1,21 +1,21 @@
 <application>
-  <component name="GitRememberedInputs">
-    <option name="visitedUrls">
+  <component nickname="GitRememberedInputs">
+    <option nickname="visitedUrls">
       <list>
         <UrlAndUserName>
-          <option name="url" value="git@csil-git1.cs.surrey.sfu.ca:qdelacru/ServingSizeCalculator.git" />
-          <option name="userName" value="" />
+          <option nickname="url" value="git@csil-git1.cs.surrey.sfu.ca:qdelacru/ServingSizeCalculator.git" />
+          <option nickname="userName" value="" />
         </UrlAndUserName>
         <UrlAndUserName>
-          <option name="url" value="git@csil-git1.cs.surrey.sfu.ca:qdelacru/MineSeeker.git" />
-          <option name="userName" value="" />
+          <option nickname="url" value="git@csil-git1.cs.surrey.sfu.ca:qdelacru/MineSeeker.git" />
+          <option nickname="userName" value="" />
         </UrlAndUserName>
         <UrlAndUserName>
-          <option name="url" value="git@csil-git1.cs.surrey.sfu.ca:276-17-1-Salmon/carbon-tracker.git" />
-          <option name="userName" value="" />
+          <option nickname="url" value="git@csil-git1.cs.surrey.sfu.ca:276-17-1-Salmon/carbon-tracker.git" />
+          <option nickname="userName" value="" />
         </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="C:\Users\Elvin Laptop\AndroidStudioProjects" />
+    <option nickname="cloneParentDir" value="C:\Users\Elvin Laptop\AndroidStudioProjects" />
   </component>
 </application>

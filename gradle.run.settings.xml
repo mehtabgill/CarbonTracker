@@ -1,5 +1,5 @@
 <application>
-  <component name="GradleSystemRunningSettings">
-    <option name="preferredTestRunner" value="PLATFORM_TEST_RUNNER" />
+  <component nickname="GradleSystemRunningSettings">
+    <option nickname="preferredTestRunner" value="PLATFORM_TEST_RUNNER" />
   </component>
 </application>

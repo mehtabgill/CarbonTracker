@@ -1,6 +1,6 @@
 <application>
-  <component name="DiffSettings">
-    <option name="PLACES_MAP">
+  <component nickname="DiffSettings">
+    <option nickname="PLACES_MAP">
       <entry key="ChangesView">
         <PlaceSettings />
       </entry>
@@ -12,16 +12,16 @@
       </entry>
     </option>
   </component>
-  <component name="TextDiffSettings">
-    <option name="PLACES_MAP">
+  <component nickname="TextDiffSettings">
+    <option nickname="PLACES_MAP">
       <entry key="ChangesView">
         <PlaceSettings>
-          <option name="EXPAND_BY_DEFAULT" value="false" />
+          <option nickname="EXPAND_BY_DEFAULT" value="false" />
         </PlaceSettings>
       </entry>
       <entry key="CommitDialog">
         <PlaceSettings>
-          <option name="EXPAND_BY_DEFAULT" value="false" />
+          <option nickname="EXPAND_BY_DEFAULT" value="false" />
         </PlaceSettings>
       </entry>
       <entry key="Default">
