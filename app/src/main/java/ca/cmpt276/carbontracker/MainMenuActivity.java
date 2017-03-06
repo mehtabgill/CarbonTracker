@@ -14,6 +14,7 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
         Button createJourneyButton = (Button) findViewById(R.id.createJourneyButton);
         Button viewCarbonFootprintButton = (Button) findViewById(R.id.viewCarbonFootprintButton);
         createJourneyButton.setOnClickListener(new View.OnClickListener() {
@@ -33,6 +34,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void clickMainMenuButton(BUTTONS function) {
         switch (function){
+            //Change this later
             case CREATE_JOURNEY:
             {
                 startActivity(new Intent(MainMenuActivity.this, SelectTransportationModeActivity.class));

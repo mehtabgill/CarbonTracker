@@ -2,24 +2,36 @@ package ca.cmpt276.carbontracker;
 
 
 public class Car {
-    private String name;
+    private String nickname;
     private String model;
     private String make;
     private int year;
+    private String additionalInfo;
+    private String fuelType;
 
-    public Car(String name, String model, String make, int year) {
-        this.name = name;
-        this.model = model;
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    private int milesPerGallonCity;
+    private int milesPerGallonHway;
+
+    public Car(String make, String model, int year) {
         this.make = make;
+        this.model = model;
         this.year = year;
     }
 
-    public String getName() {
-        return name;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getModel() {
@@ -46,4 +58,27 @@ public class Car {
         this.year = year;
     }
 
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
+    public int getMilesPerGallonCity() {
+        return milesPerGallonCity;
+    }
+
+    public void setMilesPerGallonCity(int milesPerGallonCity) {
+        this.milesPerGallonCity = milesPerGallonCity;
+    }
+
+    public int getMilesPerGallonHway() {
+        return milesPerGallonHway;
+    }
+
+    public void setMilesPerGallonHway(int milesPerGallonHway) {
+        this.milesPerGallonHway = milesPerGallonHway;
+    }
 }
