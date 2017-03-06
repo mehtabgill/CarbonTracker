@@ -48,11 +48,10 @@ public class CarCollection {
         }
         return temp;
     }
-
-    public ArrayList<String> getUniqueModelName(){
-        return this.uniqueModelName;
-    }
-
+    /*
+     * Look in current CarCollection and remove any duplicate model name,
+     * storing them into UniqueModelName string arraylist
+     */
     public void searchUniqueModelName(){
         uniqueModelName.add(this.getCar(0).getModel());
         for(Car car: this.cars){
@@ -66,6 +65,10 @@ public class CarCollection {
                 uniqueModelName.add(car.getModel());
             }
         }
+    }
+
+    public ArrayList<String> getUniqueModelName(){
+        return this.uniqueModelName;
     }
 
     public CarCollection findCarsWithMake(String make) {

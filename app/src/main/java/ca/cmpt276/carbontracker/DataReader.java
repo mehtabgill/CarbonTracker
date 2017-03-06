@@ -10,7 +10,11 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
-
+/*
+ * DataReader class that read in data from raw resources files and
+ * generate a CarCollection of all cars and necessary information
+ * for UI display
+ */
 public class DataReader {
     private static BufferedReader reader;
 

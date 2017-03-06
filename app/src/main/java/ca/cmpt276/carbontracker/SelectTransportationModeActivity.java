@@ -23,21 +23,28 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
         InputStream is = getResources().openRawResource(R.raw.make_list_data);
         DataReader.readCarMakeData(is);
         ArrayList<String> carMakeList = DataReader.getCarMakeList();
+
         InputStream is1 = getResources().openRawResource(R.raw.data);
         DataReader.readCarData(is1);
-        CarCollection carlist = DataReader.getCarList();
+
+
         makeSpinner = (Spinner) findViewById(R.id.select_make_spinner);
         populateSpinner(makeSpinner, carMakeList);
         updateModelSpinner();
     }
 
+    /*
+     * Update spinner for car models based on which make is selected
+     */
     private void updateModelSpinner() {
         makeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 selectedMake = makeSpinner.getSelectedItem().toString();
                 Spinner modelSpinner = (Spinner) findViewById(R.id.select_model_spinner);
                 CarCollection currentCollection = DataReader.getCarList();
+
                 if (!selectedMake.equals("make")){
                     CarCollection currentCollectionByMake = currentCollection.findCarsWithMake(selectedMake);
                     currentCollectionByMake.searchUniqueModelName();
@@ -51,6 +58,7 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
             }
         });
     }
+
     private void populateSpinner(Spinner spinner, List<String> stringArrayList) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, stringArrayList

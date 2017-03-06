@@ -9,7 +9,7 @@ import android.widget.Button;
 public class MainMenuActivity extends AppCompatActivity {
 
     private enum BUTTONS{CREATE_JOURNEY, VIEW_CARBON_FOOTPRINT};
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
