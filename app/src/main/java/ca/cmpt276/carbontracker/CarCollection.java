@@ -39,6 +39,16 @@ public class CarCollection {
         return temp;
     }
 
+    public CarCollection findCarsWithMake(String make) {
+        CarCollection temp = new CarCollection();
+        for(Car car : cars) {
+            if(car.getMake().toLowerCase().equals(make.toLowerCase())) {
+                temp.add(car);
+            }
+        }
+        return temp;
+    }
+
     public CarCollection findCarsWithModel(String model) {
         CarCollection temp = new CarCollection();
         for(Car car : this.cars) {
@@ -71,13 +81,5 @@ public class CarCollection {
         return this.uniqueModelName;
     }
 
-    public CarCollection findCarsWithMake(String make) {
-        CarCollection temp = new CarCollection();
-        for(Car car : cars) {
-            if(car.getMake().toLowerCase().equals(make.toLowerCase())) {
-                temp.add(car);
-            }
-        }
-        return temp;
-    }
+
 }
