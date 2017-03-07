@@ -11,20 +11,28 @@ import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/*
+This class is for the welcome screen. It is the first screen that will appear. Some image
+animations will play with the optino for the user to skip them. Either when the skip button is
+pressed or when the animations finish, will the screen change to the main menu.
+ */
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private int fadeTimer = 5000; //first animation cars image fades out to be replaced
+    private int slideTimer = 3000; // second animation save earth sign slides in from left
+    private int dropTimer = 4000; // final animation recycle signs drops down spinning
+    private int mainMenuDelay = 7000; //delay b4 main menu displays 
 
     public void fade(View view)
     {
 
         //some fading animations replaced by stuff
         ImageView cars = (ImageView) findViewById(R.id.cars);
-        cars.animate().alpha(0f).setDuration(5000);
+        cars.animate().alpha(0f).setDuration(fadeTimer);
 
         ImageView earth = (ImageView) findViewById(R.id.earth);
-        earth.animate().alpha(1f).setDuration(5000).setListener(new Animator.AnimatorListener() {
+        earth.animate().alpha(1f).setDuration(fadeTimer).setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
 
@@ -34,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
                 //save earth
                 ImageView save = (ImageView) findViewById(R.id.save);
-                save.animate().translationXBy(1000f).setDuration(3000).setListener(new Animator.AnimatorListener() {
+                save.animate().translationXBy(1000f).setDuration(slideTimer).setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
 
@@ -43,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         ImageView recycle = (ImageView) findViewById(R.id.recycle);
-                        recycle.animate().translationYBy(2000f).rotationBy(7200).setDuration(4000);
+                        recycle.animate().translationYBy(2000f).rotationBy(7200).setDuration(dropTimer);
 
                         new Timer().schedule(
                                 new TimerTask() {
@@ -53,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                                         startActivity(intent);
                                     }
                                 },
-                                7000
+                                mainMenuDelay
                         );
                     }
 
@@ -83,8 +91,8 @@ public class MainActivity extends AppCompatActivity {
         TextView msg1 = (TextView) findViewById(R.id.msg1);
         TextView msg2 = (TextView) findViewById(R.id.msg2);
 
-        msg1.animate().alpha(0f).setDuration(5000);
-        msg2.animate().alpha(0f).setDuration(5000);
+        msg1.animate().alpha(0f).setDuration(fadeTimer);
+        msg2.animate().alpha(0f).setDuration(fadeTimer);
 
 
 
