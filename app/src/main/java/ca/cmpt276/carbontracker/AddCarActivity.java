@@ -2,18 +2,23 @@ package ca.cmpt276.carbontracker;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AddCarActivity extends AppCompatActivity {
-    Spinner makeSpinner;
+    private enum Spinner {Model, Year};
+    android.widget.Spinner makeSpinner;
+    android.widget.Spinner modelSpinner;
+    android.widget.Spinner yearSpinner;
     String selectedMake;
+    CarCollection testCollection = new CarCollection();
+    CarCollection currentCollection = new CarCollection();
     //carCollection needs to be moved to Singleton model when the model is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,42 +29,93 @@ public class AddCarActivity extends AppCompatActivity {
         DataReader.readCarMakeData(is);
         ArrayList<String> carMakeList = DataReader.getCarMakeList();
 
-        InputStream is1 = getResources().openRawResource(R.raw.data);
-        DataReader.readCarData(is1);
+//        InputStream is1 = getResources().openRawResource(R.raw.data);
+//        DataReader.readCarData(is1, testCollection);
+        testCollection = MainMenuActivity.collection;
 
-
-        makeSpinner = (Spinner) findViewById(R.id.select_make_spinner);
+        makeSpinner = (android.widget.Spinner) findViewById(R.id.select_make_spinner);
+        modelSpinner = (android.widget.Spinner) findViewById(R.id.select_model_spinner);
+        yearSpinner = (android.widget.Spinner) findViewById(R.id.select_year_spinner);
         populateSpinner(makeSpinner, carMakeList);
-        updateModelSpinner();
+        updateSpinner(Spinner.Model);
+        updateSpinner(Spinner.Year);
     }
 
     /*
-     * Update spinner for car models based on which make is selected
+     * Update spinner for car models and car years option
      */
-    private void updateModelSpinner() {
-        makeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    private void updateSpinner(Spinner mode) {
+        switch (mode){
+            case Model:
+                makeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        selectedMake = makeSpinner.getSelectedItem().toString();
+                        modelSpinner.setVisibility(View.INVISIBLE);
+                        if (!selectedMake.equals("Make")) {
+                            modelSpinner.setVisibility(View.VISIBLE);
+                            currentCollection = testCollection.findCarsWithMake(selectedMake);
+                            currentCollection.searchUniqueModelName();
+                            ArrayList<String> currentModelList = currentCollection.getUniqueModelNames();
+                            populateSpinner(modelSpinner, currentModelList);
+                        }
+                        else{
+                            modelSpinner.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
-                selectedMake = makeSpinner.getSelectedItem().toString();
-                Spinner modelSpinner = (Spinner) findViewById(R.id.select_model_spinner);
-                CarCollection currentCollection = DataReader.getCarList();
+                    }
+                });
+                break;
+            case Year:
+                modelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        yearSpinner.setVisibility(View.INVISIBLE);
+                        if (modelSpinner.getVisibility() == View.VISIBLE){
 
-                if (!selectedMake.equals("make")){
-                    CarCollection currentCollectionByMake = currentCollection.findCarsWithMake(selectedMake);
-                    currentCollectionByMake.searchUniqueModelName();
-                    ArrayList<String> currentModelList = currentCollectionByMake.getUniqueModelName();
-                    populateSpinner(modelSpinner, currentModelList);
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                            String selectedModel = modelSpinner.getSelectedItem().toString();
+                            yearSpinner.setVisibility(View.VISIBLE);
 
-            }
-        });
+                            CarCollection selectedModelCollection = currentCollection.findCarsWithModel(selectedModel);
+                            ArrayList<String> currentYearList = new ArrayList<String>();
+
+                            //add the first year in the current Models list
+                            currentYearList.add(Integer.toString(selectedModelCollection.getCar(0).getYear()));
+
+                            for (Car car: selectedModelCollection){
+                                boolean yearIsUnique = true;
+                                String modelYear = Integer.toString(car.getYear());
+                                for(String uniqueYear : currentYearList){
+                                    if (modelYear.equals(uniqueYear)){
+                                        yearIsUnique = false;
+                                    }
+                                }
+                                // TODO: actually do shit
+                               if(yearIsUnique){
+                                    currentYearList.add(modelYear);
+                               }
+                            }
+                            populateSpinner(yearSpinner, currentYearList);
+                        }
+                        else{
+                            if(modelSpinner.getVisibility() == View.INVISIBLE){
+                                yearSpinner.setVisibility(View.INVISIBLE);
+                            }
+                        }
+                    }
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+
+                    }
+                });
+                break;
+        }
     }
-
-    private void populateSpinner(Spinner spinner, List<String> stringArrayList) {
+    
+    private void populateSpinner(android.widget.Spinner spinner, List<String> stringArrayList) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, stringArrayList
         );

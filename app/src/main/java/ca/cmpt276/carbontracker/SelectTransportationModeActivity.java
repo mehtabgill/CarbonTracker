@@ -1,11 +1,24 @@
 package ca.cmpt276.carbontracker;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SelectTransportationModeActivity extends AppCompatActivity {
     Spinner makeSpinner;
     String selectedMake;
+    //This will get reference from Singleton model;
+    CarCollection currentCarCollection;
+    Spinner selectCarSpinner;
+    Button addCarButton;
 
     Model model = Model.getInstance();
     //carCollection needs to be moved to Singleton model when the model is created
@@ -19,6 +32,14 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
         makeSpinner = (Spinner) findViewById(R.id.select_make_spinner);
         populateSpinner(makeSpinner, carMakeList);
         updateModelSpinner();
+        selectCarSpinner = (Spinner)findViewById(R.id.select_car_spinner);
+        addCarButton = (Button) findViewById(R.id.add_car_button);
+        addCarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SelectTransportationModeActivity.this, AddCarActivity.class));
+            }
+        });
     }
 
     /*
