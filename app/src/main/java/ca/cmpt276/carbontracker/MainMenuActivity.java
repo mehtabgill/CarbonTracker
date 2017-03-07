@@ -37,7 +37,7 @@ public class MainMenuActivity extends AppCompatActivity {
             //Change this later
             case CREATE_JOURNEY:
             {
-                startActivity(new Intent(MainMenuActivity.this, SelectTransportationModeActivity.class));
+                startActivity(new Intent(MainMenuActivity.this, AddCarActivity.class));
             }
             break;
             case VIEW_CARBON_FOOTPRINT:

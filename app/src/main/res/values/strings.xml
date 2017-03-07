@@ -3,4 +3,6 @@
     <string name="create_journey_button">CREATE NEW JOURNEY</string>
     <string name="view_carbon_footprint_button">VIEW CARBON FOOTPRINT</string>
     <string name="Additional_Info">Displacement vol: %1$f Transmission tye: %2$s</string>
+    <string name="select_car_text">Select your car from the drop down menu, or press the button to add new car to the list: </string>
+    <string name="add_car_button_text">Add New Car</string>
 </resources>
