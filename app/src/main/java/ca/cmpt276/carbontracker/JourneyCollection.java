@@ -34,7 +34,7 @@ public class JourneyCollection {
             //double the array
             Journey[] temp;
 
-            temp = new Journey[NUMBER_OF_JOURNEYS*2];
+            temp = new Journey[journeyCollection.length*2];
 
             for(int i = 0; i<getLength(); i++)
             {
