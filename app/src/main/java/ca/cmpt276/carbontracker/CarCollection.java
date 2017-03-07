@@ -1,8 +1,9 @@
 package ca.cmpt276.carbontracker;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class CarCollection {
+public class CarCollection implements Iterable<Car>{
     private ArrayList<Car> cars = new ArrayList<>();
     private ArrayList<String> uniqueModelName = new ArrayList<>();
     public void add(Car car) {
@@ -79,5 +80,10 @@ public class CarCollection {
             }
         }
         return temp;
+    }
+
+    @Override
+    public Iterator<Car> iterator() {
+        return cars.iterator();
     }
 }
