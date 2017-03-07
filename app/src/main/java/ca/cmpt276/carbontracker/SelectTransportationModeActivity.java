@@ -14,19 +14,15 @@ import java.util.List;
 public class SelectTransportationModeActivity extends AppCompatActivity {
     Spinner makeSpinner;
     String selectedMake;
+
+    Model model = Model.getInstance();
     //carCollection needs to be moved to Singleton model when the model is created
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_transportation_mode);
 
-        InputStream is = getResources().openRawResource(R.raw.make_list_data);
-        DataReader.readCarMakeData(is);
-        ArrayList<String> carMakeList = DataReader.getCarMakeList();
-
-        InputStream is1 = getResources().openRawResource(R.raw.data);
-        DataReader.readCarData(is1);
-
+        ArrayList<String> carMakeList = model.getCarMakeList();
 
         makeSpinner = (Spinner) findViewById(R.id.select_make_spinner);
         populateSpinner(makeSpinner, carMakeList);
@@ -43,7 +39,7 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
 
                 selectedMake = makeSpinner.getSelectedItem().toString();
                 Spinner modelSpinner = (Spinner) findViewById(R.id.select_model_spinner);
-                CarCollection currentCollection = DataReader.getCarList();
+                CarCollection currentCollection = model.getCarList();
 
                 if (!selectedMake.equals("make")){
                     CarCollection currentCollectionByMake = currentCollection.findCarsWithMake(selectedMake);

@@ -1,6 +1,5 @@
 <application>
-  <component nickname="UISettings">
-    <option nickname="HIDE_TOOL_STRIPES" value="false" />
-    <option nickname="SHOW_MAIN_TOOLBAR" value="true" />
+  <component name="UISettings">
+    <option name="HIDE_TOOL_STRIPES" value="false" />
   </component>
 </application>
