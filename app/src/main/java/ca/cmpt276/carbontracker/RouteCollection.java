@@ -20,6 +20,12 @@ public class RouteCollection {
         }
     }
 
+    public void EditRoute(ArrayList<Route> list, String name, float citydrivedistance, float highwaydrivedistance) {
+        for( Route route : list){
+            route = new Route(name , citydrivedistance , highwaydrivedistance) ;
+        }
+    }
+
     public Route getRoute(int index){
         return routes.get(index);
     }
