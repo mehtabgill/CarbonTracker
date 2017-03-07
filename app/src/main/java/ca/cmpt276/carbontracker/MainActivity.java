@@ -1,13 +1,13 @@
 package ca.cmpt276.carbontracker;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 /*
 This class is for the welcome screen. It is the first screen that will appear. Some image
@@ -17,18 +17,19 @@ pressed or when the animations finish, will the screen change to the main menu.
 
 public class MainActivity extends AppCompatActivity {
 
-    private int fadeTimer = 5000; //first animation cars image fades out to be replaced
+    private int fadeTimer = 5000; //first animation currentCars image fades out to be replaced
     private int slideTimer = 3000; // second animation save earth sign slides in from left
     private int dropTimer = 4000; // final animation recycle signs drops down spinning
     private int mainMenuDelay = 7000; //delay b4 main menu displays
 
+/*
 
     public void fade(View view)
     {
 
         //some fading animations replaced by stuff
-        ImageView cars = (ImageView) findViewById(R.id.cars);
-        cars.animate().alpha(0f).setDuration(fadeTimer);
+        ImageView currentCars = (ImageView) findViewById(R.id.currentCars);
+        currentCars.animate().alpha(0f).setDuration(fadeTimer);
 
         ImageView earth = (ImageView) findViewById(R.id.earth);
         earth.animate().alpha(1f).setDuration(fadeTimer).setListener(new Animator.AnimatorListener() {
@@ -93,24 +94,58 @@ public class MainActivity extends AppCompatActivity {
         msg1.animate().alpha(0f).setDuration(fadeTimer);
         msg2.animate().alpha(0f).setDuration(fadeTimer);
 
-
-
-
-
     }
 
-
-
     public void skip(View view){
-
         Intent intent = new Intent(this, MainMenuActivity.class);
         startActivity(intent);
     }
 
+*/
+    private Model model = Model.getInstance();
+
+    /*
+     * LoadCarListTask and LoadCarMakeTask class read data in background
+     */
+
+    private class LoadCarListTask extends AsyncTask<InputStream, Integer, CarCollection>
+    {
+        @Override
+        protected CarCollection doInBackground(InputStream... is) {
+            return DataReader.getCarList(is[0]);
+        }
+
+        protected void onPostExecute(CarCollection carCollection){
+            Toast.makeText(MainActivity.this,
+                    "Load completed", Toast.LENGTH_SHORT).show();
+            model.setTotalCarList(carCollection);;
+            model.setFullDataLoaded();
+        }
+    }
+
+    private class LoadCarMakeTask extends AsyncTask<InputStream, Integer, ArrayList<String>> {
+        @Override
+        protected ArrayList<String> doInBackground(InputStream... is) {
+            return DataReader.getCarMakeList(is[0]);
+        }
+
+        protected void onPostExecute(ArrayList<String> carMakeList) {
+            Toast.makeText(MainActivity.this,
+                    "Load Make completed", Toast.LENGTH_SHORT).show();
+            model.setCarMakeList(carMakeList);
+            model.setMakeDataLoaded();
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new LoadCarMakeTask().execute(getResources().openRawResource(R.raw.make_list_data));
+        new LoadCarListTask().execute(getResources().openRawResource(R.raw.data));
+        Intent intent = new Intent(this, MainMenuActivity.class);
+        startActivity(intent);
+
     }
 }

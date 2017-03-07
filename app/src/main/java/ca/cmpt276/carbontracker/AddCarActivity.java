@@ -2,7 +2,6 @@ package ca.cmpt276.carbontracker;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,12 +25,9 @@ public class AddCarActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_car);
 
         InputStream is = getResources().openRawResource(R.raw.make_list_data);
-        DataReader.readCarMakeData(is);
-        ArrayList<String> carMakeList = DataReader.getCarMakeList();
+        ArrayList<String> carMakeList = DataReader.getCarMakeList(is);
 
-//        InputStream is1 = getResources().openRawResource(R.raw.data);
-//        DataReader.readCarData(is1, testCollection);
-        testCollection = MainMenuActivity.collection;
+        testCollection = Model.getInstance().getTotalCarList();
 
         makeSpinner = (android.widget.Spinner) findViewById(R.id.select_make_spinner);
         modelSpinner = (android.widget.Spinner) findViewById(R.id.select_model_spinner);
@@ -52,7 +48,7 @@ public class AddCarActivity extends AppCompatActivity {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         selectedMake = makeSpinner.getSelectedItem().toString();
                         modelSpinner.setVisibility(View.INVISIBLE);
-                        if (!selectedMake.equals("Make")) {
+                        if (!selectedMake.equals(getResources().getString(R.string.Make_header))) {
                             modelSpinner.setVisibility(View.VISIBLE);
                             currentCollection = testCollection.findCarsWithMake(selectedMake);
                             currentCollection.searchUniqueModelName();
@@ -65,7 +61,6 @@ public class AddCarActivity extends AppCompatActivity {
                     }
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
-
                     }
                 });
                 break;
@@ -93,7 +88,6 @@ public class AddCarActivity extends AppCompatActivity {
                                         yearIsUnique = false;
                                     }
                                 }
-                                // TODO: actually do shit
                                if(yearIsUnique){
                                     currentYearList.add(modelYear);
                                }

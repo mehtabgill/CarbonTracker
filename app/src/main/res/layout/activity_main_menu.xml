@@ -19,7 +19,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="26dp"
         android:text="@string/create_journey_button"
-        android:enabled="false"/>
+        />
 
     <Button
         android:id="@+id/viewCarbonFootprintButton"
@@ -30,7 +30,7 @@
         android:layout_below="@+id/createJourneyButton"
         android:layout_marginTop="35dp"
         android:text="@string/view_carbon_footprint_button"
-        android:enabled="false"/>
+        />
 
 
 </RelativeLayout>
