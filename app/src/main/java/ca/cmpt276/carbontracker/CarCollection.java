@@ -10,8 +10,8 @@ public class CarCollection implements Iterable<Car>{
         cars.add(car);
     }
 
-    public void add(String model, String make, int year) {
-        cars.add(new Car(model, make, year));
+    public void add(String make, String model, int year) {
+        cars.add(new Car(make, model, year));
     }
 
     public void remove(Car car) {
