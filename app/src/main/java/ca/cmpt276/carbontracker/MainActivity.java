@@ -1,7 +1,5 @@
 package ca.cmpt276.carbontracker;
 
-import android.animation.Animator;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -114,17 +112,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //get some stuff off screen
-        ImageView save = (ImageView) findViewById(R.id.save);
-
-        save.setTranslationX(-1000f);
-
-        //recycle sign
-        ImageView recycle = (ImageView) findViewById(R.id.recycle);
-
-        recycle.setTranslationY(-2000f);
-
-
     }
 }
