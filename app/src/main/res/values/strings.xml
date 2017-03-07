@@ -2,4 +2,5 @@
     <string name="app_name">CarbonTracker</string>
     <string name="create_journey_button">CREATE NEW JOURNEY</string>
     <string name="view_carbon_footprint_button">VIEW CARBON FOOTPRINT</string>
+    <string name="Additional_Info">Displacement vol: %1$f Transmission tye: %2$s</string>
 </resources>

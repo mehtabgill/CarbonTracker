@@ -1,24 +1,25 @@
 package ca.cmpt276.carbontracker;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class CarCollection {
+public class CarCollection implements Iterable<Car>{
     private ArrayList<Car> cars = new ArrayList<>();
     private ArrayList<String> uniqueModelName = new ArrayList<>();
     public void add(Car car) {
         cars.add(car);
     }
 
-    public void add(String model, String make, int year) {
-        cars.add(new Car(model, make, year));
+    public void add(String make, String model, int year) {
+        cars.add(new Car(make, model, year));
     }
 
     public void remove(Car car) {
         cars.remove(car);
     }
 
-    public ArrayList<Car> getAllCars() {
-        return cars;
+    public void remove(int index) {
+        cars.remove(index);
     }
 
     public int size(){
@@ -39,16 +40,6 @@ public class CarCollection {
         return temp;
     }
 
-    public CarCollection findCarsWithMake(String make) {
-        CarCollection temp = new CarCollection();
-        for(Car car : cars) {
-            if(car.getMake().toLowerCase().equals(make.toLowerCase())) {
-                temp.add(car);
-            }
-        }
-        return temp;
-    }
-
     public CarCollection findCarsWithModel(String model) {
         CarCollection temp = new CarCollection();
         for(Car car : this.cars) {
@@ -58,6 +49,17 @@ public class CarCollection {
         }
         return temp;
     }
+
+    public CarCollection findCarsWithYear(int year) {
+        CarCollection temp = new CarCollection();
+        for(Car car : this.cars) {
+            if(car.getYear() == year) {
+                temp.add(car);
+            }
+        }
+        return temp;
+    }
+
     /*
      * Look in current CarCollection and remove any duplicate model name,
      * storing them into UniqueModelName string arraylist
@@ -81,5 +83,18 @@ public class CarCollection {
         return this.uniqueModelName;
     }
 
+    public CarCollection findCarsWithMake(String make) {
+        CarCollection temp = new CarCollection();
+        for(Car car : cars) {
+            if(car.getMake().toLowerCase().equals(make.toLowerCase())) {
+                temp.add(car);
+            }
+        }
+        return temp;
+    }
 
+    @Override
+    public Iterator<Car> iterator() {
+        return cars.iterator();
+    }
 }
