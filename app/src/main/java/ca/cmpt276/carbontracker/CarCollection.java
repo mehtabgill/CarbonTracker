@@ -18,8 +18,8 @@ public class CarCollection implements Iterable<Car>{
         cars.remove(car);
     }
 
-    public ArrayList<Car> getAllCars() {
-        return cars;
+    public void remove(int index) {
+        cars.remove(index);
     }
 
     public int size(){
@@ -49,6 +49,17 @@ public class CarCollection implements Iterable<Car>{
         }
         return temp;
     }
+
+    public CarCollection findCarsWithYear(int year) {
+        CarCollection temp = new CarCollection();
+        for(Car car : this.cars) {
+            if(car.getYear() == year) {
+                temp.add(car);
+            }
+        }
+        return temp;
+    }
+
     /*
      * Look in current CarCollection and remove any duplicate model name,
      * storing them into UniqueModelName string arraylist
