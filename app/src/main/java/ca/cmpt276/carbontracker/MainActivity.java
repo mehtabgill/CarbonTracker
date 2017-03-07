@@ -2,15 +2,18 @@ package ca.cmpt276.carbontracker;
 
 import android.animation.Animator;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 /*
 This class is for the welcome screen. It is the first screen that will appear. Some image
 animations will play with the optino for the user to skip them. Either when the skip button is
@@ -109,11 +112,51 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+*/
+    private Model model = Model.getInstance();
+
+    /*
+     * LoadCarListTask and LoadCarMakeTask class read data in background
+     */
+
+    private class LoadCarListTask extends AsyncTask<InputStream, Integer, CarCollection>
+    {
+        @Override
+        protected CarCollection doInBackground(InputStream... is) {
+            return DataReader.getCarList(is[0]);
+        }
+
+        protected void onPostExecute(CarCollection carCollection){
+            Toast.makeText(MainActivity.this,
+                    "Load completed", Toast.LENGTH_SHORT).show();
+            model.setTotalCarList(carCollection);;
+            model.setFullDataLoaded();
+        }
+    }
+
+    private class LoadCarMakeTask extends AsyncTask<InputStream, Integer, ArrayList<String>> {
+        @Override
+        protected ArrayList<String> doInBackground(InputStream... is) {
+            return DataReader.getCarMakeList(is[0]);
+        }
+
+        protected void onPostExecute(ArrayList<String> carMakeList) {
+            Toast.makeText(MainActivity.this,
+                    "Load Make completed", Toast.LENGTH_SHORT).show();
+            model.setCarMakeList(carMakeList);
+            model.setMakeDataLoaded();
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new LoadCarMakeTask().execute(getResources().openRawResource(R.raw.make_list_data));
+        new LoadCarListTask().execute(getResources().openRawResource(R.raw.data));
+        Intent intent = new Intent(this, MainMenuActivity.class);
+        startActivity(intent);
 
         //get some stuff off screen
         ImageView save = (ImageView) findViewById(R.id.save);

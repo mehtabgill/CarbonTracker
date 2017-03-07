@@ -15,10 +15,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenuActivity" />
-        <activity android:name=".SelectTransportationModeActivity" />
+
+        <activity android:name=".MainMenuActivity"/>
+        <activity android:name=".AddCarActivity" />
         <activity android:name=".ViewCarbonFootprintActivity" />
-        <activity android:name=".SelectRouteActivity"></activity>
+        <activity android:name=".SelectRouteActivity" />
+        <activity android:name=".SelectTransportationModeActivity"></activity>
     </application>
 
 </manifest>
