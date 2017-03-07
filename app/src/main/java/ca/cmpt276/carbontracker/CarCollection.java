@@ -10,16 +10,16 @@ public class CarCollection implements Iterable<Car>{
         cars.add(car);
     }
 
-    public void add(String model, String make, int year) {
-        cars.add(new Car(model, make, year));
+    public void add(String make, String model, int year) {
+        cars.add(new Car(make, model, year));
     }
 
     public void remove(Car car) {
         cars.remove(car);
     }
 
-    public ArrayList<Car> getAllCars() {
-        return cars;
+    public void remove(int index) {
+        cars.remove(index);
     }
 
     public int size(){
@@ -49,6 +49,17 @@ public class CarCollection implements Iterable<Car>{
         }
         return temp;
     }
+
+    public CarCollection findCarsWithYear(int year) {
+        CarCollection temp = new CarCollection();
+        for(Car car : this.cars) {
+            if(car.getYear() == year) {
+                temp.add(car);
+            }
+        }
+        return temp;
+    }
+
     /*
      * Look in current CarCollection and remove any duplicate model name,
      * storing them into UniqueModelName string arraylist

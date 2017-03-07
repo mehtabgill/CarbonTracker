@@ -20,15 +20,21 @@ public class DataReader {
 
     private static CarCollection carList = new CarCollection();
     private static ArrayList<String> carMakeList = new ArrayList<>();
-    public static CarCollection getCarList() {
+    public static CarCollection getCarList(InputStream is) {
+        if(carList.size() == 0) {
+            readCarData(is);
+        }
         return carList;
     }
 
-    public static ArrayList<String> getCarMakeList(){
+    public static ArrayList<String> getCarMakeList(InputStream is){
+        if(carMakeList.size() == 0) {
+            readCarMakeData(is);
+        }
         return carMakeList;
     }
 
-    public static void readCarMakeData(InputStream is){
+    private static void readCarMakeData(InputStream is){
         String line = "";
         reader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8"))
@@ -43,7 +49,7 @@ public class DataReader {
         }
     }
 
-    public static void readCarData(InputStream is){
+    private static void readCarData(InputStream is){
         if (carList.size() > 0)
         {
             return;
