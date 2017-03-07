@@ -56,9 +56,10 @@ public class JourneyCollection {
 
     }
 
-    public  void removeJourney(){
-        if (!isEmpty())
+    public  void removeJourneyByIndex(int i){
+        if (!isEmpty() && i<=top && i>=0)
         {
+            journeyCollection[i] = journeyCollection[top];
             journeyCollection[top] = null;
             top--;
         }
