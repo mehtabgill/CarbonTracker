@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private int fadeTimer = 5000; //first animation cars image fades out to be replaced
     private int slideTimer = 3000; // second animation save earth sign slides in from left
     private int dropTimer = 4000; // final animation recycle signs drops down spinning
-    private int mainMenuDelay = 7000; //delay b4 main menu displays 
+    private int mainMenuDelay = 7000; //delay b4 main menu displays
+
 
     public void fade(View view)
     {
