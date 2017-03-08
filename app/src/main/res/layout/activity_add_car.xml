@@ -8,32 +8,38 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ca.cmpt276.carbontracker.SelectTransportationModeActivity">
-
-    <TextView
-        android:text="@string/select_car_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/select_car_textView" />
+    tools:context="ca.cmpt276.carbontracker.AddCarActivity">
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/select_car_spinner"
-        android:layout_below="@+id/select_car_textView"
+        android:id="@+id/select_make_spinner" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/select_model_spinner"
+        android:layout_below="@+id/select_make_spinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="13dp" />
+        android:layout_marginTop="83dp" />
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/select_year_spinner"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:text="@string/add_car_button_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/add_car_button"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/select_car_spinner"
+        android:text="@string/search_button_text"
+        android:layout_below="@+id/select_year_spinner"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="23dp"
-        android:layout_marginEnd="23dp" />
+        android:layout_marginTop="35dp"
+        android:id="@+id/search_button" />
+
+
 </RelativeLayout>

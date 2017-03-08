@@ -8,7 +8,7 @@ public class Car {
     private int year;
     private String additionalInfo;
     private String fuelType;
-
+    private String description;
     public String getFuelType() {
         return fuelType;
     }
@@ -24,6 +24,7 @@ public class Car {
         this.make = make;
         this.model = model;
         this.year = year;
+        this.description = make + " " + model + " " +  Integer.toString(year) + " " + this.additionalInfo;
     }
 
     public String getNickname() {
@@ -80,5 +81,10 @@ public class Car {
 
     public void setMilesPerGallonHway(int milesPerGallonHway) {
         this.milesPerGallonHway = milesPerGallonHway;
+    }
+
+    public String getDescription(){
+        return this.description = make + " " + model + " " +  Integer.toString(year) + " " + this.additionalInfo;
+
     }
 }
