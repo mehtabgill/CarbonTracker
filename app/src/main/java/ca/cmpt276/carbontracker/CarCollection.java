@@ -6,6 +6,7 @@ import java.util.Iterator;
 public class CarCollection implements Iterable<Car> {
     private ArrayList<Car> cars = new ArrayList<>();
     private ArrayList<String> uniqueModelNames = new ArrayList<>();
+    private ArrayList<String> uniqueModelYears = new ArrayList<>();
     ;
     private ArrayList<String> uniqueYears = new ArrayList<>();
     private boolean isEmpty;
@@ -93,22 +94,54 @@ public class CarCollection implements Iterable<Car> {
      * storing them into UniqueModelName string arraylist
      */
     public void searchUniqueModelName(){
-        uniqueModelNames.add(this.getCar(0).getModel());
-        for(Car car: this.cars){
-            boolean isUniqueModelName = true;
-            for(String uniqueModels: uniqueModelNames){
-                if (car.getModel().equals(uniqueModels)){
-                    isUniqueModelName = false;
+        if(!(this.size() == 0)){
+            uniqueModelNames.add(this.getCar(0).getModel());
+            for(Car car: this.cars){
+                boolean isUniqueModelName = true;
+                for(String uniqueModel: uniqueModelNames){
+                    if (car.getModel().equals(uniqueModel)){
+                        isUniqueModelName = false;
+                    }
                 }
-            }
-            if(isUniqueModelName){
-                uniqueModelNames.add(car.getModel());
+                if(isUniqueModelName){
+                    uniqueModelNames.add(car.getModel());
+                }
             }
         }
     }
 
     public ArrayList<String> getUniqueModelNames(){
         return this.uniqueModelNames;
+    }
+
+    public void searchUniqueModelYears(){
+        if(this.size() == 0){
+
+        }
+        uniqueModelYears.add(Integer.toString(this.getCar(0).getYear()));
+        for(Car car: this.cars){
+            boolean isUniqueModelYear = true;
+            for(String uniqueYear: uniqueModelYears){
+                if (Integer.toString(car.getYear()).equals(uniqueYear)){
+                    isUniqueModelYear = false;
+                }
+            }
+            if(isUniqueModelYear){
+                uniqueModelYears.add(Integer.toString(car.getYear()));
+            }
+        }
+    }
+
+    public CarCollection getDuplicate(){
+        CarCollection temp = new CarCollection();
+        for(Car car : this.cars){
+            temp.add(car);
+        }
+        return temp;
+    }
+
+    public ArrayList<String> getUniqueModelYears(){
+        return this.uniqueModelYears;
     }
 
     @Override
