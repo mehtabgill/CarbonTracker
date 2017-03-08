@@ -24,9 +24,11 @@ public class RouteCollection {
 
     public void EditRoute(String OrignalName, String name, float citydrivedistance, float highwaydrivedistance) {
         for( Route route : this.routes){
-            if (route.getName() == OrignalName)
+            if (route.getName().toLowerCase().equals(OrignalName))
             {
-                route = new Route(name, citydrivedistance, highwaydrivedistance) ;
+                route.setName(name);
+                route.setCityDriveDistance(citydrivedistance);
+                route.setHighwayDriveDistance(highwaydrivedistance);
             }
         }
     }

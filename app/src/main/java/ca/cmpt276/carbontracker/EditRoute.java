@@ -111,14 +111,13 @@ public class EditRoute extends AppCompatActivity {
     }
 
     private void ExtractdataFRomIntent() {
-
         Intent intent = getIntent() ;
         OrignalName = intent.getStringExtra("signalEditingROute") ;
     }
 
-    public Intent intentmakerEditRoute(Context context, Route route){
+    public static Intent intentmakerEditRoute(Context context, String name){
         Intent intent  =  new Intent(context, EditRoute.class);
-        intent.putExtra("signalEditingROute" , route.getName()) ;
+        intent.putExtra("signalEditingROute" , name) ;
         return intent ;
     }
 

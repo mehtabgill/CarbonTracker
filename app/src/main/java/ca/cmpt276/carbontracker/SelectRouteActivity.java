@@ -18,8 +18,9 @@ public class SelectRouteActivity extends AppCompatActivity {
     String name ;
     float CityDriveDistance  = -2;
     float HighwayDriveDistance = -2 ;
-    ArrayList<String> dropdown ;
+    ArrayList<String> dropdown = new ArrayList<>();
     RouteCollection routeCollection = new RouteCollection() ;
+    String OrignalName ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +37,6 @@ public class SelectRouteActivity extends AppCompatActivity {
         Route newRoute = new Route( name ,CityDriveDistance, HighwayDriveDistance) ;
         routeCollection.add(newRoute);}
 
-        dropdown = new ArrayList<>() ;
         dropdown.add("Exsisting Rotes");
 
         for ( Route route : routeCollection.getAllRoutes()){
@@ -52,8 +52,7 @@ public class SelectRouteActivity extends AppCompatActivity {
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent  = new Intent(SelectRouteActivity.this, EditRoute.class) ;
-                startActivityForResult(intent, REQUEST_CODE_EditRoute);
+                OrignalName = dropdown.get(i) ;
 
             }
 
@@ -81,13 +80,20 @@ public class SelectRouteActivity extends AppCompatActivity {
             }
         });
 
+        Button btnEditRoute = (Button) findViewById(R.id.buttonLaunchEditRoute);
+        btnEditRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = EditRoute.intentmakerEditRoute(SelectRouteActivity.this, OrignalName) ;
+                startActivityForResult(intent, REQUEST_CODE_EditRoute);
+            }
+        });
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (resultCode)
-        {
-            case REQUEST_CODE_EditRoute:
+
                 String newname = data.getStringExtra("editedName") ;
                 float newcity = data.getFloatExtra("editcity", 0) ;
                 float newhighway = data.getFloatExtra("edithighway", 0);
@@ -106,7 +112,7 @@ public class SelectRouteActivity extends AppCompatActivity {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 Spinner spinner = (Spinner) findViewById(R.id.select_route_spinner);
                 spinner.setAdapter(adapter);
-        }
+
 
     }
 
