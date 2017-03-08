@@ -1,5 +1,6 @@
 package ca.cmpt276.carbontracker;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.FloatRange;
 import android.support.v7.app.AppCompatActivity;
@@ -93,9 +94,13 @@ public class AddRoute extends AppCompatActivity {
         btnAddRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Route newRoute = new Route(name, cityDis, highwayDis) ;
-                Intent intent = SelectRouteActivity.intentmakerSelectRoute(AddRoute.this, newRoute) ;
-                startActivity(intent);
+
+                Intent intent = new Intent() ;
+                intent.putExtra("NewAddedName", name) ;
+                intent.putExtra("NewAddedcity" , cityDis) ;
+                intent.putExtra("NewAddedhighway", highwayDis) ;
+                setResult(Activity.RESULT_OK , intent);
+                finish();
 
             }
         });

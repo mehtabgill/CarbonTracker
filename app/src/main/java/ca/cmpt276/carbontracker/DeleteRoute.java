@@ -47,7 +47,7 @@ public class DeleteRoute extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = SelectRouteActivity.intentmakerSelectRoute(DeleteRoute.this, route) ;
+                Intent intent = SelectRouteActivity .intentmakerSelectRoute(DeleteRoute.this, route) ;
                 startActivity(intent);
             }
         });

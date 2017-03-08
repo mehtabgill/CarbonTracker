@@ -1,5 +1,6 @@
 package ca.cmpt276.carbontracker;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 public class SelectRouteActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_EditRoute = 1024;
+    public static final int REQUEST_CODE_LauchAddRoute = 1025;
+    Spinner spinner ;
     String name ;
     float CityDriveDistance  = -2;
     float HighwayDriveDistance = -2 ;
@@ -25,7 +28,6 @@ public class SelectRouteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_route);
-        ExtractDataFromIntent() ;
 
         if ( CityDriveDistance == -1 && HighwayDriveDistance == -1 ){
             ArrayList<Route> list=  routeCollection.findRouteWithName(name) ;
@@ -33,27 +35,19 @@ public class SelectRouteActivity extends AppCompatActivity {
                 routeCollection.remove(route);
             }
         }
-        else{
-        Route newRoute = new Route( name ,CityDriveDistance, HighwayDriveDistance) ;
-        routeCollection.add(newRoute);}
-
-        dropdown.add("Exsisting Rotes");
-
-        for ( Route route : routeCollection.getAllRoutes()){
-            dropdown.add(route.getName()) ;
-        }
+        dropdown.add("Exsisting routes") ;
+        dropdown.add("No Exsisting Routes");
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, dropdown);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner spinner = (Spinner) findViewById(R.id.select_route_spinner);
+        spinner = (Spinner) findViewById(R.id.select_route_spinner);
         spinner.setAdapter(adapter);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 OrignalName = dropdown.get(i) ;
-
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -66,7 +60,8 @@ public class SelectRouteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SelectRouteActivity.this, AddRoute.class) ;
-                startActivity(intent);
+                startActivityForResult(intent,  REQUEST_CODE_LauchAddRoute);
+
             }
         });
 
@@ -93,29 +88,53 @@ public class SelectRouteActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            switch(requestCode) {
+                case REQUEST_CODE_EditRoute:
+                    if (resultCode == Activity.RESULT_OK) {
+                        String newname = data.getStringExtra("editedName");
+                        float newcity = data.getFloatExtra("editcity", 0);
+                        float newhighway = data.getFloatExtra("edithighway", 0);
+                        String OrignalName = data.getStringExtra("signalOrignalName");
+                        routeCollection.EditRoute(OrignalName, newname, newcity, newhighway);
 
-                String newname = data.getStringExtra("editedName") ;
-                float newcity = data.getFloatExtra("editcity", 0) ;
-                float newhighway = data.getFloatExtra("edithighway", 0);
-                String OrignalName = data.getStringExtra("signalOrignalName") ;
-                routeCollection.EditRoute(OrignalName, newname, newcity, newhighway);
+                        dropdown = new ArrayList<>();
+                        dropdown.add("Exsisting Routes");
 
-                dropdown = new ArrayList<>() ;
-                dropdown.add("Exsisting Rotes");
+                        for (Route route : routeCollection.getAllRoutes()) {
+                            dropdown.add(route.getName());
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                this, android.R.layout.simple_spinner_item, dropdown);
 
-                for ( Route route : routeCollection.getAllRoutes()){
-                    dropdown.add(route.getName()) ;
-                }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                       this, android.R.layout.simple_spinner_item, dropdown);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        Spinner spinner = (Spinner) findViewById(R.id.select_route_spinner);
+                        spinner.setAdapter(adapter);
+                    }
+                case REQUEST_CODE_LauchAddRoute:
+                    if (resultCode == Activity.RESULT_OK){
+                        name= data.getStringExtra("NewAddedName");
+                        CityDriveDistance = data.getFloatExtra("NewAddedcity", 0) ;
+                        HighwayDriveDistance = data.getFloatExtra("NewAddedhighway", 0);
+                        Route newRoute = new Route( name ,CityDriveDistance, HighwayDriveDistance) ;
+                        routeCollection.add(newRoute);
+                        dropdown = new ArrayList<>();
+                        dropdown.add("Exsisting Rotes");
+                        for (Route route : routeCollection.getAllRoutes()) {
+                            dropdown.add(route.getName());
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                this, android.R.layout.simple_spinner_item, dropdown);
 
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                Spinner spinner = (Spinner) findViewById(R.id.select_route_spinner);
-                spinner.setAdapter(adapter);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        Spinner spinner = (Spinner) findViewById(R.id.select_route_spinner);
+                        spinner.setAdapter(adapter);
+
+                    }
+
+            }
 
 
     }
-
     private void ExtractDataFromIntent() {
         Intent intent = getIntent() ;
         name = intent.getStringExtra("signalNewRouteName") ;
@@ -131,4 +150,6 @@ public class SelectRouteActivity extends AppCompatActivity {
         intent.putExtra("signalNewRouteHighway" , route.getHighwayDriveDistance()) ;
         return intent ;
     }
+
+
 }
