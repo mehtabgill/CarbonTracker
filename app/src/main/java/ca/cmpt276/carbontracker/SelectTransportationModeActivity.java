@@ -8,9 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+
 public class SelectTransportationModeActivity extends AppCompatActivity {
     Spinner selectCarSpinner;
     Button addCarButton;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> currentCarListDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +29,18 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
             }
         });
 
-        //TODO: Populate it with actual current cars info
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, Model.getInstance().getCarMakeList()
-        );
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         selectCarSpinner = (Spinner)findViewById(R.id.select_car_spinner);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        currentCarListDescription = Model.getCarEntriesDescription(Model.RetriveEntries.Current);
+        adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, currentCarListDescription
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         selectCarSpinner.setAdapter(adapter);
+
     }
 }
