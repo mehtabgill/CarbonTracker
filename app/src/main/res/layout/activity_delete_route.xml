@@ -10,20 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ca.cmpt276.carbontracker.DeleteRoute">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name of the Route"
-        android:ems="10"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="45dp"
-        android:id="@+id/editTextDeleteRoute" />
-
     <Button
         android:text="Delete it"
         android:layout_width="wrap_content"
@@ -43,4 +29,30 @@
         android:layout_alignBottom="@+id/buttonDeleteit"
         android:layout_toLeftOf="@+id/editTextDeleteRoute"
         android:layout_toStartOf="@+id/editTextDeleteRoute" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_marginRight="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="43dp"
+        android:id="@+id/editTextDeleteRoute"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="Enter Route Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/editTextDeleteRoute"
+        android:layout_alignStart="@+id/editTextDeleteRoute"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="15dp"
+        android:id="@+id/textView"
+        android:textSize="18sp" />
 </RelativeLayout>

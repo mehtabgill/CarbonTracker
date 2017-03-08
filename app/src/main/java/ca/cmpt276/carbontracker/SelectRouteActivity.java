@@ -16,8 +16,8 @@ public class SelectRouteActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_EditRoute = 1024;
     String name ;
-    float CityDriveDistance ;
-    float HighwayDriveDistance ;
+    float CityDriveDistance  = -2;
+    float HighwayDriveDistance = -2 ;
     ArrayList<String> dropdown ;
     RouteCollection routeCollection = new RouteCollection() ;
     @Override
@@ -36,9 +36,13 @@ public class SelectRouteActivity extends AppCompatActivity {
         Route newRoute = new Route( name ,CityDriveDistance, HighwayDriveDistance) ;
         routeCollection.add(newRoute);}
 
+        dropdown = new ArrayList<>() ;
+        dropdown.add("Exsisting Rotes");
+
         for ( Route route : routeCollection.getAllRoutes()){
             dropdown.add(route.getName()) ;
         }
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, dropdown);
 
@@ -71,6 +75,8 @@ public class SelectRouteActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(SelectRouteActivity.this, DeleteRoute.class);
+                startActivity(intent);
 
             }
         });
@@ -85,7 +91,15 @@ public class SelectRouteActivity extends AppCompatActivity {
                 String newname = data.getStringExtra("editedName") ;
                 float newcity = data.getFloatExtra("editcity", 0) ;
                 float newhighway = data.getFloatExtra("edithighway", 0);
-                routeCollection.EditRoute(routeCollection.findRouteWithName(newname), newname, newcity, newhighway);
+                String OrignalName = data.getStringExtra("signalOrignalName") ;
+                routeCollection.EditRoute(OrignalName, newname, newcity, newhighway);
+
+                dropdown = new ArrayList<>() ;
+                dropdown.add("Exsisting Rotes");
+
+                for ( Route route : routeCollection.getAllRoutes()){
+                    dropdown.add(route.getName()) ;
+                }
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                        this, android.R.layout.simple_spinner_item, dropdown);
 
