@@ -24,6 +24,6 @@ task clean(type: Delete) {
 
 allprojects {
     repositories {
-        maven { url "https://jitpack.i"}
+        maven { url "https://jitpack.io"}
     }
 }
