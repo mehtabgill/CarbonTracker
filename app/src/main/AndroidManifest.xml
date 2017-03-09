@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ca.cmpt276.carbontracker">
+    package="ca.cmpt276.carbontracker.UI">
 
     <application
         android:allowBackup="true"
@@ -8,19 +8,24 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UI.WelcomeScreenActivity">
+        <activity android:name=".WelcomeScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UI.MainMenuActivity" />
-        <activity android:name=".UI.AddCarActivity" />
-        <activity android:name=".UI.ViewCarbonFootprintActivity" />
-        <activity android:name=".UI.SelectRouteActivity" />
-        <activity android:name=".UI.SelectTransportationModeActivity" />
-        <activity android:name=".UI.EditDeleteCarActivity"></activity>
+        <activity android:name=".MainMenuActivity">
+
+        </activity>
+        <activity android:name=".SelectTransportationModeActivity" />
+        <activity android:name=".ViewCarbonFootprintActivity" />
+        <activity android:name=".SelectRouteActivity"/>
+        <activity android:name=".AddRouteActivity" />
+        <activity android:name=".EditRouteActivity" />
+        <activity android:name=".DeleteRouteActivity"></activity>
+        <activity android:name=".AddCarActivity" />
+        <activity android:name=".EditDeleteCarActivity"></activity>
     </application>
 
 </manifest>

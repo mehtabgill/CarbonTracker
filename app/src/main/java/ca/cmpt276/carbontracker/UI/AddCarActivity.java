@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import ca.cmpt276.carbontracker.Model.Model;
+import ca.cmpt276.carbontracker.UI.R;
 
 public class AddCarActivity extends AppCompatActivity {
     public enum Spinner {Model, Year};

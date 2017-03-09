@@ -18,7 +18,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import ca.cmpt276.carbontracker.R;
+import ca.cmpt276.carbontracker.UI.R;
 
 /*
  * Class for displaying carbon footprint activity

@@ -13,12 +13,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import ca.cmpt276.carbontracker.Model.Model;
-import ca.cmpt276.carbontracker.R;
+import ca.cmpt276.carbontracker.UI.R;
 
 public class SelectTransportationModeActivity extends AppCompatActivity {
     Spinner selectCarSpinner;
     String selectedCarDescription;
-    Button selectCarButton;
     Button addCarButton;
     Button editDeleteCarButton;
     ArrayAdapter<String> adapter;
@@ -30,14 +29,6 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_transportation_mode);
-
-        selectCarButton = (Button) findViewById(R.id.select_car_button);
-        selectCarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         addCarButton = (Button) findViewById(R.id.add_car_button);
         addCarButton.setOnClickListener(new View.OnClickListener() {

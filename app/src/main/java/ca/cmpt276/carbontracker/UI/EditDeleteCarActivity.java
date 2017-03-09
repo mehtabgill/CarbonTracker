@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import ca.cmpt276.carbontracker.Model.Car;
 import ca.cmpt276.carbontracker.Model.Model;
+import ca.cmpt276.carbontracker.UI.R;
 
 public class EditDeleteCarActivity extends AppCompatActivity {
 

@@ -13,7 +13,6 @@ public class Model {
     static CarCollection totalCarCollection = new CarCollection();
     static CarCollection currentSearchPreviousState = new CarCollection();
     static ArrayList<String> carMakeList;
-    static JourneyCollection currentJourneyCollection = new JourneyCollection();
     static public enum RetriveEntries{Current, Search, Total};
     boolean fullDataLoaded = false;
     boolean makeDataLoaded = false;

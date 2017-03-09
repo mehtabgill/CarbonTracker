@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import ca.cmpt276.carbontracker.Model.Model;
+import ca.cmpt276.carbontracker.UI.R;
 
 public class MainMenuActivity extends AppCompatActivity {
 

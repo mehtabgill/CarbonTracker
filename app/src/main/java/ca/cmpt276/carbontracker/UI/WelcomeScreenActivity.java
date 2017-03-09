@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import ca.cmpt276.carbontracker.Model.CarCollection;
 import ca.cmpt276.carbontracker.Model.DataReader;
 import ca.cmpt276.carbontracker.Model.Model;
+import ca.cmpt276.carbontracker.UI.R;
 /*
 This class is for the welcome screen. It is the first screen that will appear. Some image
 animations will play with the optino for the user to skip them. Either when the skip button is

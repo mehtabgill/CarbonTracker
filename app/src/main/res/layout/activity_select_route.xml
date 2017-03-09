@@ -15,4 +15,32 @@
         android:layout_height="wrap_content"
         android:id="@+id/select_route_spinner" />
 
+    <Button
+        android:text="new route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="92dp"
+        android:id="@+id/buttonAddRoute" />
+
+    <Button
+        android:text="delete route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonAddRoute"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/buttonDeleteRoute" />
+
+    <Button
+        android:text="Edit Route"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonDeleteRoute"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:id="@+id/buttonLaunchEditRoute" />
+
 </RelativeLayout>
