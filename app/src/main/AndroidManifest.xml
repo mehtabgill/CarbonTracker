@@ -8,19 +8,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WelcomeScreenActivity">
+        <activity android:name=".UI.WelcomeScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenuActivity" />
-        <activity android:name=".AddCarActivity" />
-        <activity android:name=".ViewCarbonFootprintActivity" />
-        <activity android:name=".SelectRouteActivity" />
-        <activity android:name=".SelectTransportationModeActivity" />
-        <activity android:name=".EditDeleteCarActivity"></activity>
+        <activity android:name=".UI.MainMenuActivity" />
+        <activity android:name=".UI.AddCarActivity" />
+        <activity android:name=".UI.ViewCarbonFootprintActivity" />
+        <activity android:name=".UI.SelectRouteActivity" />
+        <activity android:name=".UI.SelectTransportationModeActivity" />
+        <activity android:name=".UI.EditDeleteCarActivity"></activity>
     </application>
 
 </manifest>

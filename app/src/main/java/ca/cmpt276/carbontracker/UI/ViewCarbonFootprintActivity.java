@@ -1,4 +1,4 @@
-package ca.cmpt276.carbontracker;
+package ca.cmpt276.carbontracker.UI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +17,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ca.cmpt276.carbontracker.R;
 
 /*
  * Class for displaying carbon footprint activity

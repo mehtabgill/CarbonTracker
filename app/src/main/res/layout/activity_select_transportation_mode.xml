@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ca.cmpt276.carbontracker.SelectTransportationModeActivity">
+    tools:context="ca.cmpt276.carbontracker.UI.SelectTransportationModeActivity">
 
     <TextView
         android:text="@string/select_car_text"
@@ -47,5 +47,15 @@
         android:layout_marginRight="25dp"
         android:layout_toLeftOf="@+id/add_car_button"
         android:layout_toStartOf="@+id/add_car_button"
-        android:text="@string/edit_delete_car_button" />
+        android:text="@string/edit_delete_car_button_text" />
+
+    <Button
+        android:id="@+id/select_car_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/select_car_spinner"
+        android:layout_marginTop="20dp"
+        android:text="Button" />
 </RelativeLayout>

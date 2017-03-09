@@ -1,8 +1,7 @@
-package ca.cmpt276.carbontracker;
+package ca.cmpt276.carbontracker.UI;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,9 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
+
+import ca.cmpt276.carbontracker.Model.Model;
 
 public class AddCarActivity extends AppCompatActivity {
     public enum Spinner {Model, Year};

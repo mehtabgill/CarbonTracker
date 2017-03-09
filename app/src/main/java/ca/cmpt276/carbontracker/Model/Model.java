@@ -1,9 +1,6 @@
-package ca.cmpt276.carbontracker;
+package ca.cmpt276.carbontracker.Model;
 
 import java.util.ArrayList;
-
-import static ca.cmpt276.carbontracker.Model.RetriveEntries.Search;
-import static ca.cmpt276.carbontracker.Model.RetriveEntries.Total;
 
 /**
  * Created by Elvin Laptop on 2017-03-06.
@@ -16,6 +13,7 @@ public class Model {
     static CarCollection totalCarCollection = new CarCollection();
     static CarCollection currentSearchPreviousState = new CarCollection();
     static ArrayList<String> carMakeList;
+    static JourneyCollection currentJourneyCollection = new JourneyCollection();
     static public enum RetriveEntries{Current, Search, Total};
     boolean fullDataLoaded = false;
     boolean makeDataLoaded = false;

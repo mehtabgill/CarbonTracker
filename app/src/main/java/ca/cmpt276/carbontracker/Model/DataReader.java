@@ -1,6 +1,5 @@
-package ca.cmpt276.carbontracker;
+package ca.cmpt276.carbontracker.Model;
 
-import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedReader;

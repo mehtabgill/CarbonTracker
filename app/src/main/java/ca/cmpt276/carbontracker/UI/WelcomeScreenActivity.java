@@ -1,4 +1,4 @@
-package ca.cmpt276.carbontracker;
+package ca.cmpt276.carbontracker.UI;
 
 import android.animation.Animator;
 import android.content.Context;
@@ -16,6 +16,10 @@ import java.util.TimerTask;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+
+import ca.cmpt276.carbontracker.Model.CarCollection;
+import ca.cmpt276.carbontracker.Model.DataReader;
+import ca.cmpt276.carbontracker.Model.Model;
 /*
 This class is for the welcome screen. It is the first screen that will appear. Some image
 animations will play with the optino for the user to skip them. Either when the skip button is

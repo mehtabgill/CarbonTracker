@@ -1,4 +1,4 @@
-package ca.cmpt276.carbontracker;
+package ca.cmpt276.carbontracker.UI;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

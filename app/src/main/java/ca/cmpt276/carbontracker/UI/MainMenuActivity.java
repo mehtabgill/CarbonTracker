@@ -1,14 +1,13 @@
-package ca.cmpt276.carbontracker;
+package ca.cmpt276.carbontracker.UI;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.InputStream;
+import ca.cmpt276.carbontracker.Model.Model;
 
 public class MainMenuActivity extends AppCompatActivity {
 

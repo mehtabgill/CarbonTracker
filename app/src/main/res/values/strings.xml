@@ -7,8 +7,9 @@
     <string name="select_car_text">Select your car from the drop down list.
         \nPress Edit/Delete Car to edit/delete selected car.
         \nPress Add Car to add new car to the list </string>
-    <string name="add_car_button_text">Add New Car</string>
-    <string name="edit_delete_car_button">Edit/Delete Car</string>
+    <string name="select_car_button_text">SELECT</string>
+    <string name="add_car_button_text">ADD NEW CAR</string>
+    <string name="edit_delete_car_button_text">EDIT/DELETE CAR</string>
     <string name="edit_delete_car_error">Error: No car currently available for edit/delete</string>
     <string name="enter_nickname_textView">Enter Nickname: </string>
     <string name="nickname_hint">Nickname</string>

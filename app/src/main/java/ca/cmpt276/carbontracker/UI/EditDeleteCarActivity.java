@@ -1,6 +1,5 @@
-package ca.cmpt276.carbontracker;
+package ca.cmpt276.carbontracker.UI;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +14,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import ca.cmpt276.carbontracker.Model.Car;
+import ca.cmpt276.carbontracker.Model.Model;
 
 public class EditDeleteCarActivity extends AppCompatActivity {
 
