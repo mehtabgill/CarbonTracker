@@ -39,5 +39,7 @@
     <string name="journey_distance_header">Distance\n(km) </string>
     <string name="journey_car_name_header">Car Name </string>
     <string name="journey_carbon_emission_header">Carbon Emission\n(kg)</string>
+    <string name="switch_button">SWITCH TO PIE CHART/TABLE</string>
+
 
 </resources>

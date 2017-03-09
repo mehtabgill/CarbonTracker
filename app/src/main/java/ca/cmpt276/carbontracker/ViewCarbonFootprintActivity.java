@@ -2,6 +2,8 @@ package ca.cmpt276.carbontracker;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -16,14 +18,13 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.ArrayList;
-
 /*
  * Class for displaying carbon footprint activity
  */
 public class ViewCarbonFootprintActivity extends AppCompatActivity {
     private RelativeLayout mainLayout;
     private TableLayout tableLayout;
+    private PieChart chart;
 
     //Column for: date of trip; distance; vehicle name; carbon emitted;
     private int colNum = 4;
@@ -37,12 +38,6 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
     ArrayList<Integer> testInt = new ArrayList<Integer>();
     ArrayList<Integer> testInt2 = new ArrayList<Integer>();
     ArrayList<Integer> testInt3 = new ArrayList<Integer>();
-
-    //arrays to be displayed
-    float rainfall[] = {98.8f, 123.8f, 161.6f, 24.2f, 52f, 58.2f, 35.4f, 13.8f, 78.4f, 203.4f, 240.2f, 159.7f};
-    String monthNames[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,24 +109,37 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                     currentRow.addView(textView);
                 }
             }
+            final Button pieChartButton = (Button) findViewById(R.id.switch_button);
+            chart = (PieChart) findViewById(R.id.chart);
+            pieChartButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(tableLayout.getVisibility() == View.VISIBLE){
+                        tableLayout.setVisibility(View.INVISIBLE);
+                        chart.setVisibility(View.VISIBLE);
+                        setupPieChart();
+                    }
+                    else{
+                        tableLayout.setVisibility(View.VISIBLE);
+                        chart.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
         }
-
-
-        //function that sets up the piechart on creatation of activity
-        setupPieChart();
     }
 
     private void setupPieChart(){
-        //populating a list of entires into the pie graph
+        //populating a list of entries into the pie graph
         List<PieEntry> pieEntries = new ArrayList<>();
 
-        for(int i=0; i<rainfall.length; i++)
+        for(int i=0; i< rowNum; i++)
         {
-            pieEntries.add(new PieEntry(rainfall[i], monthNames[i]));
+            //Instead of testInt, put carbon emission, and dateString is journey date/name
+            pieEntries.add(new PieEntry(testInt.get(i), dateString.get(i)));
         }
 
         //parameters are the array of entries followed by name of graph
-        PieDataSet dataset = new PieDataSet(pieEntries, "Rainfall for Vancouver");
+        PieDataSet dataset = new PieDataSet(pieEntries, "Test");
 
         //change the color of the pie chart
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -140,17 +148,12 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         PieData data = new PieData(dataset);
 
         //get the chart from the layout
-        PieChart chart = (PieChart) findViewById(R.id.chart);
         chart.setData(data);
 
         //make chart animate
         chart.animateY(1000);
 
-
         chart.invalidate();
-
-
-
 
     }
 }
