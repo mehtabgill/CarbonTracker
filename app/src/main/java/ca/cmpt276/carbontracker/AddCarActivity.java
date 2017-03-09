@@ -178,7 +178,7 @@ public class AddCarActivity extends AppCompatActivity {
         }
     }
     
-    public static void populateSpinner(Context context, android.widget.Spinner spinner, List<String> stringArrayList) {
+    public static void populateSpinner(Context context, android.widget.Spinner spinner, ArrayList<String> stringArrayList) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 context, android.R.layout.simple_spinner_item, stringArrayList
         );
