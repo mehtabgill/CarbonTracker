@@ -16,7 +16,7 @@ public class RouteCollection {
 
     public void remove(String routeName){
         for(Route route: routes){
-            if(route.getName().toLowerCase() == routeName.toLowerCase()){
+            if(route.getName().toLowerCase().equals(routeName.toLowerCase())){
                 remove(route);
             }
         }
@@ -24,7 +24,7 @@ public class RouteCollection {
 
     public void EditRoute(String OrignalName, String name, float citydrivedistance, float highwaydrivedistance) {
         for( Route route : this.routes){
-            if (route.getName().toLowerCase().equals(OrignalName))
+            if (route.getName().toLowerCase().equals(OrignalName.toLowerCase()))
             {
                 route.setName(name);
                 route.setCityDriveDistance(citydrivedistance);
@@ -41,10 +41,10 @@ public class RouteCollection {
         return routes;
     }
 
-    public ArrayList<Route> findRouteWithName(String name){
+    public ArrayList<Route> findRouteWithName(String namE){
         ArrayList<Route> temp = new ArrayList<Route>();
         for(Route route: routes){
-            if(route.getName().toLowerCase() == name.toLowerCase()){
+            if(route.getName().toLowerCase().equals(namE.toLowerCase())){
                 temp.add(route);
             }
         }

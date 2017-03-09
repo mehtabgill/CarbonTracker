@@ -18,18 +18,21 @@ public class EditRoute extends AppCompatActivity {
     EditText editName ;
     EditText editCityDistance ;
     EditText editHighDistance ;
-    String name  ;
-    String Cdistance ;
-    String hdistance  ;
+    String name = "no" ;
+    String Cdistance = "0";
+    String hdistance = "0" ;
     String OrignalName ;
+    float temp1 = 0 ;
+    float temp2 =  0  ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_route);
-        ExtractdataFRomIntent() ;
+        ExtractdataFRomIntent11() ;
 
         editName = (EditText) findViewById(R.id.editTextEditRouteName) ;
-        editCityDistance = (EditText) findViewById(R.id.editTextEditHighway) ;
+        editCityDistance = (EditText) findViewById(R.id.editTextEditCity) ;
         editHighDistance = (EditText) findViewById(R.id.editTextEditHighway) ;
 
 
@@ -41,7 +44,7 @@ public class EditRoute extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                name = editName.getText().toString();
             }
 
             @Override
@@ -59,7 +62,7 @@ public class EditRoute extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                Cdistance = editCityDistance.getText().toString() ;
             }
 
             @Override
@@ -77,7 +80,7 @@ public class EditRoute extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                hdistance = editHighDistance.getText().toString() ;
             }
 
             @Override
@@ -85,6 +88,8 @@ public class EditRoute extends AppCompatActivity {
                 hdistance = editHighDistance.getText().toString() ;
             }
         });
+        temp1 = ParseFloat(Cdistance);
+        temp2 = ParseFloat(hdistance) ;
 
         Button btnok = (Button) findViewById(R.id.buttonOKEdit) ;
         btnok.setOnClickListener(new View.OnClickListener() {
@@ -92,8 +97,8 @@ public class EditRoute extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent() ;
                 intent.putExtra("editedName", name) ;
-                intent.putExtra("editcity" , Cdistance) ;
-                intent.putExtra("edithighway", hdistance) ;
+                intent.putExtra("editcity" , temp1) ;
+                intent.putExtra("edithighway", temp2) ;
                 intent.putExtra("signalOrignalName", OrignalName) ;
                 setResult(Activity.RESULT_OK , intent);
                 finish();
@@ -110,15 +115,26 @@ public class EditRoute extends AppCompatActivity {
 
     }
 
-    private void ExtractdataFRomIntent() {
+    private void ExtractdataFRomIntent11() {
         Intent intent = getIntent() ;
-        OrignalName = intent.getStringExtra("signalEditingROute") ;
+        if(intent.hasExtra("signalEditingROute")){
+        OrignalName = intent.getStringExtra("signalEditingROute") ;}
     }
 
     public static Intent intentmakerEditRoute(Context context, String name){
         Intent intent  =  new Intent(context, EditRoute.class);
         intent.putExtra("signalEditingROute" , name) ;
         return intent ;
+    }
+    float ParseFloat(String str ) {
+        if (str != null && str.length() > 0) {
+            try {
+                return Float.parseFloat(str);
+            } catch(Exception e) {
+                return -1;
+            }
+        }
+        else return 0;
     }
 
 }

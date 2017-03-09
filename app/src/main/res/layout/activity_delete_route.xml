@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="112dp"
-        android:id="@+id/buttonDeleteit"
+        android:id="@+id/buttonDeleteitforMe"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -25,26 +25,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonCancelDelete"
-        android:layout_alignBaseline="@+id/buttonDeleteit"
-        android:layout_alignBottom="@+id/buttonDeleteit"
+        android:layout_alignBaseline="@+id/buttonDeleteitforMe"
+        android:layout_alignBottom="@+id/buttonDeleteitforMe"
         android:layout_toLeftOf="@+id/editTextDeleteRoute"
         android:layout_toStartOf="@+id/editTextDeleteRoute" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_marginRight="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="43dp"
-        android:id="@+id/editTextDeleteRoute"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <TextView
-        android:text="Enter Route Name"
+        android:text="Are you sure?"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

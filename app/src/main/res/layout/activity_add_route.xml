@@ -65,4 +65,32 @@
         android:layout_marginLeft="37dp"
         android:layout_marginStart="37dp"
         android:id="@+id/buttonCancel" />
+
+    <TextView
+        android:text="Name:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editText_cityDistance"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/textView5"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="City Distance:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editText_highwayDistance"
+        android:id="@+id/textView6"
+        android:textSize="14sp" />
+
+    <TextView
+        android:text="Highway Distance:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView7"
+        android:layout_alignBottom="@+id/editText_highwayDistance"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="14sp" />
 </RelativeLayout>

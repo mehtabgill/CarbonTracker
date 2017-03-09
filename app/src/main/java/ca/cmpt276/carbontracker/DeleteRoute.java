@@ -1,5 +1,7 @@
 package ca.cmpt276.carbontracker;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,43 +14,21 @@ import android.widget.EditText;
 public class DeleteRoute extends AppCompatActivity {
 
     String name ;
-    Route route ;
-    EditText RouteName ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_route);
+        ExtractdataFRomIntent();
 
-        RouteName = (EditText) findViewById(R.id.editTextDeleteRoute) ;
-
-
-        RouteName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                name = RouteName.getText().toString() ;
-
-
-            }
-        });
-
-        route = new Route(name, -1, -1 ) ;
-        Button btnDelete = (Button) findViewById(R.id.buttonDeleteit) ;
+        Button btnDelete = (Button) findViewById(R.id.buttonDeleteitforMe) ;
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = SelectRouteActivity .intentmakerSelectRoute(DeleteRoute.this, route) ;
-                startActivity(intent);
+                Intent intent1 = new Intent() ;
+                intent1.putExtra("signalDeletingName", name) ;
+                setResult(Activity.RESULT_OK , intent1);
+                finish();
             }
         });
         Button btnCancelDelete = (Button) findViewById(R.id.buttonCancelDelete) ;
@@ -59,6 +39,17 @@ public class DeleteRoute extends AppCompatActivity {
             }
         });
 
+    }
+    private void ExtractdataFRomIntent() {
+        Intent intent = getIntent() ;
+        intent.hasExtra("signaldeleteName11");
+        name = intent.getStringExtra("signaldeleteName11") ;
+    }
+
+    public static Intent intentmakerDeleteRoute(Context context, String name){
+        Intent intent  =  new Intent(context, DeleteRoute.class);
+        intent.putExtra("signaldeleteName11" , name) ;
+        return intent ;
     }
 }
 
