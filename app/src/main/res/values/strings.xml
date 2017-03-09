@@ -7,9 +7,10 @@
     <string name="select_car_text">Select your car from the drop down list.
         \nPress Edit/Delete Car to edit/delete selected car.
         \nPress Add Car to add new car to the list </string>
-    <string name="add_car_button_text">Add New Car</string>
-    <string name="edit_delete_car_button">Edit/Delete Car</string>
-    <string name="edit_delete_car_error">Error: No car currently available for edit/delete</string>
+    <string name="select_car_button_text">SELECT CAR</string>
+    <string name="add_car_button_text">NEW CAR</string>
+    <string name="edit_delete_car_button_text">EDIT/DELETE CAR</string>
+    <string name="error_no_car">Error: No car currently available</string>
     <string name="enter_nickname_textView">Enter Nickname: </string>
     <string name="nickname_hint">Nickname</string>
     <string name="nickname_input_error">Error: Nickname must contain at least 1 character</string>
@@ -24,14 +25,29 @@
     <string name="ok_text">OK</string>
     <string name="cancel_text">CANCEL</string>
     <string name="car_existed_message">Car already existed</string>
+    <string name="select_route_button_text">SELECT ROUTE</string>
+    <string name="add_route_button_text">NEW ROUTE</string>
+    <string name="edit_route_button_text">EDIT ROUTE</string>
+    <string name="delete_route_button_text">DELETE ROUTE</string>
+    <string name="error_no_route_selected">Error: No route available for select</string>
     <string name="load_car_completed">Load completed</string>
     <string name="load_make_completed">Load Make completed</string>
     <string name="selected_entries_title">Your selected entry is: %1s </string>
     <string name="edit_nickname_text">Edit Car Nickname: </string>
     <string name="edit_car_entries_text">Edit Car Entries(Make, Model, Year): </string>
-    <string name="delete_button">Delete Car</string>
-    <string name="save_button">Save Car Information</string>
+    <string name="delete_car_button_text">Delete Car</string>
+    <string name="save_car_info_button_text">Save Car Information</string>
     <string name="welcomeMessage1">Want to save the Earth?</string>
     <string name="welcomeMessage2">Click the picture!</string>
     <string name="skip">SKIP</string>
+    <string name="table_header">SUMMARY OF CARBON FOORPRINT</string>
+    <string name="journey_date_header">Date</string>
+    <string name="journey_distance_header">Distance\n(km) </string>
+    <string name="journey_car_name_header">Car Name </string>
+    <string name="journey_carbon_emission_header">Carbon Emission\n(kg)</string>
+    <string name="switch_button">SWITCH TO PIE CHART/TABLE</string>
+    <string name="existing_car_text">Existing Routes</string>
+    <string name="no_existing_car_text">No Existing Routes</string>
+
+
 </resources>

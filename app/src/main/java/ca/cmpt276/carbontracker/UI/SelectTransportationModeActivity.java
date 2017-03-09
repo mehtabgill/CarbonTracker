@@ -12,12 +12,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import ca.cmpt276.carbontracker.Model.Model;
-import ca.cmpt276.carbontracker.UI.R;
+import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 public class SelectTransportationModeActivity extends AppCompatActivity {
     Spinner selectCarSpinner;
     String selectedCarDescription;
+    Button selectCarButton;
     Button addCarButton;
     Button editDeleteCarButton;
     ArrayAdapter<String> adapter;
@@ -29,6 +29,24 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_transportation_mode);
+        ERROR_NO_CAR = getString(R.string.error_no_car);
+
+        selectCarButton = (Button) findViewById(R.id.select_car_button);
+        selectCarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentCarListDescription.isEmpty()){
+                    Toast.makeText(SelectTransportationModeActivity.this,
+                            ERROR_NO_CAR,
+                            Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Intent intent = new Intent(SelectTransportationModeActivity.this, SelectRouteActivity.class);
+                    intent.putExtra(DESCRIPTION_KEY, selectedCarDescription);
+                    startActivity(intent);
+                }
+            }
+        });
 
         addCarButton = (Button) findViewById(R.id.add_car_button);
         addCarButton.setOnClickListener(new View.OnClickListener() {
@@ -38,7 +56,7 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
             }
         });
 
-        ERROR_NO_CAR = getString(R.string.edit_delete_car_error);
+
         editDeleteCarButton = (Button)findViewById(R.id.edit_delete_car_button);
         editDeleteCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,8 +81,8 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        Model.updateCurrentCarCollectionDescription();
-        currentCarListDescription = Model.getCarEntriesDescription(Model.RetriveEntries.Current);
+        SingletonModel.updateCurrentCarCollectionDescription();
+        currentCarListDescription = SingletonModel.getCarEntriesDescription(SingletonModel.RetriveEntries.Current);
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, currentCarListDescription
         );

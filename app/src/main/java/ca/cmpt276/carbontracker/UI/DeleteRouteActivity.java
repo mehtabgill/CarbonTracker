@@ -45,7 +45,7 @@ public class DeleteRouteActivity extends AppCompatActivity {
         name = intent.getStringExtra("signaldeleteName11") ;
     }
 
-    public static Intent intentmakerDeleteRoute(Context context, String name){
+    public static Intent intentMakerDeleteRoute(Context context, String name){
         Intent intent  =  new Intent(context, DeleteRouteActivity.class);
         intent.putExtra("signaldeleteName11" , name) ;
         return intent ;

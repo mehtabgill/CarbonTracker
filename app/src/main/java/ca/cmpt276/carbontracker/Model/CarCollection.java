@@ -59,14 +59,14 @@ public class CarCollection implements Iterable<Car> {
         return -1;
     }
 
-    public CarCollection findCarsWithNickname(String name) {
-        CarCollection temp = new CarCollection();
-        for (Car car : cars) {
-            if (car.getNickname().toLowerCase().equals(name.toLowerCase())) {
-                temp.add(car);
+    public Car findCarsWithNickname(String name) {
+        Car car = new Car();
+        for (Car currentCar : cars) {
+            if (currentCar.getNickname().toLowerCase().equals(name.toLowerCase())) {
+                car = currentCar;
             }
         }
-        return temp;
+        return car;
     }
 
     public CarCollection findCarsWithModel(String model) {

@@ -6,22 +6,23 @@ import java.util.ArrayList;
  * Created by Elvin Laptop on 2017-03-06.
  */
 
-public class Model {
+public class SingletonModel {
     static CarCollection currentCarCollection = new CarCollection();
     static CarCollection currentSearchCollection = new CarCollection();
-    static RouteCollection routes = new RouteCollection();
     static CarCollection totalCarCollection = new CarCollection();
     static CarCollection currentSearchPreviousState = new CarCollection();
+    static RouteCollection routeCollection = new RouteCollection();
+    static JourneyCollection journeyCollection = new JourneyCollection();
     static ArrayList<String> carMakeList;
     static public enum RetriveEntries{Current, Search, Total};
     boolean fullDataLoaded = false;
     boolean makeDataLoaded = false;
 
-    private static final Model instance = new Model();
+    private static final SingletonModel instance = new SingletonModel();
 
     //private constructor to avoid client applications to use constructor
-    private Model(){}
-    public static Model getInstance(){
+    private SingletonModel(){}
+    public static SingletonModel getInstance(){
         return instance;
     }
 
@@ -120,7 +121,7 @@ public class Model {
      * TODO: edit this later
      */
 
-    public static Car findCarBasedOnDescription(String description, RetriveEntries mode){
+    public static Car getCarFromCollection(String description, RetriveEntries mode){
         Car returnCar = new Car();
         String current;
         int compareValue;
@@ -176,8 +177,52 @@ public class Model {
         return currentCarCollection;
     }
 
-    public RouteCollection getRoutes() {
-        return routes;
+    public void addToCarCollection(Car car){
+        currentCarCollection.add(car);
+    }
+
+    public void removeFromCarCollection(String nickname){
+        Car car = currentCarCollection.findCarsWithNickname(nickname);
+        currentCarCollection.remove(car);
+    }
+
+    public static Route getRouteByName(String name){
+        Route returnRoute = new Route();
+        for (Route route: routeCollection){
+            if(route.getName().toLowerCase().equals(name.toLowerCase())){
+                returnRoute = route;
+            }
+        }
+        return returnRoute;
+    }
+    public static RouteCollection getRouteCollection() {
+        return routeCollection;
+    }
+
+    public static void addToRouteCollection(Route route){
+        routeCollection.add(route);
+    }
+
+    public static void removeFromRouteCollection(String routeName){
+        routeCollection.remove(routeName);
+    }
+
+    public static ArrayList<String> getRouteCollectionNames(){
+        ArrayList<String> routeNames = new ArrayList<>();
+        for(Route route: routeCollection){
+            routeNames.add(route.getName());
+        }
+        return routeNames;
+    }
+
+    public static void addNewJourney(String carDescription, String routeName){
+        Car newCar = getCarFromCollection(carDescription, RetriveEntries.Current);
+        Route newRoute = getRouteByName(routeName);
+        journeyCollection.addJourney(new Journey(newCar, newRoute));
+    }
+
+    public static void editRoute(String originalName, String newName, float newCity, float newHighway){
+        routeCollection.editRoute(originalName, newName, newCity, newHighway);
     }
 
     public boolean isLoaded() {

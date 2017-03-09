@@ -1,8 +1,9 @@
 package ca.cmpt276.carbontracker.Model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class RouteCollection {
+public class RouteCollection implements Iterable<Route>{
     private ArrayList<Route> routes = new ArrayList<Route>();
 
     public void add(Route route){
@@ -22,13 +23,13 @@ public class RouteCollection {
         }
     }
 
-    public void EditRoute(String OrignalName, String name, float citydrivedistance, float highwaydrivedistance) {
+    public void editRoute(String orignalName, String name, float cityDriveDistance, float highwayDriveDistance) {
         for( Route route : this.routes){
-            if (route.getName().toLowerCase().equals(OrignalName.toLowerCase()))
+            if (route.getName().toLowerCase().equals(orignalName.toLowerCase()))
             {
                 route.setName(name);
-                route.setCityDriveDistance(citydrivedistance);
-                route.setHighwayDriveDistance(highwaydrivedistance);
+                route.setCityDriveDistance(cityDriveDistance);
+                route.setHighwayDriveDistance(highwayDriveDistance);
             }
         }
     }
@@ -68,5 +69,9 @@ public class RouteCollection {
             }
         }
         return temp;
+    }
+    @Override
+    public Iterator<Route> iterator() {
+        return routes.iterator();
     }
 }

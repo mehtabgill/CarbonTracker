@@ -7,8 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import ca.cmpt276.carbontracker.Model.Model;
-import ca.cmpt276.carbontracker.UI.R;
+import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -42,7 +41,7 @@ public class MainMenuActivity extends AppCompatActivity {
             //Change this later
             case CREATE_JOURNEY:
             {
-                if(Model.getInstance().isLoaded()){
+                if(SingletonModel.getInstance().isLoaded()){
                     startActivity(new Intent(MainMenuActivity.this, SelectTransportationModeActivity.class));
                 }
                 else{

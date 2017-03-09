@@ -5,6 +5,8 @@ public class Route {
     private float cityDriveDistance;
     private float highwayDriveDistance;
 
+    public Route(){};
+
     public Route(String name, float cityDriveDistance, float highwayDriveDistance) {
         this.name = name;
         this.cityDriveDistance = cityDriveDistance;

@@ -47,5 +47,15 @@
         android:layout_marginRight="25dp"
         android:layout_toLeftOf="@+id/add_car_button"
         android:layout_toStartOf="@+id/add_car_button"
-        android:text="@string/edit_delete_car_button" />
+        android:text="@string/edit_delete_car_button_text" />
+
+    <Button
+        android:id="@+id/select_car_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/add_car_button"
+        android:layout_alignRight="@+id/add_car_button"
+        android:layout_below="@+id/select_car_spinner"
+        android:layout_marginTop="29dp"
+        android:text="@string/select_car_button_text" />
 </RelativeLayout>
