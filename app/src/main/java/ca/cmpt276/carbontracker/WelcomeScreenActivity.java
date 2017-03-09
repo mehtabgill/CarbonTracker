@@ -146,7 +146,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
         protected void onPostExecute(ArrayList<String> carMakeList) {
             Toast.makeText(WelcomeScreenActivity.getContext(),
-                    "Load Make completed", Toast.LENGTH_SHORT).show();
+                    getString(R.string.load_make_completed), Toast.LENGTH_SHORT).show();
             model.setCarMakeList(carMakeList);
             model.setMakeDataLoaded();
         }
@@ -161,7 +161,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
         protected void onPostExecute(CarCollection carCollection){
             Toast.makeText(WelcomeScreenActivity.getContext(),
-                    "Load completed", Toast.LENGTH_SHORT).show();
+                    getString(R.string.load_car_completed), Toast.LENGTH_SHORT).show();
             model.setTotalCarCollection(carCollection);;
             model.setFullDataLoaded();
         }

@@ -10,36 +10,95 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ca.cmpt276.carbontracker.AddCarActivity">
 
+    <TextView
+        android:id="@+id/enterName_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="21dp"
+        android:text="@string/enter_nickname_textView" />
+
+    <EditText
+        android:id="@+id/enter_nickname_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/enterName_textview"
+        android:layout_alignBottom="@+id/enterName_textview"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="13dp"
+        android:layout_marginRight="13dp"
+        android:ems="10"
+        android:hint="@string/nickname_hint"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/select_make_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/enter_nickname_editText"
+        android:layout_marginTop="26dp"
+        android:text="@string/make_spinner_header" />
+
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/select_make_spinner" />
+        android:id="@+id/select_make_spinner"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/select_make_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/select_model_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/select_make_spinner"
+        android:layout_marginTop="38dp"
+        android:text="@string/model_spinner_header" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/select_model_spinner"
-        android:layout_below="@+id/select_make_spinner"
+        android:layout_below="@+id/select_model_header"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="83dp" />
+        android:layout_marginTop="19dp" />
+
+    <TextView
+        android:id="@+id/select_year_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/select_model_spinner"
+        android:layout_marginTop="43dp"
+        android:text="@string/year_spinner_header" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/select_year_spinner"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="24dp"
+        android:layout_below="@+id/select_year_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/search_button_text"
-        android:layout_below="@+id/select_year_spinner"
+        android:id="@+id/search_button"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="35dp"
-        android:id="@+id/search_button" />
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

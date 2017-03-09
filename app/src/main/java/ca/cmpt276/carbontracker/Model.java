@@ -2,6 +2,9 @@ package ca.cmpt276.carbontracker;
 
 import java.util.ArrayList;
 
+import static ca.cmpt276.carbontracker.Model.RetriveEntries.Search;
+import static ca.cmpt276.carbontracker.Model.RetriveEntries.Total;
+
 /**
  * Created by Elvin Laptop on 2017-03-06.
  */
@@ -13,7 +16,7 @@ public class Model {
     static CarCollection totalCarCollection = new CarCollection();
     static CarCollection currentSearchPreviousState = new CarCollection();
     static ArrayList<String> carMakeList;
-    static public enum RetriveEntries{Current, Search};
+    static public enum RetriveEntries{Current, Search, Total};
     boolean fullDataLoaded = false;
     boolean makeDataLoaded = false;
 
@@ -51,34 +54,25 @@ public class Model {
         ArrayList<String> currentYearList = currentSearchCollection.getUniqueModelYears();
         return currentYearList;
     }
-
     public static void updateCurrentSearchByYear(int year){
         currentSearchCollection = currentSearchCollection.findCarsWithYear(year);
     }
-
-    public static void addNewCarBasedOnDecsription(String description){
-        for(Car car: currentSearchCollection){
+    public static boolean isCurrentCarAdded(String description){
+        for(Car car : currentCarCollection){
             if (car.getDescription().equals(description)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void addNewCarBasedOnDecsription(String nickname, String description){
+        for(Car car: currentSearchCollection){
+            if (car.getDescriptionNoNickame().equals(description)){
+                car.setNickname(nickname);
                 currentCarCollection.add(car);
             }
         }
-    }
-
-    public static ArrayList<String> getCarEntriesDescription(RetriveEntries mode){
-        ArrayList<String> carEntriesDescription = new ArrayList<>();
-        switch (mode){
-            case Search:
-                for(Car car: currentSearchCollection){
-                    carEntriesDescription.add(car.getDescription());
-                }
-                break;
-            case Current:
-                for(Car car: currentCarCollection){
-                    carEntriesDescription.add(car.getDescription());
-                }
-                break;
-        }
-        return carEntriesDescription;
     }
 
     public static void resetCurrentSearchCollection(){
@@ -87,8 +81,91 @@ public class Model {
         }
     }
 
+    public static ArrayList<String> getCarEntriesDescription(RetriveEntries mode){
+        ArrayList<String> carEntriesDescription = new ArrayList<>();
+        switch (mode){
+            case Search:
+                carEntriesDescription = currentSearchCollection.getDescriptionNoNickNameList();
+                break;
+            case Current:
+                carEntriesDescription = currentCarCollection.getDescriptionList();
+                break;
+        }
+        return carEntriesDescription;
+    }
+
+    public static void updateCurrentCarCollectionDescription(){
+        ArrayList<String> updatedDescription = new ArrayList<>();
+        ArrayList<String> updatedDescriptionNoNickname = new ArrayList<>();
+        for(Car car: currentCarCollection){
+            updatedDescription.add(car.getDescription());
+            updatedDescriptionNoNickname.add(car.getDescriptionNoNickame());
+        }
+        currentCarCollection.setDescriptionList(updatedDescription);
+        currentCarCollection.setDescriptionNoNicknameList(updatedDescriptionNoNickname);
+    }
+
+    public static void removeCarDescription(String description){
+        for(int i = 0; i < currentCarCollection.size(); i++){
+            if(currentCarCollection.getCar(i).getDescription().equals(description)){
+                currentCarCollection.getDescriptionList().remove(i);
+                currentCarCollection.getDescriptionNoNickNameList().remove(i);
+            }
+        }
+    }
+
+
     public void setTotalCarCollection(CarCollection totalCarCollection){
         this.totalCarCollection = totalCarCollection;
+    }
+
+    /*
+     * TODO: edit this later
+     */
+
+    public static Car findCarBasedOnDescription(String description, RetriveEntries mode){
+        Car returnCar = new Car();
+        String current;
+        int compareValue;
+        switch (mode) {
+            case Current:
+                for (Car car : currentCarCollection) {
+                    current = car.getDescription();
+                    compareValue = description.compareTo(current);
+                    if (compareValue == 0) {
+                        returnCar = car;
+                    }
+                }
+                break;
+            case Total:
+                for (Car car : totalCarCollection) {
+                    current = car.getDescriptionNoNickame();
+                    compareValue = description.compareTo(current);
+                    if (compareValue == 0) {
+                        returnCar = car;
+                    }
+                }
+                break;
+            case Search:
+                for (Car car : currentSearchCollection) {
+                    current = car.getDescriptionNoNickame();
+                    compareValue = description.compareTo(current);
+                    if (compareValue == 0) {
+                        returnCar = car;
+                    }
+                }
+                break;
+
+        }
+        return returnCar;
+    }
+
+    public static void setCurrentCarAtIndex(Car car, int index){
+        currentCarCollection.setCarAtIndex(car, index);
+    }
+
+    public static int getIndexOfCar(Car car){
+        return currentCarCollection.getIndex(car);
     }
 
     public static ArrayList<String> getCarMakeList() {

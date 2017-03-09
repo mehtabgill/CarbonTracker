@@ -7,7 +7,8 @@ public class CarCollection implements Iterable<Car> {
     private ArrayList<Car> cars = new ArrayList<>();
     private ArrayList<String> uniqueModelNames = new ArrayList<>();
     private ArrayList<String> uniqueModelYears = new ArrayList<>();
-    ;
+    private ArrayList<String> descriptionList = new ArrayList<>();
+    private ArrayList<String> descriptionNoNickNameList = new ArrayList<>();
     private ArrayList<String> uniqueYears = new ArrayList<>();
     private boolean isEmpty;
 
@@ -15,18 +16,13 @@ public class CarCollection implements Iterable<Car> {
         isEmpty = true;
     }
 
-    public void add(String make, String model, int year) {
-        if (cars.isEmpty()) {
-            isEmpty = false;
-        }
-        cars.add(new Car(make, model, year));
-    }
-
     public void add(Car car) {
         if (cars.isEmpty()) {
             isEmpty = false;
         }
         cars.add(car);
+        descriptionList.add(car.getDescription());
+        descriptionNoNickNameList.add(car.getDescriptionNoNickame());
     }
 
     public void remove(Car car) {
@@ -47,6 +43,20 @@ public class CarCollection implements Iterable<Car> {
 
     public Car getCar(int index) {
         return cars.get(index);
+    }
+
+    public void setCarAtIndex(Car car, int index){
+        cars.remove(index);
+        cars.add(index, car);
+    }
+
+    public int getIndex(Car car){
+        for(int i = 0; i < cars.size(); i++){
+            if (cars.get(i).equals(car)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     public CarCollection findCarsWithNickname(String name) {
@@ -110,14 +120,8 @@ public class CarCollection implements Iterable<Car> {
         }
     }
 
-    public ArrayList<String> getUniqueModelNames(){
-        return this.uniqueModelNames;
-    }
 
     public void searchUniqueModelYears(){
-        if(this.size() == 0){
-
-        }
         uniqueModelYears.add(Integer.toString(this.getCar(0).getYear()));
         for(Car car: this.cars){
             boolean isUniqueModelYear = true;
@@ -140,8 +144,27 @@ public class CarCollection implements Iterable<Car> {
         return temp;
     }
 
+    public ArrayList<String> getUniqueModelNames(){
+        return this.uniqueModelNames;
+    }
+
     public ArrayList<String> getUniqueModelYears(){
         return this.uniqueModelYears;
+    }
+
+    public ArrayList<String> getDescriptionList(){
+        return this.descriptionList;
+    }
+
+    public ArrayList<String> getDescriptionNoNickNameList() {
+        return descriptionNoNickNameList;
+    }
+
+    public void setDescriptionList(ArrayList<String> descriptionList){
+        this.descriptionList = descriptionList;
+    }
+    public void setDescriptionNoNicknameList(ArrayList<String> descriptionNoNicknameList){
+        this.descriptionNoNickNameList = descriptionNoNicknameList;
     }
 
     @Override

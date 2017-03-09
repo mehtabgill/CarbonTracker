@@ -69,9 +69,7 @@ public class DataReader {
                         tokens[i] = tokens[i+1];
                     }
                 }
-
-                Car car = new Car(tokens[0], tokens[1], Integer.parseInt(tokens[2]));
-
+                String additionalInfo = " ";
                 if(tokens[3].length() > 0){
                     float displacement = 0.0f;
                     if(tokens[3].equals("NA")){
@@ -80,9 +78,9 @@ public class DataReader {
                     {
                        displacement =  Float.parseFloat(tokens[3]);
                     }
-                    car.setAdditionalInfo("Displacement vol: " + displacement
-                                          + " Transmission type: " + tokens[4]);
+                    additionalInfo = (displacement + " L " + tokens[4]);
                 }
+                Car car = new Car(tokens[0], tokens[1], Integer.parseInt(tokens[2]), additionalInfo);
                 car.setFuelType(tokens[5]);
                 car.setMilesPerGallonCity(Integer.parseInt(tokens[6]));
                 car.setMilesPerGallonHway(Integer.parseInt(tokens[7]));
