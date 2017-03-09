@@ -10,4 +10,31 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ca.cmpt276.carbontracker.ViewCarbonFootprintActivity">
 
+    <TextView
+        android:id="@+id/table_header_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/table_header" />
+
+    <TableLayout
+        android:id="@+id/table_Layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/table_header_textView"
+        android:layout_marginTop="12dp">
+
+    </TableLayout>
+
+    <Button
+        android:id="@+id/pie_chart_button;"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="Button" />
 </RelativeLayout>
