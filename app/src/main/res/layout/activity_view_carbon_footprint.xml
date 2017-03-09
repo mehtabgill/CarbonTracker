@@ -37,4 +37,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:text="Button" />
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/chart"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        />
+
 </RelativeLayout>
