@@ -1,71 +1,41 @@
 package ca.cmpt276.carbontracker;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * Keeps a collection of Journey objects
  */
 
-public class JourneyCollection {
+public class JourneyCollection implements Iterable<Journey>{
+    private ArrayList<Journey> journeys = new ArrayList<>();
 
-    final int NUMBER_OF_JOURNEYS = 10;
-    private int top; //current number of journeys
-    private Journey journeyCollection[];
-
-    public JourneyCollection(){
-        top = 0;
-        journeyCollection = new Journey[NUMBER_OF_JOURNEYS];
+    public void add(Journey journey) {
+        journeys.add(journey);
     }
 
-    public int getLength(){
-        return top;
+    public void add(Car car, Route route) {
+        journeys.add(new Journey(car, route));
     }
 
-    public boolean isEmpty(){
-        if (top==0)
-        {
-            return true;
-        }
-        else
-            return false;
+    public void remove(int index) {
+        journeys.remove(index);
     }
 
-    //if run out of space extends the array
-    private void extendCollection(){
-
-            //double the array
-            Journey[] temp;
-
-            temp = new Journey[journeyCollection.length*2];
-
-            for(int i = 0; i<getLength(); i++)
-            {
-                temp[i] = journeyCollection[i];
-            }
-
-            journeyCollection = temp;
-
+    public void remove(Journey journey) {
+        journeys.remove(journey);
     }
 
-    public void addJourney(Journey journey){
-        if(top == journeyCollection.length)
-        {
-            extendCollection();
-        }
-
-        journeyCollection[top] = journey;
-        top++;
-
+    public int size() {
+        return journeys.size();
     }
 
-    public  void removeJourneyByIndex(int i){
-        if (!isEmpty() && i<=top && i>=0)
-        {
-            journeyCollection[i] = journeyCollection[top];
-            journeyCollection[top] = null;
-            top--;
-        }
+    public Journey get(int index){
+        return journeys.get(index);
     }
 
-
-
-
+    @Override
+    public Iterator<Journey> iterator() {
+        return journeys.iterator();
+    }
 }
