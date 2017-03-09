@@ -1,71 +1,82 @@
 package ca.cmpt276.carbontracker;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 public class SelectTransportationModeActivity extends AppCompatActivity {
-    Spinner makeSpinner;
-    String selectedMake;
-    //carCollection needs to be moved to Singleton model when the model is created
+    Spinner selectCarSpinner;
+    String selectedCarDescription;
+    Button addCarButton;
+    Button editDeleteCarButton;
+    ArrayAdapter<String> adapter;
+    ArrayList<String> currentCarListDescription;
+    public static final String DESCRIPTION_KEY = "description";
+    private static String ERROR_NO_CAR;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_transportation_mode);
 
-        InputStream is = getResources().openRawResource(R.raw.make_list_data);
-        DataReader.readCarMakeData(is);
-        ArrayList<String> carMakeList = DataReader.getCarMakeList();
+        addCarButton = (Button) findViewById(R.id.add_car_button);
+        addCarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SelectTransportationModeActivity.this, AddCarActivity.class));
+            }
+        });
 
-        InputStream is1 = getResources().openRawResource(R.raw.data);
-        DataReader.readCarData(is1);
+        ERROR_NO_CAR = getString(R.string.edit_delete_car_error);
+        editDeleteCarButton = (Button)findViewById(R.id.edit_delete_car_button);
+        editDeleteCarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentCarListDescription.isEmpty()){
+                    Toast.makeText(SelectTransportationModeActivity.this,
+                            ERROR_NO_CAR,
+                            Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Intent intent = new Intent(SelectTransportationModeActivity.this, EditDeleteCarActivity.class);
+                    intent.putExtra(DESCRIPTION_KEY, selectedCarDescription);
+                    startActivity(intent);
+                }
 
+            }
+        });
+        selectCarSpinner = (Spinner)findViewById(R.id.select_car_spinner);
 
-        makeSpinner = (Spinner) findViewById(R.id.select_make_spinner);
-        populateSpinner(makeSpinner, carMakeList);
-        updateModelSpinner();
     }
 
-    /*
-     * Update spinner for car models based on which make is selected
-     */
-    private void updateModelSpinner() {
-        makeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Model.updateCurrentCarCollectionDescription();
+        currentCarListDescription = Model.getCarEntriesDescription(Model.RetriveEntries.Current);
+        adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, currentCarListDescription
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        selectCarSpinner.setAdapter(adapter);
+        selectCarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                selectedMake = makeSpinner.getSelectedItem().toString();
-                Spinner modelSpinner = (Spinner) findViewById(R.id.select_model_spinner);
-                CarCollection currentCollection = DataReader.getCarList();
-
-                if (!selectedMake.equals("make")){
-                    CarCollection currentCollectionByMake = currentCollection.findCarsWithMake(selectedMake);
-                    currentCollectionByMake.searchUniqueModelName();
-                    ArrayList<String> currentModelList = currentCollectionByMake.getUniqueModelName();
-                    populateSpinner(modelSpinner, currentModelList);
-                }
+                selectedCarDescription = selectCarSpinner.getSelectedItem().toString();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
     }
-
-    private void populateSpinner(Spinner spinner, List<String> stringArrayList) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, stringArrayList
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinner.setAdapter(adapter);
-    }
-
-
 }

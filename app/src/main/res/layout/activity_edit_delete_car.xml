@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+    <TextView
+        android:id="@+id/edit_nickname_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_weight="1"
+        android:text="@string/edit_nickname_text"
+        android:layout_marginTop="47dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp" />
+
+    <EditText
+        android:id="@+id/edit_nickname_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="@string/nickname_hint"
+        android:inputType="textPersonName"
+        android:layout_alignBaseline="@+id/edit_nickname_textview"
+        android:layout_alignBottom="@+id/edit_nickname_textview"
+        android:layout_alignRight="@+id/edit_model_spinner"
+        android:layout_alignEnd="@+id/edit_model_spinner" />
+
+    <Spinner
+        android:id="@+id/edit_make_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/edit_model_textView"
+        android:layout_marginTop="39dp"
+        android:layout_weight="1" />
+
+    <Spinner
+        android:id="@+id/edit_model_spinner"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="222dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/edit_make_spinner"
+        android:layout_marginTop="77dp"
+        android:layout_weight="1" />
+
+    <Spinner
+        android:id="@+id/edit_year_spinner"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="286dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/delete_car_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="52dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/delete_car_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/delete_button"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="447dp"
+        android:layout_marginRight="17dp"
+        android:layout_marginEnd="17dp"
+        android:layout_alignBaseline="@+id/save_edited_button"
+        android:layout_alignBottom="@+id/save_edited_button"
+        android:layout_toLeftOf="@+id/edit_nickname_editText"
+        android:layout_toStartOf="@+id/edit_nickname_editText" />
+
+    <Button
+        android:id="@+id/save_edited_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/save_button"
+        tools:layout_editor_absoluteX="181dp"
+        tools:layout_editor_absoluteY="447dp"
+        android:layout_marginBottom="23dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/edit_nickname_editText"
+        android:layout_alignStart="@+id/edit_nickname_editText" />
+
+    <TextView
+        android:id="@+id/edit_model_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/edit_car_entries_text"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="110dp"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/edit_nickname_editText"
+        android:layout_alignLeft="@+id/edit_nickname_textview"
+        android:layout_alignStart="@+id/edit_nickname_textview" />
+</RelativeLayout>

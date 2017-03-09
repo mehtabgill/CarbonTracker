@@ -1,8 +1,8 @@
 <application>
-  <component nickname="AndroidEditors">
-    <option nickname="state">
+  <component name="AndroidEditors">
+    <option name="state">
       <GlobalState>
-        <option nickname="visible" value="false" />
+        <option name="visible" value="false" />
       </GlobalState>
     </option>
   </component>

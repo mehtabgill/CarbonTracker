@@ -5,11 +5,12 @@ public class Route {
     private float cityDriveDistance;
     private float highwayDriveDistance;
 
-    public Route( String name, float cityDriveDistance , float highwayDriveDistance){
-        this.name = name ;
-        this.cityDriveDistance = cityDriveDistance ;
-        this.highwayDriveDistance = highwayDriveDistance ;
+    public Route(String name, float cityDriveDistance, float highwayDriveDistance) {
+        this.name = name;
+        this.cityDriveDistance = cityDriveDistance;
+        this.highwayDriveDistance = highwayDriveDistance;
     }
+
     public String getName() {
         return name;
     }

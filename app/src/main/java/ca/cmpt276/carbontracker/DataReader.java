@@ -20,15 +20,21 @@ public class DataReader {
 
     private static CarCollection carList = new CarCollection();
     private static ArrayList<String> carMakeList = new ArrayList<>();
-    public static CarCollection getCarList() {
+    public static CarCollection getCarList(InputStream is) {
+        if(carList.size() == 0) {
+            readCarData(is);
+        }
         return carList;
     }
 
-    public static ArrayList<String> getCarMakeList(){
+    public static ArrayList<String> getCarMakeList(InputStream is){
+        if(carMakeList.size() == 0) {
+            readCarMakeData(is);
+        }
         return carMakeList;
     }
 
-    public static void readCarMakeData(InputStream is){
+    private static void readCarMakeData(InputStream is){
         String line = "";
         reader = new BufferedReader(
                 new InputStreamReader(is, Charset.forName("UTF-8"))
@@ -43,7 +49,7 @@ public class DataReader {
         }
     }
 
-    public static void readCarData(InputStream is){
+    private static void readCarData(InputStream is){
         if (carList.size() > 0)
         {
             return;
@@ -63,9 +69,7 @@ public class DataReader {
                         tokens[i] = tokens[i+1];
                     }
                 }
-
-                Car car = new Car(tokens[0], tokens[1], Integer.parseInt(tokens[2]));
-
+                String additionalInfo = " ";
                 if(tokens[3].length() > 0){
                     float displacement = 0.0f;
                     if(tokens[3].equals("NA")){
@@ -74,9 +78,9 @@ public class DataReader {
                     {
                        displacement =  Float.parseFloat(tokens[3]);
                     }
-                    car.setAdditionalInfo("Displacement vol: " + displacement
-                                          + " Transmission type: " + tokens[4]);
+                    additionalInfo = (displacement + " L " + tokens[4]);
                 }
+                Car car = new Car(tokens[0], tokens[1], Integer.parseInt(tokens[2]), additionalInfo);
                 car.setFuelType(tokens[5]);
                 car.setMilesPerGallonCity(Integer.parseInt(tokens[6]));
                 car.setMilesPerGallonHway(Integer.parseInt(tokens[7]));

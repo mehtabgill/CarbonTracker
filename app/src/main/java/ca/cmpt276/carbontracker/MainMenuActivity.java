@@ -1,14 +1,19 @@
 package ca.cmpt276.carbontracker;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.io.InputStream;
 
 public class MainMenuActivity extends AppCompatActivity {
 
     private enum BUTTONS{CREATE_JOURNEY, VIEW_CARBON_FOOTPRINT};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +42,12 @@ public class MainMenuActivity extends AppCompatActivity {
             //Change this later
             case CREATE_JOURNEY:
             {
-                startActivity(new Intent(MainMenuActivity.this, SelectTransportationModeActivity.class));
+                if(Model.getInstance().isLoaded()){
+                    startActivity(new Intent(MainMenuActivity.this, SelectTransportationModeActivity.class));
+                }
+                else{
+                    Toast.makeText(MainMenuActivity.this, "Still loading data", Toast.LENGTH_SHORT).show();
+                }
             }
             break;
             case VIEW_CARBON_FOOTPRINT:

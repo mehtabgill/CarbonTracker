@@ -1,38 +1,68 @@
 package ca.cmpt276.carbontracker;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class CarCollection {
+public class CarCollection implements Iterable<Car> {
     private ArrayList<Car> cars = new ArrayList<>();
-    private ArrayList<String> uniqueModelName = new ArrayList<>();
-    public void add(Car car) {
-        cars.add(car);
+    private ArrayList<String> uniqueModelNames = new ArrayList<>();
+    private ArrayList<String> uniqueModelYears = new ArrayList<>();
+    private ArrayList<String> descriptionList = new ArrayList<>();
+    private ArrayList<String> descriptionNoNickNameList = new ArrayList<>();
+    private ArrayList<String> uniqueYears = new ArrayList<>();
+    private boolean isEmpty;
+
+    public CarCollection() {
+        isEmpty = true;
     }
 
-    public void add(String model, String make, int year) {
-        cars.add(new Car(model, make, year));
+    public void add(Car car) {
+        if (cars.isEmpty()) {
+            isEmpty = false;
+        }
+        cars.add(car);
+        descriptionList.add(car.getDescription());
+        descriptionNoNickNameList.add(car.getDescriptionNoNickame());
     }
 
     public void remove(Car car) {
         cars.remove(car);
     }
 
-    public ArrayList<Car> getAllCars() {
-        return cars;
+    public void remove(int index) {
+        cars.remove(index);
     }
 
-    public int size(){
+    public boolean isEmpty() {
+        return isEmpty;
+    }
+
+    public int size() {
         return cars.size();
     }
 
-    public Car getCar(int index){
+    public Car getCar(int index) {
         return cars.get(index);
+    }
+
+    public void setCarAtIndex(Car car, int index){
+        cars.remove(index);
+        cars.add(index, car);
+    }
+
+    public int getIndex(Car car){
+        for(int i = 0; i < cars.size(); i++){
+            if (cars.get(i).equals(car)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     public CarCollection findCarsWithNickname(String name) {
         CarCollection temp = new CarCollection();
-        for(Car car : cars) {
-            if(car.getNickname().toLowerCase().equals(name.toLowerCase())) {
+        for (Car car : cars) {
+            if (car.getNickname().toLowerCase().equals(name.toLowerCase())) {
                 temp.add(car);
             }
         }
@@ -48,27 +78,15 @@ public class CarCollection {
         }
         return temp;
     }
-    /*
-     * Look in current CarCollection and remove any duplicate model name,
-     * storing them into UniqueModelName string arraylist
-     */
-    public void searchUniqueModelName(){
-        uniqueModelName.add(this.getCar(0).getModel());
-        for(Car car: this.cars){
-            boolean isUniqueModelName = true;
-            for(int i = 0; i < this.uniqueModelName.size(); i++ ){
-                if (car.getModel().equals(this.uniqueModelName.get(i))){
-                    isUniqueModelName = false;
-                }
-            }
-            if(isUniqueModelName){
-                uniqueModelName.add(car.getModel());
+
+    public CarCollection findCarsWithYear(int year) {
+        CarCollection temp = new CarCollection();
+        for(Car car : this.cars) {
+            if(car.getYear() == year) {
+                temp.add(car);
             }
         }
-    }
-
-    public ArrayList<String> getUniqueModelName(){
-        return this.uniqueModelName;
+        return temp;
     }
 
     public CarCollection findCarsWithMake(String make) {
@@ -79,5 +97,78 @@ public class CarCollection {
             }
         }
         return temp;
+    }
+
+    /*
+     * Look in current CarCollection and remove any duplicate model name,
+     * storing them into UniqueModelName string arraylist
+     */
+    public void searchUniqueModelName(){
+        if(!(this.size() == 0)){
+            uniqueModelNames.add(this.getCar(0).getModel());
+            for(Car car: this.cars){
+                boolean isUniqueModelName = true;
+                for(String uniqueModel: uniqueModelNames){
+                    if (car.getModel().equals(uniqueModel)){
+                        isUniqueModelName = false;
+                    }
+                }
+                if(isUniqueModelName){
+                    uniqueModelNames.add(car.getModel());
+                }
+            }
+        }
+    }
+
+
+    public void searchUniqueModelYears(){
+        uniqueModelYears.add(Integer.toString(this.getCar(0).getYear()));
+        for(Car car: this.cars){
+            boolean isUniqueModelYear = true;
+            for(String uniqueYear: uniqueModelYears){
+                if (Integer.toString(car.getYear()).equals(uniqueYear)){
+                    isUniqueModelYear = false;
+                }
+            }
+            if(isUniqueModelYear){
+                uniqueModelYears.add(Integer.toString(car.getYear()));
+            }
+        }
+    }
+
+    public CarCollection getDuplicate(){
+        CarCollection temp = new CarCollection();
+        for(Car car : this.cars){
+            temp.add(car);
+        }
+        return temp;
+    }
+
+    public ArrayList<String> getUniqueModelNames(){
+        return this.uniqueModelNames;
+    }
+
+    public ArrayList<String> getUniqueModelYears(){
+        return this.uniqueModelYears;
+    }
+
+    public ArrayList<String> getDescriptionList(){
+        return this.descriptionList;
+    }
+
+    public ArrayList<String> getDescriptionNoNickNameList() {
+        return descriptionNoNickNameList;
+    }
+
+    public void setDescriptionList(ArrayList<String> descriptionList){
+        this.descriptionList = descriptionList;
+    }
+    public void setDescriptionNoNicknameList(ArrayList<String> descriptionNoNicknameList){
+        this.descriptionNoNickNameList = descriptionNoNicknameList;
+    }
+
+    @Override
+    public Iterator<Car> iterator() {
+        return cars.iterator();
     }
 }

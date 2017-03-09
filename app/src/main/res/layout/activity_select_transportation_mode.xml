@@ -10,26 +10,42 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ca.cmpt276.carbontracker.SelectTransportationModeActivity">
 
-    <Spinner
-        android:layout_width="match_parent"
+    <TextView
+        android:text="@string/select_car_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/select_make_spinner" />
+        android:id="@+id/select_car_textView" />
 
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/select_model_spinner"
-        android:layout_below="@+id/select_make_spinner"
+        android:id="@+id/select_car_spinner"
+        android:layout_below="@+id/select_car_textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="83dp" />
+        android:layout_marginTop="13dp" />
 
-    <Spinner
-        android:layout_width="match_parent"
+    <Button
+        android:text="@string/add_car_button_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/select_year_spinner"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/add_car_button"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="28dp" />
 
-
+    <Button
+        android:id="@+id/edit_delete_car_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/add_car_button"
+        android:layout_alignBottom="@+id/add_car_button"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_toLeftOf="@+id/add_car_button"
+        android:layout_toStartOf="@+id/add_car_button"
+        android:text="@string/edit_delete_car_button" />
 </RelativeLayout>
