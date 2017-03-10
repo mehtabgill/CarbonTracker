@@ -3,6 +3,9 @@ package ca.cmpt276.carbontracker.Model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/*
+ * Keep a collection of Route objects and its related information
+ */
 public class RouteCollection implements Iterable<Route>{
     private ArrayList<Route> routes = new ArrayList<Route>();
 

@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
+/*
+ * UI class to display Select transportation activity, including select car, delete car, edit car, add new car
+ */
 public class SelectTransportationModeActivity extends AppCompatActivity {
     Spinner selectCarSpinner;
     String selectedCarDescription;

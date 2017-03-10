@@ -27,5 +27,4 @@
         <activity android:name=".AddCarActivity" />
         <activity android:name=".EditDeleteCarActivity"></activity>
     </application>
-
 </manifest>

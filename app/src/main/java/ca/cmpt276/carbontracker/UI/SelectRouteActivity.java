@@ -14,9 +14,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import ca.cmpt276.carbontracker.Model.SingletonModel;
 import ca.cmpt276.carbontracker.Model.Route;
+import ca.cmpt276.carbontracker.Model.SingletonModel;
 
+/*
+ * UI class to display Select Route Activity, including select route, add new route, delete/edit routes
+ */
 public class SelectRouteActivity extends AppCompatActivity {
 
     public static final int REQUEST_CODE_EditRoute = 1024;
@@ -28,18 +31,17 @@ public class SelectRouteActivity extends AppCompatActivity {
     String selectedRouteName;
     float CityDriveDistance ;
     float HighwayDriveDistance  ;
-    ArrayList<String> dropdownList = new ArrayList<>();
-    String orignalName;  //= "abc";
-    String existingCarString;
-    String noExistingCarString;
-    final String EDITED_NAME_STRING = "editedName";
-    final String EDITED_CITY_STRING = "editedCity";
-    final String EDITED_HIGHWAY_STRING = "editedHighway";
-    final String SIGNAL_ORIGINAL_NAME_STRING = "signalOrignalName";
-    final String NEW_ADDED_NAME_STRING = "NewAddedName";
-    final String NEW_ADDED_CITY_STRING = "NewAddedCity";
-    final String NEW_ADDED_HIGHWAY_STRING = "NewAddedHighway";
-    final String SIGNAL_DELETING_NAME = "signalDeletingName";
+    ArrayList<String> currentRouteList = new ArrayList<>();
+    String orignalName;
+    public static final String EDITED_NAME_STRING = "editedName";
+    public static final String EDITED_HIGHWAY_STRING = "editedHighway";
+    public static final String EDITED_CITY_STRING = "editedCity";
+    public static final String SIGNAL_ORIGINAL_NAME_STRING = "signalOrignalName";
+    public final String NEW_ADDED_NAME_STRING = "NewAddedName";
+    public final String NEW_ADDED_CITY_STRING = "NewAddedCity";
+    public final String NEW_ADDED_HIGHWAY_STRING = "NewAddedHighway";
+    public final String SIGNAL_DELETING_NAME = "signalDeletingName";
+    String selectedRoute;
     String ERROR_NO_ROUTE;
     Button btnAddRoute;
     Button btnDelete;
@@ -51,13 +53,9 @@ public class SelectRouteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_route);
         receiveDescription();
         ERROR_NO_ROUTE = getString(R.string.error_no_route_selected);
-        existingCarString = getString(R.string.existing_car_text);
-        noExistingCarString = getString(R.string.no_existing_car_text);
-        dropdownList.add(existingCarString) ;
-        dropdownList.add(noExistingCarString);
-
+        currentRouteList = SingletonModel.getRouteCollectionNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_item, dropdownList);
+                this, android.R.layout.simple_spinner_item, currentRouteList);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner = (Spinner) findViewById(R.id.select_route_spinner);
@@ -67,15 +65,15 @@ public class SelectRouteActivity extends AppCompatActivity {
         btnSelectRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedRouteName = spinner.getSelectedItem().toString();
-                if(selectedRouteName.isEmpty()){
+                if(currentRouteList.isEmpty()){
                     Toast.makeText(SelectRouteActivity.this,
                             ERROR_NO_ROUTE,
                                     Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    selectedRouteName = spinner.getSelectedItem().toString();
                     SingletonModel.addNewJourney(selectedCarDescription, selectedRouteName);
-                    finish();
+                    startActivity(new Intent(SelectRouteActivity.this, MainMenuActivity.class));
                 }
             }
         });
@@ -85,7 +83,7 @@ public class SelectRouteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SelectRouteActivity.this, AddRouteActivity.class) ;
-                startActivityForResult(intent,  REQUEST_CODE_LauchAddRoute);
+                startActivity(intent);
 
             }
         });
@@ -118,7 +116,7 @@ public class SelectRouteActivity extends AppCompatActivity {
                             getString(R.string.error_no_route_selected),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = EditRouteActivity.intentmakerEditRoute(SelectRouteActivity.this, orignalName);
+                    Intent intent = EditRouteActivity.intentMakerEditRoute(SelectRouteActivity.this, orignalName);
                     startActivityForResult(intent, REQUEST_CODE_EditRoute);
                 }
             }
@@ -128,16 +126,14 @@ public class SelectRouteActivity extends AppCompatActivity {
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                orignalName = dropdownList.get(i);
-                if (!dropdownList.get(i).equals(existingCarString) && !dropdownList.get(i).equals(noExistingCarString) && !dropdownList.get(i).equals("abc")){
-                    if(!dropdownList.equals(null)) {
-                        orignalName = dropdownList.get(i);
-                        EnableButtons();
-                    }
-                }
-                else if (dropdownList.get(i).equals(existingCarString)){
+                selectedRoute = spinner.getSelectedItem().toString();
+                if (selectedRoute.isEmpty()){
                     btnDelete.setEnabled(false);
                     btnEditRoute.setEnabled(false);
+                }
+                else{
+                    orignalName = selectedRoute;
+                    enableButtons();
                 }
 
             }
@@ -146,60 +142,45 @@ public class SelectRouteActivity extends AppCompatActivity {
         });
     }
 
+    protected void onResume(){
+        super.onResume();
+        refreshSpinner();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data.hasExtra(EDITED_NAME_STRING) && data.hasExtra(EDITED_CITY_STRING) && data.hasExtra(EDITED_HIGHWAY_STRING) && data.hasExtra(SIGNAL_ORIGINAL_NAME_STRING)) {
-                            String newName = data.getStringExtra(EDITED_NAME_STRING);
-                            float newCity = data.getFloatExtra(EDITED_CITY_STRING, 0);
-                            float newHighway = data.getFloatExtra(EDITED_HIGHWAY_STRING, 0);
-                            String orignalName = data.getStringExtra(SIGNAL_ORIGINAL_NAME_STRING);
-                            SingletonModel.editRoute(orignalName, newName, newCity, newHighway);
-                            Log.d("hello" , "SATNAMJI");
-                            dropdownList = new ArrayList<>();
-                            dropdownList.add(existingCarString);
-                            for (String route : SingletonModel.getRouteCollectionNames()) {
-                                dropdownList.add(route);
-                            }
-                            RefreshSpinner();
-                        }
+            String newName = data.getStringExtra(EDITED_NAME_STRING);
+            float newCity = data.getFloatExtra(EDITED_CITY_STRING, 0);
+            float newHighway = data.getFloatExtra(EDITED_HIGHWAY_STRING, 0);
+            String orignalName = data.getStringExtra(SIGNAL_ORIGINAL_NAME_STRING);
+            SingletonModel.editRoute(orignalName, newName, newCity, newHighway);
+        }
+        switch(requestCode) {
+        case REQUEST_CODE_LauchAddRoute:
+            if (resultCode == Activity.RESULT_OK) {
 
-                switch(requestCode) {
-                case REQUEST_CODE_LauchAddRoute:
-                    if (resultCode == Activity.RESULT_OK) {
+                name = data.getStringExtra(NEW_ADDED_NAME_STRING);
 
-                        name = data.getStringExtra(NEW_ADDED_NAME_STRING);
+                CityDriveDistance = data.getFloatExtra(NEW_ADDED_CITY_STRING, 0);
 
-                        CityDriveDistance = data.getFloatExtra(NEW_ADDED_CITY_STRING, 0);
-
-                        HighwayDriveDistance = data.getFloatExtra(NEW_ADDED_HIGHWAY_STRING, 0);
-                        Route newRoute = new Route(name, CityDriveDistance, HighwayDriveDistance);
-                        SingletonModel.addToRouteCollection(newRoute);
-                        dropdownList = new ArrayList<>();
-                        dropdownList.add(existingCarString);
-                        for (String route : SingletonModel.getRouteCollectionNames()) {
-                            dropdownList.add(route);
-                        }
-                        RefreshSpinner();
+                HighwayDriveDistance = data.getFloatExtra(NEW_ADDED_HIGHWAY_STRING, 0);
+                Route newRoute = new Route(name, CityDriveDistance, HighwayDriveDistance);
+                SingletonModel.addNewRoute(newRoute);
+        }
+        case REQUEST_CODE_LaunchDeleteRoute:
+            if (resultCode == Activity.RESULT_OK) {
+                String deletingName = data.getStringExtra(SIGNAL_DELETING_NAME);
+                if (data.hasExtra(SIGNAL_DELETING_NAME)) {
+                    SingletonModel.removeFromRouteCollection(deletingName);
                 }
-                case REQUEST_CODE_LaunchDeleteRoute:
-                    if (resultCode == Activity.RESULT_OK) {
-                        String deletingName = data.getStringExtra(SIGNAL_DELETING_NAME);
-                        if (data.hasExtra(SIGNAL_DELETING_NAME)) {
-                            SingletonModel.removeFromRouteCollection(deletingName);
-                        }
-                        dropdownList = new ArrayList<>();
-                        for (String route : SingletonModel.getRouteCollectionNames()) {
-                            dropdownList.add(route);
-                        }
-                        RefreshSpinner();
-                    }
             }
-
+        }
     }
-    private void RefreshSpinner(){
-
+    private void refreshSpinner(){
+        currentRouteList = SingletonModel.getRouteCollectionNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.simple_spinner_dropdown_item, dropdownList);
+                this, android.R.layout.simple_spinner_dropdown_item, currentRouteList);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner spinner = (Spinner) findViewById(R.id.select_route_spinner);
@@ -213,7 +194,7 @@ public class SelectRouteActivity extends AppCompatActivity {
         }
     }
 
-    public void EnableButtons()
+    public void enableButtons()
     {
         btnDelete.setEnabled(true);
         btnEditRoute.setEnabled(true);

@@ -11,16 +11,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import ca.cmpt276.carbontracker.UI.R;
-
+/*
+ * UI class to display edit route activity, including edit name, city and/or highway distance
+ */
 public class EditRouteActivity extends AppCompatActivity {
 
     EditText editName ;
     EditText editCityDistance ;
     EditText editHighDistance ;
     String name = "no" ;
-    String Cdistance = "0";
-    String hdistance = "0" ;
+    String cDistance = "0";
+    String hDistance = "0" ;
+    final static String SIGNAL_EDITING_ROUTE = "signalEditingRoute";
     String OrignalName ;
     float temp1 = 0 ;
     float temp2 =  0  ;
@@ -29,7 +31,7 @@ public class EditRouteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_route);
-        ExtractdataFRomIntent11() ;
+        extractDataFromIntent() ;
 
         editName = (EditText) findViewById(R.id.editTextEditRouteName) ;
         editCityDistance = (EditText) findViewById(R.id.editTextEditCity) ;
@@ -44,7 +46,7 @@ public class EditRouteActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                name = editName.getText().toString();
+                name = editName.getText().toString() ;
             }
 
             @Override
@@ -62,13 +64,13 @@ public class EditRouteActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Cdistance = editCityDistance.getText().toString() ;
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                 Cdistance = editCityDistance.getText().toString() ;
-
+                 cDistance = editCityDistance.getText().toString() ;
+                 temp1 = ParseFloat(cDistance);
             }
         });
 
@@ -80,26 +82,26 @@ public class EditRouteActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                hdistance = editHighDistance.getText().toString() ;
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                hdistance = editHighDistance.getText().toString() ;
+                hDistance = editHighDistance.getText().toString() ;
+                temp2 = ParseFloat(hDistance) ;
             }
         });
-        temp1 = ParseFloat(Cdistance);
-        temp2 = ParseFloat(hdistance) ;
 
-        Button btnok = (Button) findViewById(R.id.buttonOKEdit) ;
-        btnok.setOnClickListener(new View.OnClickListener() {
+
+        Button btnOK = (Button) findViewById(R.id.buttonOKEdit) ;
+        btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent() ;
-                intent.putExtra("editedName", name) ;
-                intent.putExtra("editcity" , temp1) ;
-                intent.putExtra("edithighway", temp2) ;
-                intent.putExtra("signalOrignalName", OrignalName) ;
+                intent.putExtra(SelectRouteActivity.EDITED_NAME_STRING, name) ;
+                intent.putExtra(SelectRouteActivity.EDITED_CITY_STRING , temp1) ;
+                intent.putExtra(SelectRouteActivity.EDITED_HIGHWAY_STRING, temp2) ;
+                intent.putExtra(SelectRouteActivity.SIGNAL_ORIGINAL_NAME_STRING, OrignalName) ;
                 setResult(Activity.RESULT_OK , intent);
                 finish();
             }
@@ -115,16 +117,16 @@ public class EditRouteActivity extends AppCompatActivity {
 
     }
 
-    private void ExtractdataFRomIntent11() {
-        Intent intent = getIntent() ;
-        if(intent.hasExtra("signalEditingROute")){
-        OrignalName = intent.getStringExtra("signalEditingROute") ;}
+    private void extractDataFromIntent() {
+        Intent intent = getIntent();
+        if(intent.hasExtra(SIGNAL_EDITING_ROUTE)){
+        OrignalName = intent.getStringExtra(SIGNAL_EDITING_ROUTE) ;}
     }
 
-    public static Intent intentmakerEditRoute(Context context, String name){
-        Intent intent  =  new Intent(context, EditRouteActivity.class);
-        intent.putExtra("signalEditingROute" , name) ;
-        return intent ;
+    public static Intent intentMakerEditRoute(Context context, String name){
+        Intent intent = new Intent(context, EditRouteActivity.class);
+        intent.putExtra(SIGNAL_EDITING_ROUTE, name) ;
+        return intent;
     }
     float ParseFloat(String str ) {
         if (str != null && str.length() > 0) {

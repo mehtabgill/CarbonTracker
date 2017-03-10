@@ -1,71 +1,76 @@
 package ca.cmpt276.carbontracker.Model;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * Keeps a collection of Journey objects
  */
 
-public class JourneyCollection {
+public class JourneyCollection implements Iterable<Journey>{
+    private ArrayList<Journey> journeys = new ArrayList<>();
+    private ArrayList<String> dateCreatedList = new ArrayList<>();
+    private ArrayList<String> carsNameList = new ArrayList<>();
+    private ArrayList<Float> totalDistanceList = new ArrayList<>();
+    private ArrayList<Float> carbonEmissionList = new ArrayList<>();
 
-    final int NUMBER_OF_JOURNEYS = 10;
-    private int top; //current number of journeys
-    private Journey journeyCollection[];
-
-    public JourneyCollection(){
-        top = 0;
-        journeyCollection = new Journey[NUMBER_OF_JOURNEYS];
+    public void add(Journey journey) {
+        journeys.add(journey);
     }
 
-    public int getLength(){
-        return top;
+
+    public void add(Car car, Route route) {
+        journeys.add(new Journey(car, route));
     }
 
-    public boolean isEmpty(){
-        if (top==0)
-        {
-            return true;
+    public void remove(int index) {
+        journeys.remove(index);
+    }
+
+    public void remove(Journey journey) {
+        journeys.remove(journey);
+    }
+
+    public int size() {
+        return journeys.size();
+    }
+
+    public Journey get(int index){
+        return journeys.get(index);
+    }
+
+    public ArrayList<String> getAllJourneyDates(){
+        for(Journey journey : journeys){
+            dateCreatedList.add(journey.getDateCreated());
         }
-        else
-            return false;
+        return dateCreatedList;
     }
 
-    //if run out of space extends the array
-    private void extendCollection(){
-
-            //double the array
-            Journey[] temp;
-
-            temp = new Journey[journeyCollection.length*2];
-
-            for(int i = 0; i<getLength(); i++)
-            {
-                temp[i] = journeyCollection[i];
-            }
-
-            journeyCollection = temp;
-
-    }
-
-    public void addJourney(Journey journey){
-        if(top == journeyCollection.length)
-        {
-            extendCollection();
+    public ArrayList<String> getCarsNameList(){
+        for(Journey journey : journeys){
+            carsNameList.add(journey.getCar().getNickname());
         }
-
-        journeyCollection[top] = journey;
-        top++;
-
+        return carsNameList;
     }
-
-    public  void removeJourneyByIndex(int i){
-        if (!isEmpty() && i<=top && i>=0)
-        {
-            journeyCollection[i] = journeyCollection[top];
-            journeyCollection[top] = null;
-            top--;
+    public ArrayList<Float> getTotalDistanceList(){
+        for(Journey journey : journeys){
+            totalDistanceList.add(journey.getRoute().getTotalDistance());
         }
+        return totalDistanceList;
+    }
+    public ArrayList<Float> getCarbonEmissionList(){
+        for(Journey journey : journeys){
+            carbonEmissionList.add(journey.getCarbonEmissionValue());
+        }
+        return carbonEmissionList;
     }
 
+    public ArrayList<Journey> getAllJourneys(){
+        return journeys;
+    }
 
-
-
+    @Override
+    public Iterator<Journey> iterator() {
+        return journeys.iterator();
+    }
 }

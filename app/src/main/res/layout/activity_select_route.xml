@@ -10,13 +10,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="ca.cmpt276.carbontracker.UI.SelectRouteActivity">
 
+    <TextView
+        android:id="@+id/select_route_description_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_route_description" />
+
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/select_route_spinner" />
+        android:id="@+id/select_route_spinner"
+        android:layout_below="@+id/select_route_description_textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="17dp" />
 
     <Button
-        android:text="@string/add_route_button_text"
+        android:text="@string/new_route_button_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonAddRoute"

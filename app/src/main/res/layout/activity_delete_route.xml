@@ -11,7 +11,7 @@
     tools:context="ca.cmpt276.carbontracker.UI.DeleteRouteActivity">
 
     <Button
-        android:text="Delete it"
+        android:text="@string/delete_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="112dp"
@@ -21,25 +21,25 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:text="Cancel"
+        android:text="@string/cancel_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonCancelDelete"
         android:layout_alignBaseline="@+id/buttonDeleteitforMe"
         android:layout_alignBottom="@+id/buttonDeleteitforMe"
-        android:layout_toLeftOf="@+id/editTextDeleteRoute"
-        android:layout_toStartOf="@+id/editTextDeleteRoute" />
+        android:layout_toLeftOf="@+id/buttonDeleteitforMe"
+        android:layout_toStartOf="@+id/buttonDeleteitforMe"
+        android:layout_marginRight="19dp"
+        android:layout_marginEnd="19dp" />
 
     <TextView
-        android:text="Are you sure?"
+        android:text="@string/confirm_delete_route_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/editTextDeleteRoute"
-        android:layout_alignStart="@+id/editTextDeleteRoute"
-        android:layout_marginLeft="24dp"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="15dp"
         android:id="@+id/textView"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

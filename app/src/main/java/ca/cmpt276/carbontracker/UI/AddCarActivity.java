@@ -18,6 +18,9 @@ import java.util.ArrayList;
 
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
+/*
+ * UI class to display add car activity
+ */
 public class AddCarActivity extends AppCompatActivity {
     public enum Spinner {Model, Year};
     android.widget.Spinner makeSpinner;

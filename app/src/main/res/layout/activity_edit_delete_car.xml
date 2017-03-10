@@ -68,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/delete_car_button_text"
+        android:text="@string/delete_text"
         tools:layout_editor_absoluteX="65dp"
         tools:layout_editor_absoluteY="447dp"
         android:layout_marginRight="17dp"
@@ -103,4 +103,5 @@
         android:layout_below="@+id/edit_nickname_editText"
         android:layout_alignLeft="@+id/edit_nickname_textview"
         android:layout_alignStart="@+id/edit_nickname_textview" />
+    //comment to be commit-able
 </RelativeLayout>

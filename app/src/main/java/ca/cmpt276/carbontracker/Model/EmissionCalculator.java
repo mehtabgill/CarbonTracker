@@ -1,7 +1,7 @@
 package ca.cmpt276.carbontracker.Model;
 
 /**
- * Created by Elvin Laptop on 2017-03-08.
+ * Utility class that calculate Emission based on car and route object
  */
 
 public class EmissionCalculator {

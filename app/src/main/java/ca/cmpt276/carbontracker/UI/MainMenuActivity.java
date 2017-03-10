@@ -9,6 +9,9 @@ import android.widget.Toast;
 
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
+/*
+ * UI class to display main menu, including create new journey and view current carbon emission
+ */
 public class MainMenuActivity extends AppCompatActivity {
 
     private enum BUTTONS{CREATE_JOURNEY, VIEW_CARBON_FOOTPRINT};

@@ -3,6 +3,9 @@ package ca.cmpt276.carbontracker.Model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/*
+ * Store a collection of Car objects, and variables related to the collection
+ */
 public class CarCollection implements Iterable<Car> {
     private ArrayList<Car> cars = new ArrayList<>();
     private ArrayList<String> uniqueModelNames = new ArrayList<>();
@@ -22,7 +25,7 @@ public class CarCollection implements Iterable<Car> {
         }
         cars.add(car);
         descriptionList.add(car.getDescription());
-        descriptionNoNickNameList.add(car.getDescriptionNoNickame());
+        descriptionNoNickNameList.add(car.getDescriptionNoNickname());
     }
 
     public void remove(Car car) {

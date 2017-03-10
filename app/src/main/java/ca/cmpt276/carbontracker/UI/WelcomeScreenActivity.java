@@ -21,9 +21,9 @@ import ca.cmpt276.carbontracker.Model.CarCollection;
 import ca.cmpt276.carbontracker.Model.DataReader;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 /*
-This class is for the welcome screen. It is the first screen that will appear. Some image
-animations will play with the optino for the user to skip them. Either when the skip button is
-pressed or when the animations finish, will the screen change to the main menu.
+ * UI class for the welcome screen. It is the first screen that will appear. Some image
+ * animations will play with the optino for the user to skip them. Either when the skip button is
+ * pressed or when the animations finish, will the screen change to the main menu.
  */
 
 public class WelcomeScreenActivity extends AppCompatActivity {

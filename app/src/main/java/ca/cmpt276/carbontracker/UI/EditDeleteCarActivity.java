@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import ca.cmpt276.carbontracker.Model.Car;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
+/*
+ * UI class to display edit/delete car activity, including edit nickname, car make/model/year
+ */
 public class EditDeleteCarActivity extends AppCompatActivity {
 
 

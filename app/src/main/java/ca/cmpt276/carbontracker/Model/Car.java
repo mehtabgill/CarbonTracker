@@ -1,6 +1,9 @@
 package ca.cmpt276.carbontracker.Model;
 
 
+/*
+ * Store all car information
+ */
 public class Car {
     private String nickname;
     private String model;
@@ -10,14 +13,6 @@ public class Car {
     private String fuelType;
     private String description;
     private String descriptionNoNickname;
-    public String getFuelType() {
-        return fuelType;
-    }
-
-    public void setFuelType(String fuelType) {
-        this.fuelType = fuelType;
-    }
-
     private int milesPerGallonCity;
     private int milesPerGallonHway;
 
@@ -160,8 +155,16 @@ public class Car {
                 additionalInfo;
     }
 
-    public String getDescriptionNoNickame(){
+    public String getDescriptionNoNickname(){
         return descriptionNoNickname;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
     }
 
 

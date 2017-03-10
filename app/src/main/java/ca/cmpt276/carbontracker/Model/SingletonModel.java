@@ -66,7 +66,7 @@ public class SingletonModel {
 
     public static void addNewCarBasedOnDecsription(String nickname, String description){
         for(Car car: currentSearchCollection){
-            if (car.getDescriptionNoNickame().equals(description)){
+            if (car.getDescriptionNoNickname().equals(description)){
                 car.setNickname(nickname);
                 currentCarCollection.add(car);
             }
@@ -97,7 +97,7 @@ public class SingletonModel {
         ArrayList<String> updatedDescriptionNoNickname = new ArrayList<>();
         for(Car car: currentCarCollection){
             updatedDescription.add(car.getDescription());
-            updatedDescriptionNoNickname.add(car.getDescriptionNoNickame());
+            updatedDescriptionNoNickname.add(car.getDescriptionNoNickname());
         }
         currentCarCollection.setDescriptionList(updatedDescription);
         currentCarCollection.setDescriptionNoNicknameList(updatedDescriptionNoNickname);
@@ -137,7 +137,7 @@ public class SingletonModel {
                 break;
             case Total:
                 for (Car car : totalCarCollection) {
-                    current = car.getDescriptionNoNickame();
+                    current = car.getDescriptionNoNickname();
                     compareValue = description.compareTo(current);
                     if (compareValue == 0) {
                         returnCar = car;
@@ -146,7 +146,7 @@ public class SingletonModel {
                 break;
             case Search:
                 for (Car car : currentSearchCollection) {
-                    current = car.getDescriptionNoNickame();
+                    current = car.getDescriptionNoNickname();
                     compareValue = description.compareTo(current);
                     if (compareValue == 0) {
                         returnCar = car;
@@ -199,7 +199,7 @@ public class SingletonModel {
         return routeCollection;
     }
 
-    public static void addToRouteCollection(Route route){
+    public static void addNewRoute(Route route){
         routeCollection.add(route);
     }
 
@@ -218,7 +218,33 @@ public class SingletonModel {
     public static void addNewJourney(String carDescription, String routeName){
         Car newCar = getCarFromCollection(carDescription, RetriveEntries.Current);
         Route newRoute = getRouteByName(routeName);
-        journeyCollection.addJourney(new Journey(newCar, newRoute));
+        Journey newJourney = new Journey(newCar, newRoute);
+        journeyCollection.add(newJourney);
+    }
+
+    public static int getJourneyCollectionSize(){
+        return journeyCollection.size();
+    }
+
+    public static ArrayList<String> getJourneysDates(){
+        return journeyCollection.getAllJourneyDates();
+    }
+    public static ArrayList<String> getJourneysCarList(){
+        return journeyCollection.getCarsNameList();
+    }
+    public static ArrayList<String> getJourneysTotalDistanceList(){
+        ArrayList<String> totalDistance = new ArrayList<>();
+        for(Float distance : journeyCollection.getTotalDistanceList()){
+            totalDistance.add(Float.toString(distance));
+        }
+        return totalDistance;
+    }
+    public static ArrayList<String> getJourneysCarbonEmissionList(){
+        ArrayList<String> carbonEmissionList = new ArrayList<>();
+        for(Float value: journeyCollection.getCarbonEmissionList()){
+            carbonEmissionList.add(Float.toString(value));
+        }
+        return carbonEmissionList;
     }
 
     public static void editRoute(String originalName, String newName, float newCity, float newHighway){

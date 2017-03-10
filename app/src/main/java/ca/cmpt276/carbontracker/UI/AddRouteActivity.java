@@ -2,7 +2,6 @@ package ca.cmpt276.carbontracker.UI;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.FloatRange;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,10 +10,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import ca.cmpt276.carbontracker.UI.R;
+import ca.cmpt276.carbontracker.Model.Route;
+import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 
+/*
+ * UI class to display Add Route Activity
+ */
 public class AddRouteActivity extends AppCompatActivity {
+
+    String NEW_ADDED_NAME = "NewAddedName";
+    String NEW_ADDED_CITY = "NewAddedCity";
+    String NEW_ADDED_HIGHWAY = "NewAddedHighway";
 
     EditText editName ;
     EditText editCityDistance ;
@@ -68,7 +75,7 @@ public class AddRouteActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 Cdistance = editCityDistance.getText().toString() ;
-
+                cityDis = ParseFloat(Cdistance) ;
             }
         });
 
@@ -86,23 +93,21 @@ public class AddRouteActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 hdistance = editHighDistance.getText().toString() ;
+                highwayDis = ParseFloat(hdistance) ;
 
 
             }
         });
-        cityDis = ParseFloat(Cdistance) ;
-        highwayDis =ParseFloat(hdistance) ;
 
         Button btnAddRoute = (Button)findViewById(R.id.ButtonAddRoute) ;
         btnAddRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent() ;
-                intent.putExtra("NewAddedName", name) ;
-                intent.putExtra("NewAddedcity" , cityDis) ;
-                intent.putExtra("NewAddedhighway", highwayDis) ;
-                setResult(Activity.RESULT_OK , intent);
+                Route route = new Route();
+                route.setName(name);
+                route.setCityDriveDistance(cityDis);
+                route.setHighwayDriveDistance(highwayDis);
+                SingletonModel.addNewRoute(route);
                 finish();
 
             }

@@ -10,6 +10,10 @@ import android.widget.Button;
 
 import ca.cmpt276.carbontracker.UI.R;
 
+/*
+ * UI class of delete route activity
+ */
+
 public class DeleteRouteActivity extends AppCompatActivity {
 
     String name ;
