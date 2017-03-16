@@ -4,7 +4,7 @@ package ca.cmpt276.carbontracker.Model;
 /*
  * Store all car information
  */
-public class Car {
+public class Car extends Transportation{
     private String nickname;
     private String model;
     private String make;
