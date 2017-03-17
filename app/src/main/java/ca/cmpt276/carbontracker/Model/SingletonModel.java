@@ -14,6 +14,7 @@ public class SingletonModel {
     static RouteCollection routeCollection = new RouteCollection();
     static JourneyCollection journeyCollection = new JourneyCollection();
     static ArrayList<String> carMakeList;
+    static ArrayList<Emission> emissionArrayList = new ArrayList<Emission>();
     static public enum RetriveEntries{Current, Search, Total};
     boolean fullDataLoaded = false;
     boolean makeDataLoaded = false;
@@ -115,6 +116,7 @@ public class SingletonModel {
 
     public void setTotalCarCollection(CarCollection totalCarCollection){
         this.totalCarCollection = totalCarCollection;
+
     }
 
     /*
