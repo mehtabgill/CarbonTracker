@@ -26,6 +26,7 @@ public class Bus extends Transportation {
 
     public void setDistance(float distance){
         this.distance = distance;
+        carbonEmitted = distance * BUS_CARBON_EMISSIONS_PER_KM;
     }
 
     public float getDistance(){
