@@ -10,12 +10,12 @@ import java.util.Date;
 
 public class Journey {
 
-    private Car car; // Car object, use getter methods to get required info if needed
+    private Transportation car; // Car object, use getter methods to get required info if needed
     private Route route; //route object, use getter methods to get required info
     private float carbonEmissionValue;
 
     String dateCreated;
-    public Journey(Car car, Route route){
+    public Journey(Transportation car, Route route){
         this.car = car;
         this.route = route;
         carbonEmissionValue = EmissionCalculator.calculate(car, route);
@@ -23,7 +23,7 @@ public class Journey {
 
     }
 
-    public void setCar(Car car){
+    public void setCar(Transportation car){
         this.car = car;
         carbonEmissionValue = EmissionCalculator.calculate(car, route);
 
@@ -34,7 +34,7 @@ public class Journey {
         carbonEmissionValue = EmissionCalculator.calculate(car, route);
     }
 
-    public Car getCar(){
+    public Transportation getCar(){
         return this.car;
     }
 
