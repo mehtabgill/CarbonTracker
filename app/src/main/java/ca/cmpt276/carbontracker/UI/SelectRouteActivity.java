@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -190,7 +189,7 @@ public class SelectRouteActivity extends AppCompatActivity {
     private void receiveDescription(){
         Bundle extra = getIntent().getExtras();
         if(extra != null){
-            selectedCarDescription = extra.getString(SelectTransportationModeActivity.DESCRIPTION_KEY);
+            selectedCarDescription = extra.getString(CarSelectionActivity.DESCRIPTION_KEY);
         }
     }
 

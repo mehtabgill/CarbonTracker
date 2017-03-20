@@ -56,6 +56,8 @@
     <string name="switch_button">SWITCH TO PIE CHART/TABLE</string>
     <string name="existing_car_text">Existing Routes</string>
     <string name="no_existing_car_text">No Existing Routes</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 
 
 </resources>

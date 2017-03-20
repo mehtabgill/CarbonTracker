@@ -67,7 +67,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
     private void receiveDescription(){
         Bundle extra = getIntent().getExtras();
         if(extra != null){
-            description = extra.getString(SelectTransportationModeActivity.DESCRIPTION_KEY);
+            description = extra.getString(CarSelectionActivity.DESCRIPTION_KEY);
         }
     }
 
