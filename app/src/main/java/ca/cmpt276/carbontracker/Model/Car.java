@@ -19,20 +19,12 @@ public class Car extends Transportation{
     public Car(){
     };
 
-    public Car(String make, String model, int year, String additionalInfo) {
+    public Car(String make, String model, int year, String displacementVol, String transmissionType) {
         this.make = make;
         this.model = model;
         this.year = year;
-        this.additionalInfo = additionalInfo;
-        this.descriptionNoNickname = make + " " +
-                model + " " +
-                Integer.toString(year) + " " +
-                additionalInfo;
-        description = nickname + " - " +
-                make + " " +
-                model + " " +
-                Integer.toString(year) + " " +
-                additionalInfo;
+        this.additionalInfo = displacementVol + " L " + transmissionType ;
+        updateCarDescriptions();
     }
 
     public String getNickname() {
@@ -41,15 +33,7 @@ public class Car extends Transportation{
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-        this.description = nickname + " - " +
-                make + " " +
-                model + " " +
-                Integer.toString(year) + " " +
-                additionalInfo;
-        this.descriptionNoNickname = make + " " +
-                model + " " +
-                year + " " +
-                additionalInfo;
+        updateCarDescriptions();
     }
 
     public String getModel() {
@@ -58,15 +42,7 @@ public class Car extends Transportation{
 
     public void setModel(String model) {
         this.model = model;
-        this.description = nickname + " - " +
-                make + " " +
-                model + " " +
-                year + " " +
-                additionalInfo;
-        this.descriptionNoNickname = make + " " +
-                model + " " +
-                year + " " +
-                additionalInfo;
+        updateCarDescriptions();
     }
 
     public String getMake() {
@@ -75,15 +51,7 @@ public class Car extends Transportation{
 
     public void setMake(String make) {
         this.make = make;
-        this.description = nickname + " - " +
-                make + " " +
-                model + " " +
-                Integer.toString(year) + " " +
-                additionalInfo;
-        this.descriptionNoNickname = make + " " +
-                model + " " +
-                Integer.toString(year) + " " +
-                additionalInfo;
+        updateCarDescriptions();
     }
 
     public int getYear() {
@@ -92,32 +60,28 @@ public class Car extends Transportation{
 
     public void setYear(int year) {
         this.year = year;
-        this.description = nickname + " - " +
-                make + " " +
-                model + " " +
-                Integer.toString(year) + " " +
-                additionalInfo;
-        this.descriptionNoNickname = make + " " +
-                model + " " +
-                Integer.toString(year) + " " +
-                additionalInfo;
+        updateCarDescriptions();
     }
 
     public String getAdditionalInfo() {
         return additionalInfo;
     }
 
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
-        this.description = nickname + " - " +
-                make + " " +
-                model + " " +
-                Integer.toString(year) + " " +
-                additionalInfo;
-        this.descriptionNoNickname = make + " " +
-                model + " " +
-                Integer.toString(year) + " " +
-                additionalInfo;
+    public void setAdditionalInfo(String displacementVolume, String transmissionType) {
+        this.additionalInfo = displacementVolume + " L " + transmissionType;
+        updateCarDescriptions();
+    }
+
+    private void updateCarDescriptions() {
+        this.description = this.nickname + " - " +
+                this.make + " " +
+                this.model + " " +
+                Integer.toString(this.year) + " " +
+                this.additionalInfo;
+        this.descriptionNoNickname = this.make + " " +
+                this.model + " " +
+                Integer.toString(this.year) + " " +
+                this.additionalInfo;
     }
 
     public int getMilesPerGallonCity() {
@@ -136,7 +100,8 @@ public class Car extends Transportation{
         this.milesPerGallonHway = milesPerGallonHway;
     }
 
-    public void setDescription(String nickname, String make, String model, String year, String additionalInfo){
+    public void setDescription(String nickname, String make, String model, String year, String displacementVolume, String transmissionType){
+        additionalInfo = displacementVolume + transmissionType;
         this.description = nickname + " - " +
                 make + " " +
                 model + " " +
@@ -154,6 +119,7 @@ public class Car extends Transportation{
                 year + " " +
                 additionalInfo;
     }
+
 
     public String getDescriptionNoNickname(){
         return descriptionNoNickname;

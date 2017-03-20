@@ -8,19 +8,17 @@ import java.util.Date;
  * including type of car, distance traveled, and carbon emission amount on the journey
  */
 
-public class Journey {
+public class Journey extends Emission {
 
     private Transportation car; // Car object, use getter methods to get required info if needed
     private Route route; //route object, use getter methods to get required info
     private float carbonEmissionValue;
-
     String dateCreated;
     public Journey(Transportation car, Route route){
         this.car = car;
         this.route = route;
         carbonEmissionValue = EmissionCalculator.calculate(car, route);
         dateCreated = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-
     }
 
     //alternate constructor
@@ -52,10 +50,14 @@ public class Journey {
     }
 
     public float getCarbonEmissionValue(){
-        return carbonEmissionValue;
+        return super.getCarbonEmissionValue();
     }
 
     public String getDateCreated() {
         return dateCreated;
+    }
+
+    public void setDateCreated(String day, String month, String year){
+        this.dateCreated = day + "-" + month + "-" + year;
     }
 }
