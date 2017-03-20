@@ -83,7 +83,8 @@ public class SelectTransportationMode extends AppCompatActivity {
                     startActivity(intent) ;
                 }
                 else{
-                    String input = distEntered.toString();
+                    EditText d = (EditText)findViewById(R.id.distanceEntered);
+                    String input = d.getText().toString();
                     float inputDist = Float.parseFloat(input);
 
                     Transportation mode;
@@ -92,13 +93,13 @@ public class SelectTransportationMode extends AppCompatActivity {
                     {
                         mode = new Walk(inputDist);
                         Route r = new Route();
-                        SingletonModel.addNewJourney(mode, r, 0);
+                        SingletonModel.addNewJourney(mode, r, 0f);
                     }
                     else if (ModeSelected.equals("Bike"))
                     {
                         mode = new Bike(inputDist);
                         Route r = new Route();
-                        SingletonModel.addNewJourney(mode, r, 0);
+                        SingletonModel.addNewJourney(mode, r, 0f);
                     }
                     else if (ModeSelected.equals("SkyTrain"))
                     {
