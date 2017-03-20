@@ -28,6 +28,11 @@ public class Transportation {
         return "";
     }
 
+    //skytrain
+    public float getCarbonEmitted(){
+        return 0;
+    }
+
 
 
 }

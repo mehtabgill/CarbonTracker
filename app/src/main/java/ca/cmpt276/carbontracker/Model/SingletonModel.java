@@ -222,6 +222,12 @@ public class SingletonModel {
         journeyCollection.add(newJourney);
     }
 
+    public static void addNewJourney(Transportation mode, Route route, float carbon)
+    {
+        Journey newJourney = new Journey(mode, route, carbon);
+        journeyCollection.add(newJourney);
+    }
+
     public static int getJourneyCollectionSize(){
         return journeyCollection.size();
     }

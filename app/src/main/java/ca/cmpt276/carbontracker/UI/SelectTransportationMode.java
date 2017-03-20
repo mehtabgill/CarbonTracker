@@ -10,8 +10,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import ca.cmpt276.carbontracker.Model.Bike;
+import ca.cmpt276.carbontracker.Model.Bus;
+import ca.cmpt276.carbontracker.Model.Route;
+import ca.cmpt276.carbontracker.Model.SingletonModel;
+import ca.cmpt276.carbontracker.Model.Skytrain;
+import ca.cmpt276.carbontracker.Model.Transportation;
+import ca.cmpt276.carbontracker.Model.Walk;
 
 public class SelectTransportationMode extends AppCompatActivity {
 
@@ -37,9 +46,25 @@ public class SelectTransportationMode extends AppCompatActivity {
         final Spinner TransportationItems = (Spinner) findViewById(R.id.spinnerTranspportationMode);
         TransportationItems.setAdapter(adapter);
 
+        final EditText distEntered= (EditText)findViewById(R.id.distanceEntered);
+        final TextView dist = (TextView)findViewById(R.id.distance);
+
         TransportationItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 ModeSelected = TransportationItems.getSelectedItem().toString();
+
+                if(ModeSelected.equals("Car")){
+
+
+                    dist.setVisibility(View.INVISIBLE);
+                    distEntered.setVisibility(View.INVISIBLE);
+                }
+                if(ModeSelected.equals("Bus") || ModeSelected.equals("SkyTrain") || ModeSelected.equals("Walk") || ModeSelected.equals("Bike")){
+
+                    dist.setVisibility(View.VISIBLE);
+                    distEntered.setVisibility(View.VISIBLE);
+                }
+
             }
 
             @Override
@@ -58,7 +83,39 @@ public class SelectTransportationMode extends AppCompatActivity {
                     startActivity(intent) ;
                 }
                 else{
+                    String input = distEntered.toString();
+                    float inputDist = Float.parseFloat(input);
 
+                    Transportation mode;
+
+                    if(ModeSelected.equals("Walk"))
+                    {
+                        mode = new Walk(inputDist);
+                        Route r = new Route();
+                        SingletonModel.addNewJourney(mode, r, 0);
+                    }
+                    else if (ModeSelected.equals("Bike"))
+                    {
+                        mode = new Bike(inputDist);
+                        Route r = new Route();
+                        SingletonModel.addNewJourney(mode, r, 0);
+                    }
+                    else if (ModeSelected.equals("SkyTrain"))
+                    {
+                        mode = new Skytrain(inputDist);
+                        Route r = new Route();
+                        SingletonModel.addNewJourney(mode, r, mode.getCarbonEmitted());
+                    }
+                    else
+                    {
+                        mode = new Bus(inputDist);
+                        Route r = new Route();
+                        SingletonModel.addNewJourney(mode, r, mode.getCarbonEmitted());
+                    }
+
+                    Toast.makeText(SelectTransportationMode.this, "Journey Added", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(SelectTransportationMode.this, MainMenuActivity.class);
+                    startActivity(intent);
 
 
                 }
@@ -74,6 +131,8 @@ public class SelectTransportationMode extends AppCompatActivity {
         });
 
     }
+
+
 
     /* fix later on laptop
     Spinner TransportationItems = (Spinner) findViewById(R.id.spinnerTranspportationMode);
