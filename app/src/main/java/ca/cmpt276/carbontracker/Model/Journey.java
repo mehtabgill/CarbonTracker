@@ -23,6 +23,15 @@ public class Journey {
 
     }
 
+    //alternate constructor
+    public Journey(Transportation car, Route route, float carbonEmissionValue)
+    {
+        this.car = car;
+        this.route = route;
+        this.carbonEmissionValue = carbonEmissionValue;
+        dateCreated = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+    }
+
     public void setCar(Transportation car){
         this.car = car;
         carbonEmissionValue = EmissionCalculator.calculate(car, route);

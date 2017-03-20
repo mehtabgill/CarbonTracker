@@ -8,7 +8,14 @@ public class Route {
     private float cityDriveDistance;
     private float highwayDriveDistance;
     private float totalDistance;
-    public Route(){};
+
+    //default blank constructor
+    public Route(){
+        name ="";
+        cityDriveDistance = 0;
+        highwayDriveDistance=0;
+        totalDistance=0;
+    };
 
     public Route(String name, float cityDriveDistance, float highwayDriveDistance) {
         this.name = name;

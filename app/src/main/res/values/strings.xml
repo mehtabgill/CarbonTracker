@@ -58,6 +58,7 @@
     <string name="no_existing_car_text">No Existing Routes</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="distance">Distance: </string>
 
 
 </resources>

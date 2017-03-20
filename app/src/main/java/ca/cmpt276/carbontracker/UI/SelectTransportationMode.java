@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -46,6 +48,7 @@ public class SelectTransportationMode extends AppCompatActivity {
         });
 
 
+
         btnOk = (Button) findViewById(R.id.buttonOkForSelectedTransportationMode);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +57,11 @@ public class SelectTransportationMode extends AppCompatActivity {
                     Intent intent = new Intent(SelectTransportationMode.this, CarSelectionActivity.class);
                     startActivity(intent) ;
                 }
-                /*else{ //Add work for other transportation mode activities as they are not made yet
+                else{
 
-                }*/
+
+
+                }
             }
         });
 
@@ -70,4 +75,37 @@ public class SelectTransportationMode extends AppCompatActivity {
 
     }
 
+    /* fix later on laptop
+    Spinner TransportationItems = (Spinner) findViewById(R.id.spinnerTranspportationMode);
+    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+            this, android.R.layout.simple_spinner_item, TransportationModeList);
+    TransportationItems.setAdapter(adapter);
+    TransportationItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            ModeSelected = TransportationItems.getSelectedItem().toString();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+        }
+    });
+
+
+    EditText distEntered= (EditText)findViewById(R.id.distanceEntered);
+    TextView dist = (TextView)findViewById(R.id.distance);
+
+        if(ModeSelected.equals("Car")){
+
+
+        dist.setVisibility(View.INVISIBLE);
+        distEntered.setVisibility(View.INVISIBLE);
+    }
+        if(ModeSelected.equals("Bus") || ModeSelected.equals("SkyTrain") || ModeSelected.equals("Walk") || ModeSelected.equals("Bike")){
+
+        dist.setVisibility(View.VISIBLE);
+        distEntered.setVisibility(View.VISIBLE);
+    }*/
+
 }
+
+
