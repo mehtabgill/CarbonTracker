@@ -16,6 +16,9 @@ import java.util.ArrayList;
  */
 public class DataReader {
     private static BufferedReader reader;
+    private static boolean  fullDataLoaded = false;
+    private static boolean  makeDataLoaded = false;
+
 
     private static CarCollection carList = new CarCollection();
     private static ArrayList<String> carMakeList = new ArrayList<>();
@@ -94,5 +97,16 @@ public class DataReader {
             Log.wtf("DataReader", "Error reading data file on line " + line, e);
             e.printStackTrace();
         }
+    }
+
+    public static boolean isLoaded() {
+        return makeDataLoaded && fullDataLoaded;
+    }
+
+    public static void setFullDataLoaded() {
+        fullDataLoaded = true;
+    }
+    public static void setMakeDataLoaded() {
+        makeDataLoaded = true;
     }
 }

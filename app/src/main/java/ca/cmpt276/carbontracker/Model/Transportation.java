@@ -4,7 +4,9 @@ package ca.cmpt276.carbontracker.Model;
  * This class is the parent class for Car, bus, skytrain, walk, bike classes
  */
 
-public class Transportation {
+public abstract class Transportation {
+
+    public enum TRANSPORTATION_TYPE {CAR, BUS, SKYTRAIN, BIKE, WALK}
 
     //default constructor
     public Transportation() {
@@ -28,11 +30,9 @@ public class Transportation {
         return "";
     }
 
-    //skytrain
     public float getCarbonEmitted(){
         return 0;
     }
 
-
-
+    public abstract TRANSPORTATION_TYPE getType();
 }

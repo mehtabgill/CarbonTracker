@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainMenuActivity"></activity>
+        <activity android:name=".SelectTransportationMode"></activity>
         <activity android:name=".CarSelectionActivity" />
         <activity android:name=".ViewCarbonFootprintActivity" />
         <activity android:name=".SelectRouteActivity" />

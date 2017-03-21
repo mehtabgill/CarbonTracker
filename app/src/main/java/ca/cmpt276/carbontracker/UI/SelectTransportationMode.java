@@ -43,7 +43,7 @@ public class SelectTransportationMode extends AppCompatActivity {
                 this, android.R.layout.simple_spinner_item, TransportationModeList);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        final Spinner TransportationItems = (Spinner) findViewById(R.id.spinnerTranspportationMode);
+        final Spinner TransportationItems = (Spinner) findViewById(R.id.spinnerTransportationMode);
         TransportationItems.setAdapter(adapter);
 
         final EditText distEntered= (EditText)findViewById(R.id.distanceEntered);
@@ -87,32 +87,38 @@ public class SelectTransportationMode extends AppCompatActivity {
                     String input = d.getText().toString();
                     float inputDist = Float.parseFloat(input);
 
-                    Transportation mode;
+                    Transportation newTransportation;
                     SingletonModel model = SingletonModel.getInstance();
 
+                    //TODO: Just a substitute name, need to have layout for getting route name;
+                    String name = "name";
                     if(ModeSelected.equals("Walk"))
                     {
-                        mode = new Walk(inputDist);
+                        /*mode = new Walk(inputDist);
                         Route r = new Route(inputDist);
-                        model.addNewJourney(mode, r, 0f);
+                        model.addNewJourney(mode, r, 0f);*/
+
+                        newTransportation = new Walk();
+                        Route newRoute = new Route(name, inputDist, 0);
+                        model.addNewJourney(newTransportation, newRoute);
                     }
                     else if (ModeSelected.equals("Bike"))
                     {
-                        mode = new Bike(inputDist);
-                        Route r = new Route(inputDist);
-                        model.addNewJourney(mode, r, 0f);
+                        newTransportation = new Bike();
+                        Route newRoute = new Route(name, inputDist, 0);
+                        model.addNewJourney(newTransportation, newRoute);
                     }
                     else if (ModeSelected.equals("SkyTrain"))
                     {
-                        mode = new Skytrain(inputDist);
-                        Route r = new Route(inputDist);
-                        model.addNewJourney(mode, r, mode.getCarbonEmitted());
+                        newTransportation = new Skytrain();
+                        Route newRoute = new Route(name, inputDist, 0);
+                        model.addNewJourney(newTransportation, newRoute);
                     }
                     else
                     {
-                        mode = new Bus(inputDist);
-                        Route r = new Route(inputDist);
-                        model.addNewJourney(mode, r, mode.getCarbonEmitted());
+                        newTransportation = new Bus();
+                        Route newRoute = new Route(name, inputDist, 0);
+                        model.addNewJourney(newTransportation, newRoute);
                     }
 
                     Toast.makeText(SelectTransportationMode.this, "Journey Added", Toast.LENGTH_SHORT).show();

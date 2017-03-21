@@ -16,6 +16,7 @@ public class Car extends Transportation{
     private int milesPerGallonCity;
     private int milesPerGallonHway;
 
+
     public Car(){
     };
 
@@ -129,5 +130,9 @@ public class Car extends Transportation{
         this.fuelType = fuelType;
     }
 
+    @Override
+    public Transportation.TRANSPORTATION_TYPE getType(){
+        return TRANSPORTATION_TYPE.CAR;
+    }
 
 }

@@ -152,7 +152,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
             Toast.makeText(WelcomeScreenActivity.getContext(),
                     getString(R.string.load_make_completed), Toast.LENGTH_SHORT).show();
             model.setCarMakeList(carMakeList);
-            model.setMakeDataLoaded();
+            DataReader.setMakeDataLoaded();
         }
     }
 
@@ -167,7 +167,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
             Toast.makeText(WelcomeScreenActivity.getContext(),
                     getString(R.string.load_car_completed), Toast.LENGTH_SHORT).show();
             model.setTotalCarCollection(carCollection);;
-            model.setFullDataLoaded();
+            DataReader.setFullDataLoaded();
         }
     }
 }
