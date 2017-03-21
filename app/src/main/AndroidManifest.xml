@@ -15,16 +15,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenuActivity">
-
-        </activity>
-        <activity android:name=".SelectTransportationModeActivity" />
+        <activity android:name=".MainMenuActivity"></activity>
+        <activity android:name=".SelectTransportationMode"></activity>
+        <activity android:name=".CarSelectionActivity" />
         <activity android:name=".ViewCarbonFootprintActivity" />
-        <activity android:name=".SelectRouteActivity"/>
+        <activity android:name=".SelectRouteActivity" />
         <activity android:name=".AddRouteActivity" />
         <activity android:name=".EditRouteActivity" />
-        <activity android:name=".DeleteRouteActivity"></activity>
+        <activity android:name=".DeleteRouteActivity" />
         <activity android:name=".AddCarActivity" />
-        <activity android:name=".EditDeleteCarActivity"></activity>
+        <activity android:name=".EditDeleteCarActivity" />
+        <activity android:name=".AddUtilitiesBillActivity"></activity>
     </application>
+
 </manifest>

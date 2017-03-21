@@ -1,7 +1,5 @@
 package ca.cmpt276.carbontracker.UI;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +16,7 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
  * UI class to display Add Route Activity
  */
 public class AddRouteActivity extends AppCompatActivity {
+    private SingletonModel model = SingletonModel.getInstance();
 
     String NEW_ADDED_NAME = "NewAddedName";
     String NEW_ADDED_CITY = "NewAddedCity";
@@ -29,8 +28,8 @@ public class AddRouteActivity extends AppCompatActivity {
     float cityDis = 0 ;
     float highwayDis = 0 ;
     String name ;
-    String Cdistance ;
-    String hdistance  ;
+    String cityDistance;
+    String highwayDistance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,8 +73,8 @@ public class AddRouteActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                Cdistance = editCityDistance.getText().toString() ;
-                cityDis = ParseFloat(Cdistance) ;
+                cityDistance = editCityDistance.getText().toString() ;
+                cityDis = ParseFloat(cityDistance) ;
             }
         });
 
@@ -92,8 +91,8 @@ public class AddRouteActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                hdistance = editHighDistance.getText().toString() ;
-                highwayDis = ParseFloat(hdistance) ;
+                highwayDistance = editHighDistance.getText().toString() ;
+                highwayDis = ParseFloat(highwayDistance) ;
 
 
             }
@@ -107,7 +106,7 @@ public class AddRouteActivity extends AppCompatActivity {
                 route.setName(name);
                 route.setCityDriveDistance(cityDis);
                 route.setHighwayDriveDistance(highwayDis);
-                SingletonModel.addNewRoute(route);
+                model.addNewRoute(route);
                 finish();
 
             }

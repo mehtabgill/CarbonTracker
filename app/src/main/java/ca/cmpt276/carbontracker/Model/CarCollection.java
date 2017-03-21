@@ -48,7 +48,7 @@ public class CarCollection implements Iterable<Car> {
         return cars.get(index);
     }
 
-    public void setCarAtIndex(Car car, int index){
+    public void setCar(Car car, int index){
         cars.remove(index);
         cars.add(index, car);
     }
