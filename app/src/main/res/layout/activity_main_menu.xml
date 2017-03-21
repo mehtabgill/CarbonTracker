@@ -25,12 +25,21 @@
         android:id="@+id/viewCarbonFootprintButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="153dp"
+        android:text="@string/view_carbon_footprint_button"
+        android:layout_below="@+id/createJourneyButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/create_utility_bill_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/createJourneyButton"
-        android:layout_marginTop="35dp"
-        android:text="@string/view_carbon_footprint_button"
-        />
+        android:layout_marginTop="54dp"
+        android:text="@string/create_utilities_bill_button" />
     //comment in to be commit-able
 </RelativeLayout>
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,7 +20,7 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
  * UI class to display Select Route Activity, including select route, add new route, delete/edit routes
  */
 public class SelectRouteActivity extends AppCompatActivity {
-
+    private SingletonModel model = SingletonModel.getInstance();
     public static final int REQUEST_CODE_EditRoute = 1024;
     public static final int REQUEST_CODE_LauchAddRoute = 1025;
     public static final int REQUEST_CODE_LaunchDeleteRoute = 1027;
@@ -53,7 +52,7 @@ public class SelectRouteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_select_route);
         receiveDescription();
         ERROR_NO_ROUTE = getString(R.string.error_no_route_selected);
-        currentRouteList = SingletonModel.getRouteCollectionNames();
+        currentRouteList = model.getRouteCollectionNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, currentRouteList);
 
@@ -72,8 +71,8 @@ public class SelectRouteActivity extends AppCompatActivity {
                 }
                 else{
                     selectedRouteName = spinner.getSelectedItem().toString();
-                    SingletonModel.addNewJourney(selectedCarDescription, selectedRouteName);
-                    startActivity(new Intent(SelectRouteActivity.this, MainMenuActivity.class));
+                    model.addNewJourney(selectedCarDescription, selectedRouteName);
+                    finish();
                 }
             }
         });
@@ -154,7 +153,7 @@ public class SelectRouteActivity extends AppCompatActivity {
             float newCity = data.getFloatExtra(EDITED_CITY_STRING, 0);
             float newHighway = data.getFloatExtra(EDITED_HIGHWAY_STRING, 0);
             String orignalName = data.getStringExtra(SIGNAL_ORIGINAL_NAME_STRING);
-            SingletonModel.editRoute(orignalName, newName, newCity, newHighway);
+            model.editRoute(orignalName, newName, newCity, newHighway);
         }
         switch(requestCode) {
         case REQUEST_CODE_LauchAddRoute:
@@ -166,19 +165,19 @@ public class SelectRouteActivity extends AppCompatActivity {
 
                 HighwayDriveDistance = data.getFloatExtra(NEW_ADDED_HIGHWAY_STRING, 0);
                 Route newRoute = new Route(name, CityDriveDistance, HighwayDriveDistance);
-                SingletonModel.addNewRoute(newRoute);
+                model.addNewRoute(newRoute);
         }
         case REQUEST_CODE_LaunchDeleteRoute:
             if (resultCode == Activity.RESULT_OK) {
                 String deletingName = data.getStringExtra(SIGNAL_DELETING_NAME);
                 if (data.hasExtra(SIGNAL_DELETING_NAME)) {
-                    SingletonModel.removeFromRouteCollection(deletingName);
+                    model.removeFromRouteCollection(deletingName);
                 }
             }
         }
     }
     private void refreshSpinner(){
-        currentRouteList = SingletonModel.getRouteCollectionNames();
+        currentRouteList = model.getRouteCollectionNames();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_dropdown_item, currentRouteList);
 
@@ -190,7 +189,7 @@ public class SelectRouteActivity extends AppCompatActivity {
     private void receiveDescription(){
         Bundle extra = getIntent().getExtras();
         if(extra != null){
-            selectedCarDescription = extra.getString(SelectTransportationModeActivity.DESCRIPTION_KEY);
+            selectedCarDescription = extra.getString(CarSelectionActivity.DESCRIPTION_KEY);
         }
     }
 

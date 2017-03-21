@@ -8,7 +8,17 @@ public class Route {
     private float cityDriveDistance;
     private float highwayDriveDistance;
     private float totalDistance;
-    public Route(){};
+
+    //default blank constructor
+    public Route(){
+
+    }
+    public Route(float totalDistance){
+        name ="";
+        cityDriveDistance = 0;
+        highwayDriveDistance=0;
+        this.totalDistance = getTotalDistance();
+    };
 
     public Route(Route route) {
         this.name = route.name;
@@ -41,6 +51,8 @@ public class Route {
         this.totalDistance = this.cityDriveDistance + this.highwayDriveDistance;
 
     }
+
+
 
     public float getHighwayDriveDistance() {
         return highwayDriveDistance;
