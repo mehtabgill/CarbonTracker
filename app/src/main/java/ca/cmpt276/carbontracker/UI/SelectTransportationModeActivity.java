@@ -84,7 +84,7 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        SingletonModel.updateCurrentCarCollectionDescription();
+        //SingletonModel.updateCurrentCarCollectionDescription();
         currentCarListDescription = SingletonModel.getCarEntriesDescription(SingletonModel.RetriveEntries.Current);
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, currentCarListDescription

@@ -40,10 +40,6 @@ public class Car extends Transportation{
         return model;
     }
 
-    public void setModel(String model) {
-        this.model = model;
-        updateCarDescriptions();
-    }
 
     public String getMake() {
         return make;

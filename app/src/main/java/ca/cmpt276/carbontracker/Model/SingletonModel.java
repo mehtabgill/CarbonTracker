@@ -7,6 +7,9 @@ import java.util.ArrayList;
  */
 
 public class SingletonModel {
+    //TODO: Move all code relating to car search to their own class
+    //Singleton should only be the middle ground between logic and UI
+
     static CarCollection currentCarCollection = new CarCollection();
     static CarCollection currentSearchCollection = new CarCollection();
     static CarCollection totalCarCollection = new CarCollection();
@@ -33,6 +36,7 @@ public class SingletonModel {
      * are logic functions for current search mode;
      * May need to edit to adapt different modes of searching later
      */
+
     public static ArrayList<String> getCarModelsOfMake(String make){
         if(currentSearchCollection.size()== 0){
             currentSearchCollection = totalCarCollection;
@@ -56,6 +60,7 @@ public class SingletonModel {
     public static void updateCurrentSearchByYear(int year){
         currentSearchCollection = currentSearchCollection.findCarsWithYear(year);
     }
+
     public static boolean isCurrentCarAdded(String description){
         for(Car car : currentCarCollection){
             if (car.getDescription().equals(description)){
@@ -119,11 +124,8 @@ public class SingletonModel {
 
     }
 
-    /*
-     * TODO: edit this later
-     */
-
     public static Car getCarFromCollection(String description, RetriveEntries mode){
+
         Car returnCar = new Car();
         String current;
         int compareValue;
@@ -161,7 +163,7 @@ public class SingletonModel {
     }
 
     public static void setCurrentCarAtIndex(Car car, int index){
-        currentCarCollection.setCarAtIndex(car, index);
+        currentCarCollection.setCar(car, index);
     }
 
     public static int getIndexOfCar(Car car){
@@ -234,6 +236,7 @@ public class SingletonModel {
     public static ArrayList<String> getJourneysCarList(){
         return journeyCollection.getCarsNameList();
     }
+
     public static ArrayList<String> getJourneysTotalDistanceList(){
         ArrayList<String> totalDistance = new ArrayList<>();
         for(Float distance : journeyCollection.getTotalDistanceList()){
@@ -241,6 +244,7 @@ public class SingletonModel {
         }
         return totalDistance;
     }
+
     public static ArrayList<String> getJourneysCarbonEmissionList(){
         ArrayList<String> carbonEmissionList = new ArrayList<>();
         for(Float value: journeyCollection.getCarbonEmissionList()){

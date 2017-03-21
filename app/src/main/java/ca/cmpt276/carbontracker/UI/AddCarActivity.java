@@ -186,6 +186,7 @@ public class AddCarActivity extends AppCompatActivity {
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinner.setAdapter(adapter);
+
     }
 
 
