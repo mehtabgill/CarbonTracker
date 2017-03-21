@@ -66,9 +66,4 @@ public class Route {
     public float getTotalDistance(){
         return this.totalDistance;
     }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
 }
