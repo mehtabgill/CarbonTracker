@@ -17,8 +17,8 @@ public class Journey extends Emission {
 
     public Journey(Car car, Route route){
         this.car = car;
-        this.route = route;
-        carbonEmissionValue = EmissionCalculator.calculate(car, route);
+        this.route = new Route(route);
+        carbonEmissionValue = EmissionCalculator.calculate(car, this.route);
         dateCreated = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     }
 
@@ -29,8 +29,8 @@ public class Journey extends Emission {
     }
 
     public void setRoute(Route route){
-        this.route = route;
-        carbonEmissionValue = EmissionCalculator.calculate(car, route);
+        this.route = new Route(route);
+        carbonEmissionValue = EmissionCalculator.calculate(car, this.route);
     }
 
     public Car getCar(){

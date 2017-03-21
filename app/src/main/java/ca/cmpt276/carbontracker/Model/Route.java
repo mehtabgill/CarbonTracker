@@ -10,6 +10,13 @@ public class Route {
     private float totalDistance;
     public Route(){};
 
+    public Route(Route route) {
+        this.name = route.name;
+        this.cityDriveDistance = route.cityDriveDistance;
+        this.highwayDriveDistance = route.highwayDriveDistance;
+        this.totalDistance = route.totalDistance;
+    }
+
     public Route(String name, float cityDriveDistance, float highwayDriveDistance) {
         this.name = name;
         this.cityDriveDistance = cityDriveDistance;
@@ -48,5 +55,8 @@ public class Route {
         return this.totalDistance;
     }
 
-
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
