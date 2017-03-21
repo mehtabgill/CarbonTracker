@@ -7,17 +7,18 @@ import java.util.ArrayList;
  */
 
 public class SingletonModel {
-    static CarCollection currentCarCollection = new CarCollection();
-    static CarCollection currentSearchCollection = new CarCollection();
-    static CarCollection totalCarCollection = new CarCollection();
-    static CarCollection currentSearchPreviousState = new CarCollection();
-    static RouteCollection routeCollection = new RouteCollection();
-    static JourneyCollection journeyCollection = new JourneyCollection();
-    static ArrayList<String> carMakeList;
-    static ArrayList<Emission> emissionArrayList = new ArrayList<Emission>();
-    static public enum RetriveEntries{Current, Search, Total};
-    boolean fullDataLoaded = false;
-    boolean makeDataLoaded = false;
+    //TODO: Move all code relating to car search to their own class
+    //Singleton should only be the middle ground between logic and UI
+
+    CarCollection currentCarCollection = new CarCollection();
+    CarCollection currentSearchCollection = new CarCollection();
+    CarCollection totalCarCollection = new CarCollection();
+    CarCollection currentSearchPreviousState = new CarCollection();
+    RouteCollection routeCollection = new RouteCollection();
+    JourneyCollection journeyCollection = new JourneyCollection();
+    ArrayList<String> carMakeList;
+    ArrayList<Emission> emissionArrayList = new ArrayList<Emission>();
+    public enum RetriveEntries{Current, Search, Total};
 
     private static final SingletonModel instance = new SingletonModel();
 
@@ -33,7 +34,8 @@ public class SingletonModel {
      * are logic functions for current search mode;
      * May need to edit to adapt different modes of searching later
      */
-    public static ArrayList<String> getCarModelsOfMake(String make){
+
+    public ArrayList<String> getCarModelsOfMake(String make){
         if(currentSearchCollection.size()== 0){
             currentSearchCollection = totalCarCollection;
         }
@@ -43,7 +45,7 @@ public class SingletonModel {
         currentSearchPreviousState = currentSearchCollection.getDuplicate();
         return currentModelList;
     }
-    public static ArrayList<String> getCarYearsOfModels(String model){
+    public ArrayList<String> getCarYearsOfModels(String model){
         if(currentSearchCollection.size()== 0){
             currentSearchCollection = totalCarCollection;
         }
@@ -53,10 +55,11 @@ public class SingletonModel {
         ArrayList<String> currentYearList = currentSearchCollection.getUniqueModelYears();
         return currentYearList;
     }
-    public static void updateCurrentSearchByYear(int year){
+    public void updateCurrentSearchByYear(int year){
         currentSearchCollection = currentSearchCollection.findCarsWithYear(year);
     }
-    public static boolean isCurrentCarAdded(String description){
+
+    public boolean isCurrentCarAdded(String description){
         for(Car car : currentCarCollection){
             if (car.getDescription().equals(description)){
                 return true;
@@ -65,7 +68,7 @@ public class SingletonModel {
         return false;
     }
 
-    public static void addNewCarBasedOnDecsription(String nickname, String description){
+    public void addNewCarBasedOnDecsription(String nickname, String description){
         for(Car car: currentSearchCollection){
             if (car.getDescriptionNoNickname().equals(description)){
                 car.setNickname(nickname);
@@ -74,13 +77,13 @@ public class SingletonModel {
         }
     }
 
-    public static void resetCurrentSearchCollection(){
+    public void resetCurrentSearchCollection(){
         for(int i = 0; i < currentSearchCollection.size(); i++){
             currentSearchCollection.remove(i);
         }
     }
 
-    public static ArrayList<String> getCarEntriesDescription(RetriveEntries mode){
+    public ArrayList<String> getCarEntriesDescription(RetriveEntries mode){
         ArrayList<String> carEntriesDescription = new ArrayList<>();
         switch (mode){
             case Search:
@@ -93,7 +96,7 @@ public class SingletonModel {
         return carEntriesDescription;
     }
 
-    public static void updateCurrentCarCollectionDescription(){
+    public void updateCurrentCarCollectionDescription(){
         ArrayList<String> updatedDescription = new ArrayList<>();
         ArrayList<String> updatedDescriptionNoNickname = new ArrayList<>();
         for(Car car: currentCarCollection){
@@ -104,7 +107,7 @@ public class SingletonModel {
         currentCarCollection.setDescriptionNoNicknameList(updatedDescriptionNoNickname);
     }
 
-    public static void removeCarDescription(String description){
+    public void removeCarDescription(String description){
         for(int i = 0; i < currentCarCollection.size(); i++){
             if(currentCarCollection.getCar(i).getDescription().equals(description)){
                 currentCarCollection.getDescriptionList().remove(i);
@@ -119,11 +122,8 @@ public class SingletonModel {
 
     }
 
-    /*
-     * TODO: edit this later
-     */
+    public Car getCarFromCollection(String description, RetriveEntries mode){
 
-    public static Car getCarFromCollection(String description, RetriveEntries mode){
         Car returnCar = new Car();
         String current;
         int compareValue;
@@ -160,15 +160,15 @@ public class SingletonModel {
         return returnCar;
     }
 
-    public static void setCurrentCarAtIndex(Car car, int index){
-        currentCarCollection.setCarAtIndex(car, index);
+    public void setCurrentCarAtIndex(Car car, int index){
+        currentCarCollection.setCar(car, index);
     }
 
-    public static int getIndexOfCar(Car car){
+    public int getIndexOfCar(Car car){
         return currentCarCollection.getIndex(car);
     }
 
-    public static ArrayList<String> getCarMakeList() {
+    public ArrayList<String> getCarMakeList() {
         return carMakeList;
     }
 
@@ -188,7 +188,7 @@ public class SingletonModel {
         currentCarCollection.remove(car);
     }
 
-    public static Route getRouteByName(String name){
+    public Route getRouteByName(String name){
         Route returnRoute = new Route();
         for (Route route: routeCollection){
             if(route.getName().toLowerCase().equals(name.toLowerCase())){
@@ -197,19 +197,19 @@ public class SingletonModel {
         }
         return returnRoute;
     }
-    public static RouteCollection getRouteCollection() {
+    public RouteCollection getRouteCollection() {
         return routeCollection;
     }
 
-    public static void addNewRoute(Route route){
+    public void addNewRoute(Route route){
         routeCollection.add(route);
     }
 
-    public static void removeFromRouteCollection(String routeName){
+    public void removeFromRouteCollection(String routeName){
         routeCollection.remove(routeName);
     }
 
-    public static ArrayList<String> getRouteCollectionNames(){
+    public ArrayList<String> getRouteCollectionNames(){
         ArrayList<String> routeNames = new ArrayList<>();
         for(Route route: routeCollection){
             routeNames.add(route.getName());
@@ -217,37 +217,39 @@ public class SingletonModel {
         return routeNames;
     }
 
-    public static void addNewJourney(String carDescription, String routeName){
+    public void addNewJourney(String carDescription, String routeName){
         Car newCar = getCarFromCollection(carDescription, RetriveEntries.Current);
         Route newRoute = getRouteByName(routeName);
         Journey newJourney = new Journey(newCar, newRoute);
         journeyCollection.add(newJourney);
     }
 
-    public static void addNewJourney(Transportation mode, Route route, float carbon)
-    {
-        Journey newJourney = new Journey(mode, route, carbon);
+    public void addNewJourney(Transportation newTransportation, Route newRoute){
+        Journey newJourney = new Journey(newTransportation, newRoute);
         journeyCollection.add(newJourney);
     }
 
-    public static int getJourneyCollectionSize(){
+    public int getJourneyCollectionSize(){
         return journeyCollection.size();
     }
 
-    public static ArrayList<String> getJourneysDates(){
+    public ArrayList<String> getJourneysDates(){
         return journeyCollection.getAllJourneyDates();
     }
-    public static ArrayList<String> getJourneysCarList(){
-        return journeyCollection.getCarsNameList();
+
+    public ArrayList<String> getJourneyTransportationName(){
+        return journeyCollection.getTransportationNameList();
     }
-    public static ArrayList<String> getJourneysTotalDistanceList(){
+
+    public ArrayList<String> getJourneysDistanceList(){
         ArrayList<String> totalDistance = new ArrayList<>();
         for(Float distance : journeyCollection.getTotalDistanceList()){
             totalDistance.add(Float.toString(distance));
         }
         return totalDistance;
     }
-    public static ArrayList<String> getJourneysCarbonEmissionList(){
+
+    public ArrayList<String> getJourneysCarbonEmissionList(){
         ArrayList<String> carbonEmissionList = new ArrayList<>();
         for(Float value: journeyCollection.getCarbonEmissionList()){
             carbonEmissionList.add(Float.toString(value));
@@ -255,18 +257,8 @@ public class SingletonModel {
         return carbonEmissionList;
     }
 
-    public static void editRoute(String originalName, String newName, float newCity, float newHighway){
+    public void editRoute(String originalName, String newName, float newCity, float newHighway){
         routeCollection.editRoute(originalName, newName, newCity, newHighway);
     }
 
-    public boolean isLoaded() {
-        return makeDataLoaded && fullDataLoaded;
-    }
-
-    public void setFullDataLoaded() {
-        this.fullDataLoaded = true;
-    }
-    public void setMakeDataLoaded() {
-        this.makeDataLoaded = true;
-    }
 }

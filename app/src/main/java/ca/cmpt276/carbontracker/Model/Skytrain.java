@@ -37,4 +37,9 @@ public class Skytrain extends Transportation {
         return this.carbonEmitted;
     }
 
+    @Override
+    public Transportation.TRANSPORTATION_TYPE getType(){
+        return TRANSPORTATION_TYPE.SKYTRAIN;
+    }
+
 }

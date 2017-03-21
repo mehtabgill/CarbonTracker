@@ -25,7 +25,7 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
 public class ViewCarbonFootprintActivity extends AppCompatActivity {
     private TableLayout tableLayout;
     private PieChart chart;
-    SingletonModel model = SingletonModel.getInstance();
+    private SingletonModel model = SingletonModel.getInstance();
 
     //Column for: date of trip; distance; vehicle name; carbon emitted;
     private final int COL_NUM = 4;
@@ -36,10 +36,9 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
     private int arrayIndex;
 
     ArrayList<String> journeyDateList = model.getJourneysDates();
-    ArrayList<String> totalDistanceList = model.getJourneysTotalDistanceList();
-    ArrayList<String> carNameList = model.getJourneysCarList();
+    ArrayList<String> totalDistanceList = model.getJourneysDistanceList();
+    ArrayList<String> carNameList = model.getJourneyTransportationName();
     ArrayList<String> carbonEmissionList = model.getJourneysCarbonEmissionList();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

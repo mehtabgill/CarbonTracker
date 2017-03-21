@@ -18,6 +18,7 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
  * UI class to display Select transportation activity, including select car, delete car, edit car, add new car
  */
 public class CarSelectionActivity extends AppCompatActivity {
+    private SingletonModel model = SingletonModel.getInstance();
     Spinner selectCarSpinner;
     String selectedCarDescription;
     Button selectCarButton;
@@ -84,8 +85,8 @@ public class CarSelectionActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        SingletonModel.updateCurrentCarCollectionDescription();
-        currentCarListDescription = SingletonModel.getCarEntriesDescription(SingletonModel.RetriveEntries.Current);
+        //SingletonModel.updateCurrentCarCollectionDescription();
+        currentCarListDescription = model.getCarEntriesDescription(SingletonModel.RetriveEntries.Current);
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, currentCarListDescription
         );

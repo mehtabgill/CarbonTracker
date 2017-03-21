@@ -11,15 +11,15 @@
     tools:context="ca.cmpt276.carbontracker.UI.EditRouteActivity">
 
     <EditText
+        android:id="@+id/editTextEditCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_below="@+id/editTextEditRouteName"
         android:layout_alignLeft="@+id/editTextEditRouteName"
         android:layout_alignStart="@+id/editTextEditRouteName"
+        android:layout_below="@+id/editTextEditRouteName"
         android:layout_marginTop="47dp"
-        android:id="@+id/editTextEditCity" />
+        android:ems="10"
+        android:inputType="textPersonName|numberDecimal" />
 
     <Button
         android:text="@string/cancel_text"
@@ -55,15 +55,15 @@
         android:layout_alignParentEnd="true" />
 
     <EditText
+        android:id="@+id/editTextEditHighway"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_marginTop="50dp"
-        android:id="@+id/editTextEditHighway"
-        android:layout_below="@+id/editTextEditCity"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/editTextEditCity"
+        android:layout_marginTop="50dp"
+        android:ems="10"
+        android:inputType="textPersonName|numberDecimal" />
 
     <TextView
         android:text="@string/route_highway_distance_text"

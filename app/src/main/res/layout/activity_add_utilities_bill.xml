@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ca.cmpt276.carbontracker.UI.AddUtilitiesBillActivity">
+
+    <RelativeLayout
+        android:layout_width="376dp"
+        android:layout_height="501dp"
+        tools:layout_editor_absoluteX="4dp"
+        tools:layout_editor_absoluteY="5dp">
+
+        <EditText
+            android:id="@+id/bill_amount_editText"
+            android:layout_width="232dp"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:hint="@string/enter_bill_amount_hint"
+            android:inputType="textPersonName|numberDecimal"
+            android:selectAllOnFocus="false"
+            tools:layout_editor_absoluteX="125dp"
+            tools:layout_editor_absoluteY="83dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_alignTop="@+id/amount_TextView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/end_date_textView"
+            android:layout_width="79dp"
+            android:layout_height="39dp"
+            android:layout_marginTop="33dp"
+            android:text="@string/select_end_date_text"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            app:layout_constraintRight_toLeftOf="@+id/select_end_date_trigger"
+            tools:layout_editor_absoluteY="312dp"
+            android:layout_below="@+id/start_date_textView"
+            android:layout_alignLeft="@+id/start_date_textView"
+            android:layout_alignStart="@+id/start_date_textView" />
+
+        <TextView
+            android:id="@+id/numb_of_people_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/amount_TextView"
+            android:layout_alignLeft="@+id/amount_TextView"
+            android:layout_alignRight="@+id/amount_TextView"
+            android:layout_alignStart="@+id/amount_TextView"
+            android:layout_below="@+id/bill_amount_editText"
+            android:layout_marginTop="31dp"
+            android:text="@string/amount_people_text"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="182dp" />
+
+        <EditText
+            android:id="@+id/number_of_people_editText"
+            android:layout_width="228dp"
+            android:layout_height="45dp"
+            android:layout_alignLeft="@+id/bill_amount_editText"
+            android:layout_alignStart="@+id/bill_amount_editText"
+            android:layout_alignTop="@+id/numb_of_people_textView"
+            android:ems="10"
+            android:hint="@string/amount_people_hint"
+            android:inputType="number"
+            android:singleLine="false"
+            tools:layout_editor_absoluteX="140dp"
+            tools:layout_editor_absoluteY="165dp"
+            android:layout_alignRight="@+id/bill_amount_editText"
+            android:layout_alignEnd="@+id/bill_amount_editText" />
+
+        <TextView
+            android:id="@+id/start_date_textView"
+            android:layout_width="82dp"
+            android:layout_height="44dp"
+            android:layout_alignLeft="@+id/numb_of_people_textView"
+            android:layout_alignStart="@+id/numb_of_people_textView"
+            android:layout_centerVertical="true"
+            android:text="@string/select_start_date_text"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="233dp" />
+
+        <TextView
+            android:id="@+id/amount_TextView"
+            android:layout_width="84dp"
+            android:layout_height="46dp"
+            android:layout_alignLeft="@+id/bill_textView"
+            android:layout_alignStart="@+id/bill_textView"
+            android:layout_below="@+id/bill_textView"
+            android:layout_marginTop="31dp"
+            android:text="@string/enter_bill_amount_text"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            tools:layout_editor_absoluteX="17dp"
+            tools:layout_editor_absoluteY="100dp" />
+
+        <TextView
+            android:id="@+id/select_end_date_trigger"
+            android:layout_width="204dp"
+            android:layout_height="35dp"
+            android:clickable="true"
+            android:text="@string/select_end_date_hint"
+            tools:layout_editor_absoluteX="141dp"
+            tools:layout_editor_absoluteY="316dp"
+            android:layout_alignBottom="@+id/end_date_textView"
+            android:layout_alignLeft="@+id/select_start_date_trigger"
+            android:layout_alignStart="@+id/select_start_date_trigger" />
+
+        <Button
+            android:id="@+id/add_bill_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/select_start_date_trigger"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/select_start_date_trigger"
+            android:layout_marginBottom="38dp"
+            android:text="@string/add_bill_button_text"
+            tools:layout_editor_absoluteX="280dp"
+            tools:layout_editor_absoluteY="413dp" />
+
+        <TextView
+            android:id="@+id/bill_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="23dp"
+            android:layout_marginStart="23dp"
+            android:layout_marginTop="32dp"
+            android:text="@string/select_bill_text"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="34dp" />
+
+        <TextView
+            android:id="@+id/select_start_date_trigger"
+            android:layout_width="226dp"
+            android:layout_height="35dp"
+            android:clickable="true"
+            android:text="@string/select_start_date_hint"
+            tools:layout_editor_absoluteX="142dp"
+            tools:layout_editor_absoluteY="242dp"
+            android:layout_alignBottom="@+id/start_date_textView"
+            android:layout_alignRight="@+id/number_of_people_editText"
+            android:layout_alignEnd="@+id/number_of_people_editText" />
+
+        <Spinner
+            android:id="@+id/select_bill_type_spinner"
+            android:layout_width="228dp"
+            android:layout_height="27dp"
+            tools:layout_editor_absoluteX="141dp"
+            tools:layout_editor_absoluteY="35dp"
+            android:layout_alignBottom="@+id/bill_textView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignLeft="@+id/bill_amount_editText"
+            android:layout_alignStart="@+id/bill_amount_editText" />
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

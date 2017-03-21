@@ -12,6 +12,7 @@ public class Bus extends Transportation {
     private float distance;
     private float carbonEmitted;
 
+
     //default constructor
     public Bus() {
         distance = 0;
@@ -37,4 +38,8 @@ public class Bus extends Transportation {
         return this.carbonEmitted;
     }
 
+    @Override
+    public Transportation.TRANSPORTATION_TYPE getType(){
+        return TRANSPORTATION_TYPE.BUS;
+    }
 }

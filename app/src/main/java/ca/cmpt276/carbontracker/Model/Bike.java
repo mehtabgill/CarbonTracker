@@ -11,10 +11,10 @@ public class Bike extends Transportation {
 
     //default constructor
     public Bike() {
-        distance = 0;
+
     }
 
-    //alternate constructor
+    //alternate constructor, probably can remove these
     public Bike(float distance){
         this.distance = distance;
     }
@@ -25,6 +25,11 @@ public class Bike extends Transportation {
 
     public float getDistance(){
         return distance;
+    }
+
+    @Override
+    public Transportation.TRANSPORTATION_TYPE getType(){
+        return TRANSPORTATION_TYPE.BIKE;
     }
 
 }
