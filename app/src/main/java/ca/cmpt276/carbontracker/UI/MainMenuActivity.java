@@ -53,7 +53,7 @@ public class MainMenuActivity extends AppCompatActivity {
             //Change this later
             case CREATE_JOURNEY:
                 if(SingletonModel.getInstance().isLoaded()){
-                    startActivity(new Intent(MainMenuActivity.this, SelectTransportationModeActivity.class));
+                    startActivity(new Intent(MainMenuActivity.this, SelectTransportationMode.class));
                 }
                 else{
                     Toast.makeText(MainMenuActivity.this, "Still loading data", Toast.LENGTH_SHORT).show();

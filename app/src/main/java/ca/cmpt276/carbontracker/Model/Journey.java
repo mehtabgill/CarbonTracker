@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 
 public class Journey extends Emission {
 
-    private Car car; // Car object, use getter methods to get required info if needed
+    private Transportation car; // Car object, use getter methods to get required info if needed
     private Route route; //route object, use getter methods to get required info
     private float carbonEmissionValue;
 
@@ -59,7 +59,16 @@ public class Journey extends Emission {
                 * fuelConstant;
     }
 
-    public void setCar(Car car){
+    //alternate constructor
+    public Journey(Transportation car, Route route, float carbonEmissionValue)
+    {
+        this.car = car;
+        this.route = route;
+        this.carbonEmissionValue = carbonEmissionValue;
+        dateCreated = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+    }
+
+    public void setCar(Transportation car){
         this.car = car;
         calculateCarbonEmission();
     }
@@ -69,7 +78,7 @@ public class Journey extends Emission {
         calculateCarbonEmission();
     }
 
-    public Car getCar(){
+    public Transportation getCar(){
         return this.car;
     }
 

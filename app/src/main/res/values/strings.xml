@@ -71,4 +71,9 @@
     <string name="gas_bill">Gas</string>
     <string name="bill_amount_error">Error: Amount of consumption must be greater than 0</string>
     <string name="number_of_people_error">Error: Amount of people must be greater than 0</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="distance">Distance: </string>
+
+
 </resources>

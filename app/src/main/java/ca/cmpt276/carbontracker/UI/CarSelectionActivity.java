@@ -17,7 +17,7 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
 /*
  * UI class to display Select transportation activity, including select car, delete car, edit car, add new car
  */
-public class SelectTransportationModeActivity extends AppCompatActivity {
+public class CarSelectionActivity extends AppCompatActivity {
     Spinner selectCarSpinner;
     String selectedCarDescription;
     Button selectCarButton;
@@ -31,7 +31,7 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_transportation_mode);
+        setContentView(R.layout.activity_car_selectioon);
         ERROR_NO_CAR = getString(R.string.error_no_car);
 
         selectCarButton = (Button) findViewById(R.id.select_car_button);
@@ -39,12 +39,12 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(currentCarListDescription.isEmpty()){
-                    Toast.makeText(SelectTransportationModeActivity.this,
+                    Toast.makeText(CarSelectionActivity.this,
                             ERROR_NO_CAR,
                             Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Intent intent = new Intent(SelectTransportationModeActivity.this, SelectRouteActivity.class);
+                    Intent intent = new Intent(CarSelectionActivity.this, SelectRouteActivity.class);
                     intent.putExtra(DESCRIPTION_KEY, selectedCarDescription);
                     startActivity(intent);
                 }
@@ -55,7 +55,7 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
         addCarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SelectTransportationModeActivity.this, AddCarActivity.class));
+                startActivity(new Intent(CarSelectionActivity.this, AddCarActivity.class));
             }
         });
 
@@ -65,12 +65,12 @@ public class SelectTransportationModeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(currentCarListDescription.isEmpty()){
-                    Toast.makeText(SelectTransportationModeActivity.this,
+                    Toast.makeText(CarSelectionActivity.this,
                             ERROR_NO_CAR,
                             Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Intent intent = new Intent(SelectTransportationModeActivity.this, EditDeleteCarActivity.class);
+                    Intent intent = new Intent(CarSelectionActivity.this, EditDeleteCarActivity.class);
                     intent.putExtra(DESCRIPTION_KEY, selectedCarDescription);
                     startActivity(intent);
                 }
