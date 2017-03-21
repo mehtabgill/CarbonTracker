@@ -88,35 +88,35 @@ public class SelectTransportationMode extends AppCompatActivity {
                     float inputDist = Float.parseFloat(input);
 
                     Transportation mode;
+                    SingletonModel model = SingletonModel.getInstance();
 
                     if(ModeSelected.equals("Walk"))
                     {
                         mode = new Walk(inputDist);
-                        Route r = new Route();
-                        SingletonModel.addNewJourney(mode, r, 0f);
+                        Route r = new Route(inputDist);
+                        model.addNewJourney(mode, r, 0f);
                     }
                     else if (ModeSelected.equals("Bike"))
                     {
                         mode = new Bike(inputDist);
-                        Route r = new Route();
-                        SingletonModel.addNewJourney(mode, r, 0f);
+                        Route r = new Route(inputDist);
+                        model.addNewJourney(mode, r, 0f);
                     }
                     else if (ModeSelected.equals("SkyTrain"))
                     {
                         mode = new Skytrain(inputDist);
-                        Route r = new Route();
-                        SingletonModel.addNewJourney(mode, r, mode.getCarbonEmitted());
+                        Route r = new Route(inputDist);
+                        model.addNewJourney(mode, r, mode.getCarbonEmitted());
                     }
                     else
                     {
                         mode = new Bus(inputDist);
-                        Route r = new Route();
-                        SingletonModel.addNewJourney(mode, r, mode.getCarbonEmitted());
+                        Route r = new Route(inputDist);
+                        model.addNewJourney(mode, r, mode.getCarbonEmitted());
                     }
 
                     Toast.makeText(SelectTransportationMode.this, "Journey Added", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SelectTransportationMode.this, MainMenuActivity.class);
-                    startActivity(intent);
+                    finish();
 
 
                 }
