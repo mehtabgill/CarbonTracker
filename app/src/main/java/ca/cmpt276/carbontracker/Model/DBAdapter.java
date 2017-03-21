@@ -45,7 +45,11 @@ public class DBAdapter {
 
     // DB info: it's name, and the table we are using (just one).
     public static final String DATABASE_NAME = "MyDb";
-    public static final String DATABASE_TABLE = "mainTable";
+    public static final String DATABASE_TABLE = "Table";
+    public static final String DATABASE_TOTAL_TABLE = "TotalCarTable";
+    public static final String DATABASE_CAR_TABLE = "CarTable";
+    public static final String DATABASE_ROUTE_TABLE = "RouteTable";
+    public static final String DATABASE_JOURNEY_TABLE = "JourneyTable";
     // Track DB version if a new version of your app changes the format.
     public static final int DATABASE_VERSION = 1;
 
