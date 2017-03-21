@@ -10,19 +10,27 @@ import java.util.Date;
 
 public class Journey extends Emission {
 
-    private Car car; // Car object, use getter methods to get required info if needed
+    private Transportation car; // Car object, use getter methods to get required info if needed
     private Route route; //route object, use getter methods to get required info
     private float carbonEmissionValue;
     String dateCreated;
-
-    public Journey(Car car, Route route){
+    public Journey(Transportation car, Route route){
         this.car = car;
         this.route = route;
         carbonEmissionValue = EmissionCalculator.calculate(car, route);
         dateCreated = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
     }
 
-    public void setCar(Car car){
+    //alternate constructor
+    public Journey(Transportation car, Route route, float carbonEmissionValue)
+    {
+        this.car = car;
+        this.route = route;
+        this.carbonEmissionValue = carbonEmissionValue;
+        dateCreated = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+    }
+
+    public void setCar(Transportation car){
         this.car = car;
         carbonEmissionValue = EmissionCalculator.calculate(car, route);
 
@@ -33,7 +41,7 @@ public class Journey extends Emission {
         carbonEmissionValue = EmissionCalculator.calculate(car, route);
     }
 
-    public Car getCar(){
+    public Transportation getCar(){
         return this.car;
     }
 

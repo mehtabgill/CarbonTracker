@@ -33,4 +33,7 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
 }
 //Comment in to be commit-able
+dependencies {
+    compile 'com.android.support.constraint:constraint-layout:+'
+}
 

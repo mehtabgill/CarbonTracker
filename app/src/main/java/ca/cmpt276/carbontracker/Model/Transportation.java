@@ -7,8 +7,32 @@ package ca.cmpt276.carbontracker.Model;
 public class Transportation {
 
     //default constructor
-    public Transportation()
-    {
+    public Transportation() {
 
     }
+
+    //These methods will be overriden by Car
+    public String getNickname() {
+        return "";
+    }
+
+    public int getMilesPerGallonCity() {
+        return 0;
+    }
+
+    public int getMilesPerGallonHway() {
+        return 0;
+    }
+
+    public String getFuelType() {
+        return "";
+    }
+
+    //skytrain
+    public float getCarbonEmitted(){
+        return 0;
+    }
+
+
+
 }
