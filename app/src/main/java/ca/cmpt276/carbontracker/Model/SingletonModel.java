@@ -20,7 +20,7 @@ public class SingletonModel {
     JourneyCollection journeyCollection = new JourneyCollection();
     UtilitiesCollection utilitiesCollection = new UtilitiesCollection();
     ArrayList<String> carMakeList;
-    public enum RetriveEntries{Current, Search, Total};
+    public enum RetrieveEntries {Current, Search, Total};
 
     private static final SingletonModel instance = new SingletonModel();
 
@@ -32,7 +32,7 @@ public class SingletonModel {
 
     /*
      * getCarModelsOfMake, getCarYearsOfModels,
-     * updateCurrentSearchByYear, addNewCarBasedOnDecsription
+     * updateCurrentSearchByYear, addNewCarBasedOnDescription
      * are logic functions for current search mode;
      * May need to edit to adapt different modes of searching later
      */
@@ -70,7 +70,7 @@ public class SingletonModel {
         return false;
     }
 
-    public void addNewCarBasedOnDecsription(String nickname, String description){
+    public void addNewCarBasedOnDescription(String nickname, String description){
         for(Car car: currentSearchCollection){
             if (car.getDescriptionNoNickname().equals(description)){
                 car.setNickname(nickname);
@@ -85,7 +85,7 @@ public class SingletonModel {
         }
     }
 
-    public ArrayList<String> getCarEntriesDescription(RetriveEntries mode){
+    public ArrayList<String> getCarEntriesDescription(RetrieveEntries mode){
         ArrayList<String> carEntriesDescription = new ArrayList<>();
         switch (mode){
             case Search:
@@ -124,7 +124,7 @@ public class SingletonModel {
 
     }
 
-    public Car getCarFromCollection(String description, RetriveEntries mode){
+    public Car getCarFromCollection(String description, RetrieveEntries mode){
 
         Car returnCar = new Car();
         String current;
@@ -162,9 +162,6 @@ public class SingletonModel {
         return returnCar;
     }
 
-    public void setCurrentCarAtIndex(Car car, int index){
-        currentCarCollection.setCar(car, index);
-    }
 
     public int getIndexOfCar(Car car){
         return currentCarCollection.getIndex(car);
@@ -186,9 +183,20 @@ public class SingletonModel {
         currentCarCollection.add(car);
     }
 
-    public void removeFromCarCollection(String nickname){
-        Car car = currentCarCollection.findCarsWithNickname(nickname);
-        currentCarCollection.remove(car);
+    public void editCar(String description, Car newCar){
+        int index;
+        for(Car car: currentCarCollection){
+            if(car.getDescription().equals(description)){
+                index = currentCarCollection.getIndex(car);
+                currentCarCollection.remove(car);
+                if(index == 0){
+                    currentCarCollection.add(newCar);
+                }
+                else{
+                    currentCarCollection.add(index, newCar);
+                }
+            }
+        }
     }
 
     public Route getRouteByName(String name){
@@ -219,9 +227,9 @@ public class SingletonModel {
         }
         return routeNames;
     }
-
+    //Choose one
     public void addNewJourney(String carDescription, String routeName){
-        Car newCar = getCarFromCollection(carDescription, RetriveEntries.Current);
+        Car newCar = getCarFromCollection(carDescription, RetrieveEntries.Current);
         Route newRoute = getRouteByName(routeName);
         Journey newJourney = new Journey(newCar, newRoute);
         journeyCollection.add(newJourney);
@@ -287,7 +295,12 @@ public class SingletonModel {
             if (utilities.toString().equals(originalUtilities)){
                 int index = utilitiesCollection.getIndex(utilities);
                 utilitiesCollection.remove(utilities);
-                utilitiesCollection.add(index, editedUtilities);
+                if(utilitiesCollection.size() == 0){
+                    utilitiesCollection.add(editedUtilities);
+                }
+                else{
+                    utilitiesCollection.add(index, editedUtilities);
+                }
             }
         }
     }

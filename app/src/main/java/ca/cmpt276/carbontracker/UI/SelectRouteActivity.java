@@ -72,7 +72,9 @@ public class SelectRouteActivity extends AppCompatActivity {
                 else{
                     selectedRouteName = spinner.getSelectedItem().toString();
                     model.addNewJourney(selectedCarDescription, selectedRouteName);
-                    finish();
+                    Intent intent = new Intent(SelectRouteActivity.this, MainMenuActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(intent);
                 }
             }
         });

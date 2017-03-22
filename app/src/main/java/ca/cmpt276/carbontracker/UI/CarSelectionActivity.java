@@ -86,7 +86,7 @@ public class CarSelectionActivity extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         //SingletonModel.updateCurrentCarCollectionDescription();
-        currentCarListDescription = model.getCarEntriesDescription(SingletonModel.RetriveEntries.Current);
+        currentCarListDescription = model.getCarEntriesDescription(SingletonModel.RetrieveEntries.Current);
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, currentCarListDescription
         );

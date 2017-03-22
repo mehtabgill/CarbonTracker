@@ -45,7 +45,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_delete_car);
         receiveDescription();
-        car = model.getCarFromCollection(description, SingletonModel.RetriveEntries.Current);
+        car = model.getCarFromCollection(description, SingletonModel.RetrieveEntries.Current);
         nicknameEditText = (EditText) findViewById(R.id.edit_nickname_editText);
         editMakeSpinner = (Spinner) findViewById(R.id.edit_make_spinner);
         editModelSpinner = (Spinner) findViewById(R.id.edit_model_spinner);
@@ -125,7 +125,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
                         android.support.v7.app.AlertDialog.Builder builder1 = new android.support.v7.app.AlertDialog.Builder(EditDeleteCarActivity.this);
                         builder1.setTitle(getString(R.string.select_car_popup_title));
                         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EditDeleteCarActivity.this, android.R.layout.select_dialog_singlechoice);
-                        for (String description : model.getCarEntriesDescription(SingletonModel.RetriveEntries.Search)) {
+                        for (String description : model.getCarEntriesDescription(SingletonModel.RetrieveEntries.Search)) {
                             arrayAdapter.add(description);
                         }
                         builder1.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
@@ -137,10 +137,9 @@ public class EditDeleteCarActivity extends AppCompatActivity {
                                 builder2.setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Car editedCar = model.getCarFromCollection(selection, SingletonModel.RetriveEntries.Search);
+                                        Car editedCar = model.getCarFromCollection(selection, SingletonModel.RetrieveEntries.Search);
                                         editedCar.setNickname(editedNickname);
-                                        int index = model.getIndexOfCar(car);
-                                        model.setCurrentCarAtIndex(editedCar, index);
+                                        model.editCar(description, editedCar);
                                         model.resetCurrentSearchCollection();
                                         finish();
                                     }

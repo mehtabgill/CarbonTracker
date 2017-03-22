@@ -101,7 +101,7 @@ public class AddCarActivity extends AppCompatActivity {
                 builder1.setTitle(getString(R.string.select_car_popup_title));
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(AddCarActivity.this, android.R.layout.select_dialog_singlechoice);
-                for (String description : model.getCarEntriesDescription(SingletonModel.RetriveEntries.Search)) {
+                for (String description : model.getCarEntriesDescription(SingletonModel.RetrieveEntries.Search)) {
                     arrayAdapter.add(description);
                 }
                 builder1.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
@@ -121,7 +121,7 @@ public class AddCarActivity extends AppCompatActivity {
                                 }
 
                                 else{
-                                    model.addNewCarBasedOnDecsription(nicknameInput, selection);
+                                    model.addNewCarBasedOnDescription(nicknameInput, selection);
                                     dialog.dismiss();
                                     model.resetCurrentSearchCollection();
                                     finish();

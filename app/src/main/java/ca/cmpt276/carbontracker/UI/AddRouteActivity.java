@@ -113,9 +113,7 @@ public class AddRouteActivity extends AppCompatActivity {
                 route.setCityDriveDistance(cityDis);
                 route.setHighwayDriveDistance(highwayDis);
                 model.addNewRoute(route);
-                Intent intent = new Intent(AddRouteActivity.this, MainMenuActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                finish();
 
             }
         });

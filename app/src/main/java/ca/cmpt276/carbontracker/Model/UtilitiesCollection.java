@@ -22,6 +22,10 @@ public class UtilitiesCollection implements Iterable<Utilities> {
     public void remove(Utilities utilities){
         utilityBillsCollection.remove(utilities);
     }
+
+    public int size(){
+        return utilityBillsCollection.size();
+    }
     public ArrayList<Utilities> getAllUtilityBills(){
         return utilityBillsCollection;
     }

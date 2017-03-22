@@ -24,16 +24,19 @@ public class CarCollection implements Iterable<Car> {
             isEmpty = false;
         }
         cars.add(car);
-        descriptionList.add(car.getDescription());
-        descriptionNoNickNameList.add(car.getDescriptionNoNickname());
+        if(cars.size() < 1000){
+            updateDescriptionList();
+        }
     }
 
     public void remove(Car car) {
         cars.remove(car);
+        updateDescriptionList();
     }
 
     public void remove(int index) {
         cars.remove(index);
+        updateDescriptionList();
     }
 
     public boolean isEmpty() {
@@ -48,9 +51,10 @@ public class CarCollection implements Iterable<Car> {
         return cars.get(index);
     }
 
-    public void setCar(Car car, int index){
+    public void add(int index, Car car){
         cars.remove(index);
         cars.add(index, car);
+        updateDescriptionList();
     }
 
     public int getIndex(Car car){
@@ -147,6 +151,17 @@ public class CarCollection implements Iterable<Car> {
         return temp;
     }
 
+    public void updateDescriptionList(){
+        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> listNoNickName = new ArrayList<>();
+        for (Car car: cars){
+            list.add(car.getDescription());
+            listNoNickName.add(car.getDescriptionNoNickname());
+        }
+        this.descriptionList = list;
+        this.descriptionNoNickNameList = listNoNickName;
+    }
+
     public ArrayList<String> getUniqueModelNames(){
         return this.uniqueModelNames;
     }
@@ -156,10 +171,12 @@ public class CarCollection implements Iterable<Car> {
     }
 
     public ArrayList<String> getDescriptionList(){
+        updateDescriptionList();
         return this.descriptionList;
     }
 
     public ArrayList<String> getDescriptionNoNickNameList() {
+        updateDescriptionList();
         return descriptionNoNickNameList;
     }
 
