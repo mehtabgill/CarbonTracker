@@ -81,15 +81,6 @@ public class Journey extends Emission {
 
     }
 
-    //alternate constructor
-    public Journey(Transportation transportation, Route route, float carbonEmissionValue)
-    {
-        this.transportation = transportation;
-        this.route = route;
-        this.carbonEmissionValue = carbonEmissionValue;
-        date = Calendar.getInstance();
-    }
-
     public void setTransportation(Transportation transportation){
         this.transportation = transportation;
         calculateCarbonEmission();

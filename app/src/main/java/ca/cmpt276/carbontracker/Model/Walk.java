@@ -11,20 +11,7 @@ public class Walk extends Transportation {
 
     //default constructor
     public Walk() {
-        distance = 0;
-    }
 
-    //alternate constructor
-    public Walk(float distance){
-        this.distance = distance;
-    }
-
-    public void setDistance(float distance){
-        this.distance = distance;
-    }
-
-    public float getDistance(){
-        return distance;
     }
 
     @Override

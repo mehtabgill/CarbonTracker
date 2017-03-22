@@ -177,6 +177,7 @@ public class SingletonModel {
     public void setCarMakeList(ArrayList<String> carMakeList) {
         this.carMakeList = carMakeList;
     }
+
     public CarCollection getAllCurrentCars(){
         return currentCarCollection;
     }
@@ -217,13 +218,6 @@ public class SingletonModel {
             routeNames.add(route.getName());
         }
         return routeNames;
-    }
-
-    public void addNewJourney(String carDescription, String routeName){
-        Car newCar = getCarFromCollection(carDescription, RetriveEntries.Current);
-        Route newRoute = getRouteByName(routeName);
-        Journey newJourney = new Journey(newCar, newRoute);
-        journeyCollection.add(newJourney);
     }
 
     public void addNewJourney(Transportation newTransportation, Route newRoute){
