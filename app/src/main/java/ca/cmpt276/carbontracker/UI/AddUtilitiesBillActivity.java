@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import ca.cmpt276.carbontracker.Model.SingletonModel;
 import ca.cmpt276.carbontracker.Model.Utilities;
 
 public class AddUtilitiesBillActivity extends AppCompatActivity {
@@ -29,8 +30,9 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
     private String BILL_ERROR;
     private String NUMBER_OF_PEOPLE_ERROR;
 
+    private SingletonModel model = SingletonModel.getInstance();
     private ArrayList<String> billTypeArrayList = new ArrayList<>();
-    private Spinner selectBillSpinner;
+    private Spinner selectBillTypeSpinner;
     private EditText billAmountEditText;
     private EditText numberOfPeopleEditText;
     private static TextView startDateTextView;
@@ -39,21 +41,22 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
     private String END_DATE_KEY = "endDatePicker";
     private Button addBillButton;
 
-    private String selectedBillString;
-    private enum CURRENT_PICKER{START_DATE, END_DATE};
+    private String selectedBillTypeString;
+    public enum CURRENT_PICKER{START_DATE, END_DATE};
     private static CURRENT_PICKER current_picker;
-    private Utilities.BILL selectedBill;
+    private Utilities.BILL selectedBillType;
     private Float billAmount;
     private int numberOfPeople;
     private static Calendar startDate;
     private static Calendar endDate;
-    static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    private static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_utilities_bill);
-        selectBillSpinner = (Spinner) findViewById(R.id.select_bill_type_spinner);
+        selectBillTypeSpinner = (Spinner) findViewById(R.id.select_bill_type_spinner);
         billAmountEditText = (EditText) findViewById(R.id.bill_amount_editText);
         numberOfPeopleEditText = (EditText) findViewById(R.id.number_of_people_editText);
         startDateTextView = (TextView) findViewById(R.id.select_start_date_trigger);
@@ -76,16 +79,16 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
                 AddUtilitiesBillActivity.this, android.R.layout.simple_spinner_item, billTypeArrayList
         );
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        selectBillSpinner.setAdapter(adapter);
-        selectBillSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        selectBillTypeSpinner.setAdapter(adapter);
+        selectBillTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedBillString = selectBillSpinner.getSelectedItem().toString();
-                if(selectedBillString.equals(ELECTRICITY)){
-                    selectedBill = Utilities.BILL.ELECTRICITY;
+                selectedBillTypeString = selectBillTypeSpinner.getSelectedItem().toString();
+                if(selectedBillTypeString.equals(ELECTRICITY)){
+                    selectedBillType = Utilities.BILL.ELECTRICITY;
                 }
                 else{
-                    selectedBill = Utilities.BILL.GAS;
+                    selectedBillType = Utilities.BILL.GAS;
                 }
             }
             @Override
@@ -99,7 +102,6 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
         billAmountEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                addBillButton.setEnabled(false);
             }
 
             @Override
@@ -114,7 +116,6 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
                     if(billAmount <= 0){
                         throw new IllegalArgumentException();
                     }
-                    addBillButton.setEnabled(true);
                 }
                 catch (IllegalArgumentException e){
                     Toast.makeText(AddUtilitiesBillActivity.this, BILL_ERROR, Toast.LENGTH_SHORT).show();
@@ -125,7 +126,7 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
         numberOfPeopleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                addBillButton.setEnabled(false);
+
             }
 
             @Override
@@ -140,7 +141,6 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
                     if(numberOfPeople <= 0){
                         throw new IllegalArgumentException();
                     }
-                    addBillButton.setEnabled(true);
                 }
                 catch (IllegalArgumentException e){
                     Toast.makeText(AddUtilitiesBillActivity.this, NUMBER_OF_PEOPLE_ERROR, Toast.LENGTH_SHORT).show();
@@ -169,21 +169,24 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
         });
     }
     private void setupButton() {
-        //TODO: Handle Error of start date set after end date
-        if((selectedBill == null) || (billAmount == null) || (numberOfPeople <= 0)){
-            addBillButton.setEnabled(false);
-        }
-        else{
-            addBillButton.setEnabled(true);
-            addBillButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //fuck this shit
-                    Utilities utilities = new Utilities(selectedBill, billAmount, startDate, endDate, numberOfPeople);
+        addBillButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Handle Error of start date set after end date
+                if((selectedBillType == null) || (billAmount <= 0) || (numberOfPeople <= 0) ||
+                        (startDate == null) || (endDate == null)){
+                    Toast.makeText(AddUtilitiesBillActivity.this, getString(R.string.add_bill_button_error), Toast.LENGTH_SHORT).show();
                 }
-            });
-        }
+                else{
+                    model.addNewUtilitiesBill(selectedBillType, billAmount, startDate, endDate, numberOfPeople);
+                    finish();
+                }
+
+            }
+        });
+
     }
+
 
     //source code: https://developer.android.com/guide/topics/ui/controls/pickers.html#DatePicker
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{

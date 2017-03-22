@@ -45,8 +45,6 @@ public class Route {
 
     }
 
-
-
     public float getHighwayDriveDistance() {
         return highwayDriveDistance;
     }
@@ -59,6 +57,4 @@ public class Route {
     public float getTotalDistance(){
         return this.totalDistance;
     }
-
-
 }

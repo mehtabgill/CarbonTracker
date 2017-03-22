@@ -42,7 +42,7 @@ public class JourneyCollection implements Iterable<Journey>{
     }
 
     public ArrayList<String> getAllJourneyDates(){
-        SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         for(Journey journey : journeys){
             Calendar date = journey.getDate();
             dateList.add(sdf.format(date.getTime()));
@@ -50,19 +50,8 @@ public class JourneyCollection implements Iterable<Journey>{
         return dateList;
     }
 
-    public ArrayList<String> getCarsNameList(){
-        for(Journey journey : journeys){
-            carsNameList.add(journey.getCar().getNickname());
-        }
-        return carsNameList;
-    }
-    public ArrayList<Float> getTotalDistanceList(){
-        for(Journey journey : journeys){
-            totalDistanceList.add(journey.getRoute().getTotalDistance());
-        }
-        return totalDistanceList;
-    }
-    public ArrayList<Float> getCarbonEmissionList(){
+    public ArrayList<Float> getJourneyCarbonEmissionList(){
+        ArrayList<Float> carbonEmissionList = new ArrayList<>();
         for(Journey journey : journeys){
             carbonEmissionList.add(journey.getCarbonEmissionValue());
         }
@@ -72,6 +61,46 @@ public class JourneyCollection implements Iterable<Journey>{
     public ArrayList<Journey> getAllJourneys(){
         return journeys;
     }
+    public ArrayList<String> getTransportationNameList(){
+        ArrayList<String> transportationNameList = new ArrayList<>();
+        for(Journey journey : journeys){
+            if(journey.getTransportation().getType().equals(Transportation.TRANSPORTATION_TYPE.CAR)){
+                transportationNameList.add(journey.getTransportation().getNickname());
+            }
+            else{
+                switch (journey.getTransportation().getType()){
+                    case WALK:
+                        transportationNameList.add("Walk");
+                        break;
+                    case BIKE:
+                            transportationNameList.add("Bike");
+                            break;
+                    case BUS:
+                            transportationNameList.add("Bus");
+                            break;
+                    case SKYTRAIN:
+                            transportationNameList.add("Skytrain");
+                            break;
+                }
+            }
+        }
+        return transportationNameList;
+    }
+    public ArrayList<Float> getTotalDistanceList(){
+        ArrayList<Float> totalDistanceList = new ArrayList<>();
+        for(Journey journey : journeys){
+            totalDistanceList.add(journey.getRoute().getTotalDistance());
+        }
+        return totalDistanceList;
+    }
+    public ArrayList<Float> getCarbonEmissionList(){
+        ArrayList<Float> carbonEmissionList = new ArrayList<>();
+        for(Journey journey : journeys){
+            carbonEmissionList.add(journey.getCarbonEmissionValue());
+        }
+        return carbonEmissionList;
+    }
+
 
     @Override
     public Iterator<Journey> iterator() {

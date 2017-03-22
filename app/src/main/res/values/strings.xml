@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">CarbonTracker</string>
     <string name="create_journey_button">CREATE NEW JOURNEY</string>
-    <string name="view_carbon_footprint_button">VIEW CARBON FOOTPRINT</string>\
     <string name="create_utilities_bill_button">CREATE NEW UTILITY BILL</string>
+    <string name="edit_delete_utilities_bill_button">EDIT/DELETE UTILITY BILL</string>
+    <string name="view_carbon_footprint_button">VIEW CARBON FOOTPRINT</string>\
     <string name="Additional_Info">Displacement vol: %1$f Transmission type: %2$s</string>
     <string name="Car_Description">%1$s $2$s %3$d %4$s</string>
     <string name="select_car_description">Select your car in this journey from the drop down list.
@@ -59,21 +60,31 @@
     <string name="no_existing_car_text">No Existing Routes</string>
     <string name="select_bill_text">Select bill: </string>
     <string name="enter_bill_amount_text">Amount\n(kWh or GJ): </string>
-    <string name="enter_bill_amount_hint"><font size = "15">Amount of gas or electricity</font></string>
+    <string name="enter_bill_amount_hint"><font size="15">Amount of gas or electricity</font></string>
     <string name="select_start_date_text">Starting \nbilling date</string>
     <string name="select_end_date_text">Last \nbilling date: </string>
     <string name="select_start_date_hint"><font size="15">Select first date of your bill</font></string>
-    <string name="select_end_date_hint"> <font size ="15">Select last date of your bill</font></string>
+    <string name="select_end_date_hint"> <font size="15">Select last date of your bill</font></string>
     <string name="amount_people_text">Number of people: </string>
-    <string name="amount_people_hint"><font size = "15">People in household</font></string>
+    <string name="amount_people_hint"><font size="15">People in household</font></string>
     <string name="add_bill_button_text">ADD BILL</string>
     <string name="electricity_bill">Electricity</string>
     <string name="gas_bill">Gas</string>
     <string name="bill_amount_error">Error: Amount of consumption must be greater than 0</string>
     <string name="number_of_people_error">Error: Amount of people must be greater than 0</string>
+    <string name="add_bill_button_error">Error: Not all entries required are filled</string>
+    <string name="edit_delete_bill_description">Select the bill you want to retrieve from the drop down menu. Click Select Bill and choose the action you want from the popup menu </string>
+    <string name="select_bill_error">There are no bill to select</string>
+    <string name="select_utilities_bill_popup_title">Select this bill for: </string>
+    <string name="deleted_bill_confirmed">Bill Deleted</string>
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="distance">Distance: </string>
+    <string name="save">Save</string>
+    <string name="select">Select</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
 
 
 </resources>

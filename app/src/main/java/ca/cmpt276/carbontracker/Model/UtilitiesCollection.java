@@ -46,6 +46,16 @@ public class UtilitiesCollection implements Iterable<Utilities> {
         return emissionValue;
     }
 
+    public int getIndex(Utilities utilities){
+        int index = -1;
+        for(int i = 0; i < utilityBillsCollection.size(); i++){
+            if (utilityBillsCollection.get(i).equals(utilities)){
+                index = i;
+            }
+        }
+        return index;
+    }
+
     @Override
     public Iterator<Utilities> iterator(){
         return utilityBillsCollection.iterator();

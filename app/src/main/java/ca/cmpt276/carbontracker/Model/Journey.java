@@ -30,8 +30,6 @@ public class Journey extends Emission {
         this.car = car;
         this.route = route;
         calculateCarbonEmission();
-
-        sdf.setCalendar(calendar);
         date = Calendar.getInstance();
     }
 
@@ -74,7 +72,7 @@ public class Journey extends Emission {
     }
 
     public void setRoute(Route route){
-        this.route = route;
+        this.route = (Route) route;
         calculateCarbonEmission();
     }
 
