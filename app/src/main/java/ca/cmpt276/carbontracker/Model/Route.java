@@ -20,6 +20,13 @@ public class Route {
         this.totalDistance = getTotalDistance();
     };
 
+    public Route(Route route) {
+        this.name = route.name;
+        this.cityDriveDistance = route.cityDriveDistance;
+        this.highwayDriveDistance = route.highwayDriveDistance;
+        this.totalDistance = route.totalDistance;
+    }
+
     public Route(String name, float cityDriveDistance, float highwayDriveDistance) {
         this.name = name;
         this.cityDriveDistance = cityDriveDistance;

@@ -27,4 +27,8 @@ public class Walk extends Transportation {
         return distance;
     }
 
+    @Override
+    public Transportation.TRANSPORTATION_TYPE getType(){
+        return TRANSPORTATION_TYPE.WALK;
+    }
 }

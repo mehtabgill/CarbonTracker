@@ -22,26 +22,26 @@
         android:layout_alignStart="@+id/editText_cityDistance" />
 
     <EditText
+        android:id="@+id/editText_cityDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_marginTop="36dp"
-        android:id="@+id/editText_cityDistance"
-        android:layout_below="@+id/editText_RouteName"
         android:layout_alignLeft="@+id/editText_highwayDistance"
-        android:layout_alignStart="@+id/editText_highwayDistance" />
+        android:layout_alignStart="@+id/editText_highwayDistance"
+        android:layout_below="@+id/editText_RouteName"
+        android:layout_marginTop="36dp"
+        android:ems="10"
+        android:inputType="textPersonName|numberDecimal" />
 
     <EditText
+        android:id="@+id/editText_highwayDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_marginTop="40dp"
-        android:id="@+id/editText_highwayDistance"
         android:layout_below="@+id/editText_cityDistance"
+        android:layout_marginTop="40dp"
+        android:layout_toEndOf="@+id/textView7"
         android:layout_toRightOf="@+id/textView7"
-        android:layout_toEndOf="@+id/textView7" />
+        android:ems="10"
+        android:inputType="textPersonName|numberDecimal" />
 
     <Button
         android:text="@string/add_route_button_text"

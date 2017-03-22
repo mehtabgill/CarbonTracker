@@ -43,6 +43,7 @@ public class JourneyCollection implements Iterable<Journey>{
 
     public ArrayList<String> getAllJourneyDates(){
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        ArrayList<String> dateList = new ArrayList<>();
         for(Journey journey : journeys){
             Calendar date = journey.getDate();
             dateList.add(sdf.format(date.getTime()));
@@ -58,9 +59,6 @@ public class JourneyCollection implements Iterable<Journey>{
         return carbonEmissionList;
     }
 
-    public ArrayList<Journey> getAllJourneys(){
-        return journeys;
-    }
     public ArrayList<String> getTransportationNameList(){
         ArrayList<String> transportationNameList = new ArrayList<>();
         for(Journey journey : journeys){
@@ -101,6 +99,9 @@ public class JourneyCollection implements Iterable<Journey>{
         return carbonEmissionList;
     }
 
+    public ArrayList<Journey> getAllJourneys(){
+        return journeys;
+    }
 
     @Override
     public Iterator<Journey> iterator() {

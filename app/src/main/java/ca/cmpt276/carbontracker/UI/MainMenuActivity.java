@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import ca.cmpt276.carbontracker.Model.DataReader;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /*
@@ -59,7 +60,7 @@ public class MainMenuActivity extends AppCompatActivity {
         switch (function){
             //Change this later
             case CREATE_JOURNEY:
-                if(SingletonModel.getInstance().isLoaded()){
+                if(DataReader.isLoaded()){
                     startActivity(new Intent(MainMenuActivity.this, SelectTransportationMode.class));
                 }
                 else{

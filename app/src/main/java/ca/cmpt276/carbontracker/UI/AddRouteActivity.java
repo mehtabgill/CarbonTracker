@@ -112,6 +112,7 @@ public class AddRouteActivity extends AppCompatActivity {
                 Intent intent = new Intent(AddRouteActivity.this, MainMenuActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+
             }
         });
 
