@@ -220,6 +220,13 @@ public class SingletonModel {
         return routeNames;
     }
 
+    public void addNewJourney(String carDescription, String routeName){
+        Car newCar = getCarFromCollection(carDescription, RetriveEntries.Current);
+        Route newRoute = getRouteByName(routeName);
+        Journey newJourney = new Journey(newCar, newRoute);
+        journeyCollection.add(newJourney);
+    }
+
     public void addNewJourney(Transportation newTransportation, Route newRoute){
         Journey newJourney = new Journey(newTransportation, newRoute);
         journeyCollection.add(newJourney);
