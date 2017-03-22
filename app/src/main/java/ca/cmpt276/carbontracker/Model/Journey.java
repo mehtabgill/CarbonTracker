@@ -44,8 +44,8 @@ public class Journey extends Emission {
     protected void calculateCarbonEmission(){
         switch (transportationType){
             case CAR:
-                int cityMilesPerGallon = transportation.getMilesPerGallonCity();
-                int hwyMilesPerGallon = transportation.getMilesPerGallonHway();
+                float cityMilesPerGallon = transportation.getMilesPerGallonCity();
+                float hwyMilesPerGallon = transportation.getMilesPerGallonHway();
                 float cityDistance = route.getCityDriveDistance();
                 float hwyDistance = route.getHighwayDriveDistance();
 

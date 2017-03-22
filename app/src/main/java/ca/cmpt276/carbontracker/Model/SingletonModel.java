@@ -1,12 +1,18 @@
 package ca.cmpt276.carbontracker.Model;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.support.v7.app.AppCompatActivity;
+
 import java.util.ArrayList;
+
+import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
 /**
  * Created by Elvin Laptop on 2017-03-06.
  */
 
-public class SingletonModel {
+public class SingletonModel extends AppCompatActivity{
     //TODO: Move all code relating to car search to their own class
     //Singleton should only be the middle ground between logic and UI
 
@@ -22,8 +28,11 @@ public class SingletonModel {
 
     private static final SingletonModel instance = new SingletonModel();
 
+    private DBAdapter database;
+
     //private constructor to avoid client applications to use constructor
     private SingletonModel(){}
+
     public static SingletonModel getInstance(){
         return instance;
     }
@@ -34,6 +43,48 @@ public class SingletonModel {
      * are logic functions for current search mode;
      * May need to edit to adapt different modes of searching later
      */
+
+    public void openDB(Context context) {
+        database = new DBAdapter(context);
+        database.open();
+    }
+
+    public void closeDB() {
+        database.close();
+    }
+
+    public void loadDataFromDB() {
+        loadCarsFromDB();
+    }
+
+    private void addToCarDB(Car car) {
+        database.insertCar(car);
+    }
+
+    private void loadCarsFromDB() {
+        Cursor cursor = database.getAllCarRows();
+        if(cursor.moveToFirst()) {
+            do {
+                String name = cursor.getString(DBAdapter.COL_CAR_NAME);
+                String model = cursor.getString(DBAdapter.COL_CAR_MODEL);
+                String make = cursor.getString(DBAdapter.COL_CAR_MAKE);
+                int year = cursor.getInt(DBAdapter.COL_CAR_YEAR);
+                String displacement = cursor.getString(DBAdapter.COL_CAR_DISPLACEMENT_VOL);
+                String transmission = cursor.getString(DBAdapter.COL_CAR_TRANSMISSION_TYPE);
+                String fuelType = cursor.getString(DBAdapter.COL_CAR_FUEL_TYPE);
+                float cityMPG = cursor.getFloat(DBAdapter.COL_CAR_CITYMPG);
+                float hwyMPG = cursor.getFloat(DBAdapter.COL_CAR_HWYMPG);
+
+                Car car = new Car(make, model, year, displacement, transmission);
+                car.setNickname(name);
+                car.setFuelType(fuelType);
+                car.setMilesPerGallonCity(cityMPG);
+                car.setMilesPerGallonHway(hwyMPG);
+
+                currentCarCollection.add(car);
+            } while(cursor.moveToNext());
+        }
+    }
 
     public ArrayList<String> getCarModelsOfMake(String make){
         if(currentSearchCollection.size()== 0){
@@ -73,6 +124,7 @@ public class SingletonModel {
             if (car.getDescriptionNoNickname().equals(description)){
                 car.setNickname(nickname);
                 currentCarCollection.add(car);
+                addToCarDB(car);
             }
         }
     }

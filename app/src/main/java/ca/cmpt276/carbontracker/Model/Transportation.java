@@ -18,11 +18,11 @@ public abstract class Transportation {
         return "";
     }
 
-    public int getMilesPerGallonCity() {
+    public float getMilesPerGallonCity() {
         return 0;
     }
 
-    public int getMilesPerGallonHway() {
+    public float getMilesPerGallonHway() {
         return 0;
     }
 
