@@ -247,7 +247,7 @@ public class SingletonModel {
 
     public ArrayList<String> getJourneysCarbonEmissionList(){
         ArrayList<String> carbonEmissionList = new ArrayList<>();
-        for(Float value: journeyCollection.getCarbonEmissionList()){
+        for(Float value: journeyCollection.getJourneyCarbonEmissionList()){
             carbonEmissionList.add(Float.toString(value));
         }
         return carbonEmissionList;

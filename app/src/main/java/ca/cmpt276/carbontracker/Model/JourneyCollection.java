@@ -58,6 +58,17 @@ public class JourneyCollection implements Iterable<Journey>{
         }
         return carbonEmissionList;
     }
+    public ArrayList<Journey> getAllJourneys(){
+        return journeys;
+    }
+
+    public ArrayList<Float> getTotalDistanceList(){
+        ArrayList<Float> totalDistanceList = new ArrayList<>();
+        for(Journey journey : journeys){
+            totalDistanceList.add(journey.getRoute().getTotalDistance());
+        }
+        return totalDistanceList;
+    }
 
     public ArrayList<String> getTransportationNameList(){
         ArrayList<String> transportationNameList = new ArrayList<>();
@@ -84,24 +95,8 @@ public class JourneyCollection implements Iterable<Journey>{
         }
         return transportationNameList;
     }
-    public ArrayList<Float> getTotalDistanceList(){
-        ArrayList<Float> totalDistanceList = new ArrayList<>();
-        for(Journey journey : journeys){
-            totalDistanceList.add(journey.getRoute().getTotalDistance());
-        }
-        return totalDistanceList;
-    }
-    public ArrayList<Float> getCarbonEmissionList(){
-        ArrayList<Float> carbonEmissionList = new ArrayList<>();
-        for(Journey journey : journeys){
-            carbonEmissionList.add(journey.getCarbonEmissionValue());
-        }
-        return carbonEmissionList;
-    }
 
-    public ArrayList<Journey> getAllJourneys(){
-        return journeys;
-    }
+
 
     @Override
     public Iterator<Journey> iterator() {

@@ -15,7 +15,6 @@ public class Journey extends Emission {
     private Route route; //route object, use getter methods to get required info
     private float carbonEmissionValue;
 
-
     Calendar date;
     Calendar calendar = new GregorianCalendar();
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -36,8 +35,6 @@ public class Journey extends Emission {
         transportationType = transportation.getType();
         this.route = new Route(route);
         calculateCarbonEmission();
-
-        sdf.setCalendar(calendar);
         date = Calendar.getInstance();
     }
 
@@ -88,6 +85,7 @@ public class Journey extends Emission {
 
     public void setRoute(Route route){
         this.route = new Route(route);
+        this.route = (Route) route;
         calculateCarbonEmission();
     }
 
