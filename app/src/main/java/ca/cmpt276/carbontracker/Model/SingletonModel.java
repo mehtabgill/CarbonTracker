@@ -271,8 +271,10 @@ public class SingletonModel extends AppCompatActivity{
 
     public void addNewJourney(String carDescription, String routeName){
         Car newCar = getCarFromCollection(carDescription, RetriveEntries.Current);
+        Car car = new Car(newCar);
         Route newRoute = getRouteByName(routeName);
-        Journey newJourney = new Journey(newCar, newRoute);
+        Route route = new Route(newRoute);
+        Journey newJourney = new Journey(car, route);
         journeyCollection.add(newJourney);
     }
 

@@ -1,8 +1,12 @@
 package ca.cmpt276.carbontracker.Model;
 
+import android.widget.Toast;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
 /**
  * Keeps all information about a journey,
@@ -44,6 +48,9 @@ public class Journey extends Emission {
     protected void calculateCarbonEmission(){
         switch (transportationType){
             case CAR:
+                Car car = (Car) transportation;
+                System.out.println(car.getAdditionalInfo());
+                Toast.makeText(WelcomeScreenActivity.getContext(), "Test: " + car.getFuelType(), Toast.LENGTH_SHORT).show();
                 float cityMilesPerGallon = transportation.getMilesPerGallonCity();
                 float hwyMilesPerGallon = transportation.getMilesPerGallonHway();
                 float cityDistance = route.getCityDriveDistance();
