@@ -10,6 +10,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.Calendar;
+
+import static android.R.attr.endY;
+import static android.R.attr.name;
+import static ca.cmpt276.carbontracker.Model.Utilities.BILL.ELECTRICITY;
+
 
 // TO USE:
 // Change the package (at top) to match your project.
@@ -42,6 +48,15 @@ public class DBAdapter {
     public static final String KEY_ROUTE_NAME = "routeName";
     public static final String KEY_CITYDISTANCE = "cityDistance";
     public static final String KEY_HWYDISTANCE = "hwyDistance";
+    public static final String KEY_BILL_TYPE = "billType";
+    public static final String KEY_AMOUNT = "amount";
+    public static final String KEY_START_YEAR = "startYear";
+    public static final String KEY_START_MONTH = "startMonth";
+    public static final String KEY_START_DAY = "startDay";
+    public static final String KEY_END_YEAR = "endYear";
+    public static final String KEY_END_MONTH = "endMonth";
+    public static final String KEY_END_DAY = "endDay";
+    public static final String KEY_NUM_PPL = "numPpl";
 
     // TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
     // This set for cars
@@ -83,6 +98,16 @@ public class DBAdapter {
     public static final int COL_JOURNEY_CITYDISTANCE = 12;
     public static final int COL_JOURNEY_HWYDISTANCE = 13;
 
+    public static final int COL_UTILITIES_BILL_TYPE = 1;
+    public static final int COL_UTILITIES_AMOUNT = 2;
+    public static final int COL_UTILITIES_START_YEAR = 3;
+    public static final int COL_UTILITIES_START_MONTH = 4;
+    public static final int COL_UTILITIES_START_DAY = 5;
+    public static final int COL_UTILITIES_END_YEAR = 6;
+    public static final int COL_UTILITIES_END_MONTH = 7;
+    public static final int COL_UTILITIES_END_DAY = 8;
+    public static final int COL_UTILITIES_NUM_PPL = 9;
+
     public static String[] ALL_KEYS;
 
     public static final String[] CAR_ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_MODEL, KEY_MAKE,
@@ -97,6 +122,9 @@ public class DBAdapter {
             KEY_YEAR, KEY_DISPLACEMENT_VOL, KEY_TRANSMISSION_TYPE, KEY_FUEL_TYPE, KEY_CITYMPG, KEY_HWYMPG, KEY_ROUTE_NAME,
             KEY_CITYDISTANCE, KEY_HWYDISTANCE};
 
+    public static final String[] UTILITIES_ALL_KEYS = new String[] {KEY_ROWID, KEY_BILL_TYPE, KEY_AMOUNT, KEY_START_YEAR,
+            KEY_START_MONTH, KEY_START_DAY, KEY_END_YEAR, KEY_END_MONTH, KEY_END_DAY, KEY_NUM_PPL};
+
     // DB info: it's name, and the table we are using (just one).
     public static final String DATABASE_NAME = "MyDb";
 
@@ -106,8 +134,9 @@ public class DBAdapter {
     public static final String DATABASE_CAR_TABLE = "CarTable";
     public static final String DATABASE_ROUTE_TABLE = "RouteTable";
     public static final String DATABASE_JOURNEY_TABLE = "JourneyTable";
+    public static final String DATABASE_UTILITIES_TABLE = "UtilitiesTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
 
     private static final String CAR_DATABASE_CREATE_SQL =
             "create table " + DATABASE_CAR_TABLE
@@ -168,6 +197,22 @@ public class DBAdapter {
                     + KEY_ROUTE_NAME + " text not null, "
                     + KEY_CITYDISTANCE + " real not null, "
                     + KEY_HWYDISTANCE + " real not null"
+
+                    // Rest  of creation:
+                    + ");";
+
+    private static final String UTILITIES_DATABASE_CREATE_SQL =
+            "create table " + DATABASE_UTILITIES_TABLE
+                    + " (" + KEY_ROWID + " integer primary key autoincrement, "
+                    + KEY_BILL_TYPE + " text not null, "
+                    + KEY_AMOUNT + " real not null, "
+                    + KEY_START_YEAR + " integer not null, "
+                    + KEY_START_MONTH + " integer not null, "
+                    + KEY_START_DAY + " integer not null, "
+                    + KEY_END_YEAR + " integer not null, "
+                    + KEY_END_MONTH + " integer not null, "
+                    + KEY_END_DAY + " integer not null, "
+                    + KEY_NUM_PPL + " integer not null"
 
                     // Rest  of creation:
                     + ");";
@@ -325,6 +370,46 @@ public class DBAdapter {
         return db.insert(DATABASE_JOURNEY_TABLE, null, initialValues);
     }
 
+    public long insertUtility(Utilities utilities) {
+        Utilities.BILL type = utilities.getBillMode();
+        String billType = "";
+        switch (type) {
+            case ELECTRICITY:
+                billType = "ELECTRICITY";
+                break;
+            case GAS:
+                billType = "GAS";
+                break;
+        }
+        Calendar start = utilities.getStartDate();
+        Calendar end = utilities.getEndDate();
+        float amount = utilities.getElectricityAmount() + utilities.getGasAmount();
+        int numPpl = utilities.getNumberOfPeople();
+
+        int startYear = start.get(Calendar.YEAR);
+        int startMonth = start.get(Calendar.MONTH);
+        int startDay = start.get(Calendar.DAY_OF_MONTH);
+
+        int endYear = end.get(Calendar.YEAR);
+        int endMonth = end.get(Calendar.MONTH);
+        int endDay = end.get(Calendar.DAY_OF_MONTH);
+
+        ContentValues initialValues = new ContentValues();
+        initialValues.put(KEY_BILL_TYPE, billType);
+        initialValues.put(KEY_AMOUNT, amount);
+        initialValues.put(KEY_START_YEAR, startYear);
+        initialValues.put(KEY_START_MONTH, startMonth);
+        initialValues.put(KEY_START_DAY, startDay);
+        initialValues.put(KEY_END_YEAR, endYear);
+        initialValues.put(KEY_END_MONTH, endMonth);
+        initialValues.put(KEY_END_DAY, endDay);
+        initialValues.put(KEY_NUM_PPL, numPpl);
+
+
+        // Insert it into the database.
+        return db.insert(DATABASE_UTILITIES_TABLE, null, initialValues);
+    }
+
     // Delete a row from the database, by rowId (primary key)
     public boolean deleteCarRow(long rowId) {
         String where = KEY_ROWID + "=" + rowId;
@@ -344,6 +429,11 @@ public class DBAdapter {
     public boolean deleteJourneyRow(long rowId) {
         String where = KEY_ROWID + "=" + rowId;
         return db.delete(DATABASE_JOURNEY_TABLE, where, null) != 0;
+    }
+
+    public boolean deleteUtilitiesRow(long rowId) {
+        String where = KEY_ROWID + "=" + rowId;
+        return db.delete(DATABASE_UTILITIES_TABLE, where, null) != 0;
     }
 
     public void deleteAllCar() {
@@ -390,6 +480,17 @@ public class DBAdapter {
         c.close();
     }
 
+    public void deleteAllUtilities() {
+        Cursor c = getAllUtilitiesRows();
+        long rowId = c.getColumnIndexOrThrow(KEY_ROWID);
+        if (c.moveToFirst()) {
+            do {
+                deleteUtilitiesRow(c.getLong((int) rowId));
+            } while (c.moveToNext());
+        }
+        c.close();
+    }
+
     // Return all data in the database.
     public Cursor getAllCarRows() {
         String where = null;
@@ -424,6 +525,16 @@ public class DBAdapter {
     public Cursor getAllJourneyRows() {
         String where = null;
         Cursor c = 	db.query(true, DATABASE_JOURNEY_TABLE, JOURNEY_ALL_KEYS,
+                where, null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public Cursor getAllUtilitiesRows() {
+        String where = null;
+        Cursor c = 	db.query(true, DATABASE_UTILITIES_TABLE, UTILITIES_ALL_KEYS,
                 where, null, null, null, null, null);
         if (c != null) {
             c.moveToFirst();
@@ -534,6 +645,7 @@ public class DBAdapter {
             _db.execSQL(CAR_DATABASE_CREATE_SQL);
             _db.execSQL(ROUTE_DATABASE_CREATE_SQL);
             _db.execSQL(JOURNEY_DATABASE_CREATE_SQL);
+            _db.execSQL(UTILITIES_DATABASE_CREATE_SQL);
 
         }
 
@@ -547,6 +659,7 @@ public class DBAdapter {
             _db.execSQL("DROP TABLE IF EXISTS " + DATABASE_CAR_TABLE);
             _db.execSQL("DROP TABLE IF EXISTS " + DATABASE_ROUTE_TABLE);
             _db.execSQL("DROP TABLE IF EXISTS " + DATABASE_JOURNEY_TABLE);
+            _db.execSQL("DROP TABLE IF EXISTS " + DATABASE_UTILITIES_TABLE);
 
             // Recreate new database:
             onCreate(_db);
