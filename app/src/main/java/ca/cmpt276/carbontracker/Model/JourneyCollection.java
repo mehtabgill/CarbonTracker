@@ -96,6 +96,43 @@ public class JourneyCollection implements Iterable<Journey>{
         return transportationNameList;
     }
 
+    //outputs number of walks total
+    public int getNumWalk(){
+        int output=0;
+        for(Journey journey: journeys){
+            if(journey.getTransportation().getType().equals(Transportation.TRANSPORTATION_TYPE.WALK))
+               output++;
+        }
+        return output;
+    }
+
+    public int getNumBike(){
+        int output=0;
+        for(Journey journey: journeys){
+            if(journey.getTransportation().getType().equals(Transportation.TRANSPORTATION_TYPE.BIKE))
+                output++;
+        }
+        return output;
+    }
+
+    public int getNumBus(){
+        int output=0;
+        for(Journey journey: journeys){
+            if(journey.getTransportation().getType().equals(Transportation.TRANSPORTATION_TYPE.BUS))
+                output++;
+        }
+        return output;
+    }
+
+    public int getNumSkytrain(){
+        int output=0;
+        for(Journey journey: journeys){
+            if(journey.getTransportation().getType().equals(Transportation.TRANSPORTATION_TYPE.SKYTRAIN))
+                output++;
+        }
+        return output;
+    }
+
 
 
     @Override
