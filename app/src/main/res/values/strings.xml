@@ -54,6 +54,9 @@
     <string name="journey_date_header">Date</string>
     <string name="journey_distance_header">Distance\n(km) </string>
     <string name="journey_car_name_header">Car Name </string>
+    <string name="emission_type_header">Emission Type</string>
+    <string name="emission_name_header">Emission Name</string>
+    <string name="emission_value_header">Emission Value</string>
     <string name="journey_carbon_emission_header">Carbon Emission\n(kg)</string>
     <string name="switch_button">SWITCH TO PIE CHART/TABLE</string>
     <string name="existing_car_text">Existing Routes</string>

@@ -12,7 +12,7 @@ import java.util.Date;
  */
 
 public final class GraphDataRetriever {
-    private SingletonModel model = SingletonModel.getInstance();
+    private static SingletonModel model = SingletonModel.getInstance();
     private GraphDataRetriever(){};
     public enum GRAPH_MODE{DAY, MONTH, YEAR};
     private static Calendar date;
@@ -21,8 +21,7 @@ public final class GraphDataRetriever {
     private static ArrayList<String> emissionNameList = new ArrayList<>();
     private static ArrayList<Float> carbonEmissionValueList = new ArrayList<>();
 
-    public void setUpGraphData(GRAPH_MODE mode, Calendar date){
-        
+    public static void setUpGraphData(GRAPH_MODE mode, Calendar date){
         switch (mode){
             case DAY:
                 emissionArrayList = model.getEmissionListOnDay(date);
@@ -41,5 +40,21 @@ public final class GraphDataRetriever {
                 }
                 break;
         }
+    }
+
+    public static ArrayList<String> getEmissionTypeList(){
+        return emissionTypeList;
+    }
+
+    public static ArrayList<String> getEmissionNameList(){
+        return emissionNameList;
+    }
+
+    public static ArrayList<Float> getCarbonEmissionValueList(){
+        return carbonEmissionValueList;
+    }
+
+    public static int getEmissionArrayListSize(){
+        return emissionArrayList.size();
     }
 }

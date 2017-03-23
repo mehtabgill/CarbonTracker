@@ -7,10 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-/**
- * Created by Elvin Laptop on 2017-03-06.
- */
-
 public class SingletonModel {
     //TODO: Move all code relating to car search to their own class
     //Singleton should only be the middle ground between logic and UI
@@ -361,7 +357,7 @@ public class SingletonModel {
 
     //Choose one
     public void addNewJourney(String carDescription, String routeName){
-        Car newCar = getCarFromCollection(carDescription, RetriveEntries.Current);
+        Car newCar = getCarFromCollection(carDescription, RetrieveEntries.Current);
         Car car = new Car(newCar);
         Route newRoute = getRouteByName(routeName);
         Route route = new Route(newRoute);

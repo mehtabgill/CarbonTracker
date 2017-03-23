@@ -15,8 +15,10 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import ca.cmpt276.carbontracker.Model.GraphDataRetriever;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /*
@@ -27,23 +29,27 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
     private PieChart chart;
     private SingletonModel model = SingletonModel.getInstance();
 
-    //Column for: date of trip; distance; vehicle name; carbon emitted;
-    private final int COL_NUM = 4;
-
-    //first row is for header
-    private final int ROW_NUM = model.getJourneyCollectionSize() + 1;
-    private final int ARRAY_SIZE = model.getJourneyCollectionSize();
+    //Column for: Emission type, name of transportation/bill, carbon emission value
+    private final int COL_NUM = 3;
+    //row = amount of emission + 1 row for header
+    private int ROW_NUM;
+    private int ARRAY_SIZE;
     private int arrayIndex;
 
-    ArrayList<String> journeyDateList = model.getJourneysDates();
-    ArrayList<String> totalDistanceList = model.getJourneysDistanceList();
-    ArrayList<String> carNameList = model.getJourneyTransportationName();
-    ArrayList<String> carbonEmissionList = model.getJourneysCarbonEmissionList();
+    ArrayList<String> journeyDateList;
+    ArrayList<String> emissionTypeList;
+    ArrayList<String> emissionNameList;
+    ArrayList<Float> carbonEmissionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_carbon_footprint);
+        GraphDataRetriever.setUpGraphData(GraphDataRetriever.GRAPH_MODE.DAY, Calendar.getInstance());
+        ROW_NUM = GraphDataRetriever.getEmissionArrayListSize() + 1;
+        emissionTypeList = GraphDataRetriever.getEmissionTypeList();
+        emissionNameList = GraphDataRetriever.getEmissionNameList();
+        carbonEmissionList = GraphDataRetriever.getCarbonEmissionValueList();
         setupLayout();
     }
 
@@ -67,32 +73,26 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                 if (row == 0) {
                     switch (col) {
                         case 0:
-                            textView.setText(getString(R.string.journey_date_header));
+                            textView.setText(getString(R.string.emission_type_header));
                             break;
                         case 1:
-                            textView.setText(getString(R.string.journey_distance_header));
+                            textView.setText(getString(R.string.emission_name_header));
                             break;
                         case 2:
-                            textView.setText(getString(R.string.journey_car_name_header));
-                            break;
-                        case 3:
-                            textView.setText(getString(R.string.journey_carbon_emission_header));
+                            textView.setText(getString(R.string.emission_value_header));
                             break;
                     }
                     currentRow.addView(textView);
                 } else {
                     switch (col) {
                         case 0:
-                            textView.setText(journeyDateList.get(arrayIndex));
+                            textView.setText(emissionTypeList.get(arrayIndex));
                             break;
                         case 1:
-                            textView.setText(totalDistanceList.get(arrayIndex));
+                            textView.setText(emissionNameList.get(arrayIndex));
                             break;
                         case 2:
-                            textView.setText(carNameList.get(arrayIndex));
-                            break;
-                        case 3:
-                            textView.setText(carbonEmissionList.get(arrayIndex));
+                            textView.setText(carbonEmissionList.get(arrayIndex).toString());
                             break;
                     }
                     currentRow.addView(textView);
@@ -123,7 +123,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
 
         for(int arrayIndex = 0; arrayIndex < ARRAY_SIZE; arrayIndex++)
         {
-            pieEntries.add(new PieEntry(Float.parseFloat(carbonEmissionList.get(arrayIndex)), journeyDateList.get(arrayIndex)));
+            pieEntries.add(new PieEntry(carbonEmissionList.get(arrayIndex), emissionNameList.get(arrayIndex)));
         }
 
         //parameters are the array of entries followed by name of graph
