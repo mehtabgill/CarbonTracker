@@ -32,7 +32,7 @@ public class SingletonModel {
 
     /*
      * getCarModelsOfMake, getCarYearsOfModels,
-     * updateCurrentSearchByYear, addNewCarBasedOnDescription
+     * updateCurrentSearchByYear, addNewCarWithNickname
      * are logic functions for current search mode;
      * May need to edit to adapt different modes of searching later
      */
@@ -61,16 +61,19 @@ public class SingletonModel {
         currentSearchCollection = currentSearchCollection.findCarsWithYear(year);
     }
 
-    public boolean isCurrentCarAdded(String description){
+    public boolean isCurrentCarAdded(String nickname, String description){
         for(Car car : currentCarCollection){
-            if (car.getDescription().equals(description)){
+            if (car.getDescriptionNoNickname().equals(description)){
+                return true;
+            }
+            if(car.getNickname().equals(nickname)){
                 return true;
             }
         }
         return false;
     }
 
-    public void addNewCarBasedOnDescription(String nickname, String description){
+    public void addNewCarWithNickname(String nickname, String description){
         for(Car car: currentSearchCollection){
             if (car.getDescriptionNoNickname().equals(description)){
                 car.setNickname(nickname);
@@ -109,11 +112,10 @@ public class SingletonModel {
         currentCarCollection.setDescriptionNoNicknameList(updatedDescriptionNoNickname);
     }
 
-    public void removeCarDescription(String description){
-        for(int i = 0; i < currentCarCollection.size(); i++){
-            if(currentCarCollection.getCar(i).getDescription().equals(description)){
-                currentCarCollection.getDescriptionList().remove(i);
-                currentCarCollection.getDescriptionNoNickNameList().remove(i);
+    public void removeCar(String description){
+        for(Car car: currentCarCollection){
+            if(car.getDescription().equals(description)){
+                currentCarCollection.remove(car);
             }
         }
     }
@@ -230,8 +232,9 @@ public class SingletonModel {
     //Choose one
     public void addNewJourney(String carDescription, String routeName){
         Car newCar = getCarFromCollection(carDescription, RetrieveEntries.Current);
+        Car carClone = new Car(newCar);
         Route newRoute = getRouteByName(routeName);
-        Journey newJourney = new Journey(newCar, newRoute);
+        Journey newJourney = new Journey(carClone, newRoute);
         journeyCollection.add(newJourney);
     }
 

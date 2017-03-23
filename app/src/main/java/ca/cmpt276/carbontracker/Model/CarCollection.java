@@ -8,6 +8,7 @@ import java.util.Iterator;
  */
 public class CarCollection implements Iterable<Car> {
     private ArrayList<Car> cars = new ArrayList<>();
+    private ArrayList<String> hiddenCars =  new ArrayList<>();
     private ArrayList<String> uniqueModelNames = new ArrayList<>();
     private ArrayList<String> uniqueModelYears = new ArrayList<>();
     private ArrayList<String> descriptionList = new ArrayList<>();

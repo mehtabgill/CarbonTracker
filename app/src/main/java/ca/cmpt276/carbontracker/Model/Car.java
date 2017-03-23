@@ -10,6 +10,8 @@ public class Car extends Transportation{
     private String make;
     private int year;
     private String additionalInfo;
+    private String displacementVol;
+    private String transmissionType;
     private String fuelType;
     private String description;
     private String descriptionNoNickname;
@@ -24,9 +26,28 @@ public class Car extends Transportation{
         this.make = make;
         this.model = model;
         this.year = year;
+        this.displacementVol = displacementVol;
+        this.transmissionType = transmissionType;
         this.additionalInfo = displacementVol + " L " + transmissionType ;
         updateCarDescriptions();
     }
+
+    public Car(Car car) {
+        this.make = car.make;
+        this.model = car.model;
+        this.year = car.year;
+        this.displacementVol = car.displacementVol;
+        this.transmissionType = car.transmissionType;
+        this.additionalInfo = car.displacementVol + " L " + car.transmissionType ;
+        updateCarDescriptions();
+        this.milesPerGallonCity = car.milesPerGallonCity;
+        this.milesPerGallonHway = car.milesPerGallonHway;
+        this.fuelType = car.fuelType;
+        if(!nickname.isEmpty()){
+            this.nickname = car.getNickname();
+        }
+    }
+
 
     public String getNickname() {
         return nickname;

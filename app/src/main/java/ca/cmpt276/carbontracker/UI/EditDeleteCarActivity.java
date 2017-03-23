@@ -110,7 +110,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
                 deleteCarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        model.removeCarDescription(description);
+                        model.removeCar(description);
                         Toast.makeText(EditDeleteCarActivity.this,
                                 DELETED_MESSAGE, Toast.LENGTH_SHORT).show();
                         finish();

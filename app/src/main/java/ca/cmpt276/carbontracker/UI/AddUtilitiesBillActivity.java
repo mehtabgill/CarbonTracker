@@ -24,6 +24,9 @@ import java.util.Calendar;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 import ca.cmpt276.carbontracker.Model.Utilities;
 
+/*
+ *
+ */
 public class AddUtilitiesBillActivity extends AppCompatActivity {
     private String ELECTRICITY;
     private String GAS;
