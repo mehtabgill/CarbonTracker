@@ -2,12 +2,19 @@ package ca.cmpt276.carbontracker.UI;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -46,6 +53,11 @@ public class SelectRouteActivity extends AppCompatActivity {
     Button btnDelete;
     Button btnEditRoute;
     Button btnSelectRoute;
+
+    //tips
+    static int counter = 0; //determines the priority
+    //private LayoutInflater layoutInflater;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +72,13 @@ public class SelectRouteActivity extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.select_route_spinner);
         spinner.setAdapter(adapter);
 
+        //tip array for add_car_journey
+        Resources res = getResources();
+        final String[] carTips = res.getStringArray(R.array.add_car_journey);
+        //*final RelativeLayout parent = new RelativeLayout(this);
+
+
+
         btnSelectRoute = (Button) findViewById(R.id.select_route_button);
         btnSelectRoute.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,9 +91,35 @@ public class SelectRouteActivity extends AppCompatActivity {
                 else{
                     selectedRouteName = spinner.getSelectedItem().toString();
                     model.addNewJourney(selectedCarDescription, selectedRouteName);
-                    Toast.makeText(getApplicationContext(), "Journey added", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Journey added", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SelectRouteActivity.this, MainMenuActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                    //show tip------------------------------------------------------------------------------
+
+                    //**layoutInflater= (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                    //**ViewGroup container = (ViewGroup) layoutInflater.inflate(R.layout.tips_layout, null);
+                    //**final PopupWindow window = new PopupWindow(container, 400, 400, true);
+                    //window.showAtLocation(parent, Gravity.BOTTOM, 500, 500);
+
+                    /*new Handler().postDelayed(new Runnable(){
+
+                        public void run() {
+                            window.showAtLocation(parent, Gravity.CENTER, 0, 0);
+                        }
+
+                    }, 100L);*/
+
+                    int latest = model.getJourneysCarbonEmissionList().size() - 1;
+                    String s = model.getJourneysCarbonEmissionList().get(latest);
+
+                    Toast.makeText(SelectRouteActivity.this, carTips[counter]+s, Toast.LENGTH_LONG).show();
+                    counter++;
+                    if(counter == 8)
+                        counter = 0;
+
+                    //show tip-----------------------------------------------------------------------------
+
                     startActivity(intent);
 
                 }
