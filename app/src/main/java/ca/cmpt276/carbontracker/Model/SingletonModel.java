@@ -2,7 +2,6 @@ package ca.cmpt276.carbontracker.Model;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,6 +56,7 @@ public class SingletonModel {
         loadCarsFromDB();
         loadRoutesFromDB();
         loadJourneysFromDB();
+        loadUtilitiesFromDB();
     }
 
     private void addToCarDB(Car car) {
@@ -69,6 +69,10 @@ public class SingletonModel {
 
     private void addToJourneyDB(Journey journey) {
         database.insertJourney(journey);
+    }
+
+    private void addToUtilitiesDB(Utilities utilities) {
+        database.insertUtility(utilities);
     }
 
     private void loadCarsFromDB() {
@@ -149,7 +153,7 @@ public class SingletonModel {
                         break;
                 }
 
-                String name = cursor.getString(DBAdapter.COL_JOURNEY_NAME);
+                String name = cursor.getString(DBAdapter.COL_JOURNEY_ROUTE_NAME);
                 float cityDistance = cursor.getFloat(DBAdapter.COL_JOURNEY_CITYDISTANCE);
                 float hwyDistance = cursor.getFloat(DBAdapter.COL_JOURNEY_HWYDISTANCE);
 
@@ -157,6 +161,36 @@ public class SingletonModel {
 
                 Journey journey = new Journey(transportation, route);
                 journeyCollection.add(journey);
+
+            } while(cursor.moveToNext());
+        }
+    }
+
+    private void loadUtilitiesFromDB() {
+        Cursor cursor = database.getAllUtilitiesRows();
+        if(cursor.moveToFirst()) {
+            do {
+                String bill = cursor.getString(DBAdapter.COL_UTILITIES_BILL_TYPE);
+                Utilities.BILL billType = Utilities.BILL.ELECTRICITY;
+                if(bill.equals("GAS")) {
+                    billType = Utilities.BILL.GAS;
+                }
+                float amount = cursor.getFloat(DBAdapter.COL_UTILITIES_AMOUNT);
+                int startYear = cursor.getInt(DBAdapter.COL_UTILITIES_START_YEAR);
+                int startMonth = cursor.getInt(DBAdapter.COL_UTILITIES_START_MONTH);
+                int startDay = cursor.getInt(DBAdapter.COL_UTILITIES_START_DAY);
+                int endYear = cursor.getInt(DBAdapter.COL_UTILITIES_END_YEAR);
+                int endMonth = cursor.getInt(DBAdapter.COL_UTILITIES_END_MONTH);
+                int endDay = cursor.getInt(DBAdapter.COL_UTILITIES_END_DAY);
+                int numPpl = cursor.getInt(DBAdapter.COL_UTILITIES_NUM_PPL);
+
+                Calendar start = Calendar.getInstance();
+                start.set(startYear, startMonth, startDay);
+                Calendar end = Calendar.getInstance();
+                end.set(endYear, endMonth, endDay);
+
+                Utilities utilities = new Utilities(billType, amount, start, end, numPpl);
+                utilitiesCollection.add(utilities);
 
             } while(cursor.moveToNext());
         }
@@ -317,13 +351,13 @@ public class SingletonModel {
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
                 index = currentCarCollection.getIndex(car);
-                currentCarCollection.remove(car);
                 if(index == 0){
                     currentCarCollection.add(newCar);
                 }
                 else{
                     currentCarCollection.add(index, newCar);
                 }
+                //currentCarCollection.remove(car);
             }
         }
     }
@@ -360,7 +394,7 @@ public class SingletonModel {
 
     //Choose one
     public void addNewJourney(String carDescription, String routeName){
-        Car newCar = getCarFromCollection(carDescription, RetriveEntries.Current);
+        Car newCar = getCarFromCollection(carDescription, RetrieveEntries.Current);
         Car car = new Car(newCar);
         Route newRoute = getRouteByName(routeName);
         Route route = new Route(newRoute);
@@ -413,8 +447,8 @@ public class SingletonModel {
     public void addNewUtilitiesBill(Utilities.BILL billType, float amount, Calendar startDate, Calendar endDate, int numberOfPeople){
         Utilities newBill = new Utilities(billType, amount, startDate, endDate, numberOfPeople);
         utilitiesCollection.add(newBill);
+        addToUtilitiesDB(newBill);
     }
-
 
     public void deleteUtilities(String description){
         for(Utilities utilities : utilitiesCollection){
