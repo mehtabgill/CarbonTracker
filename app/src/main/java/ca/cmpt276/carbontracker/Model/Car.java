@@ -15,8 +15,8 @@ public class Car extends Transportation{
     private String fuelType;
     private String description;
     private String descriptionNoNickname;
-    private int milesPerGallonCity;
-    private int milesPerGallonHway;
+    private float milesPerGallonCity;
+    private float milesPerGallonHway;
 
 
     public Car(){
@@ -102,19 +102,19 @@ public class Car extends Transportation{
                 this.additionalInfo;
     }
 
-    public int getMilesPerGallonCity() {
+    public float getMilesPerGallonCity() {
         return milesPerGallonCity;
     }
 
-    public void setMilesPerGallonCity(int milesPerGallonCity) {
+    public void setMilesPerGallonCity(float milesPerGallonCity) {
         this.milesPerGallonCity = milesPerGallonCity;
     }
 
-    public int getMilesPerGallonHway() {
+    public float getMilesPerGallonHway() {
         return milesPerGallonHway;
     }
 
-    public void setMilesPerGallonHway(int milesPerGallonHway) {
+    public void setMilesPerGallonHway(float milesPerGallonHway) {
         this.milesPerGallonHway = milesPerGallonHway;
     }
 
@@ -156,4 +156,11 @@ public class Car extends Transportation{
         return TRANSPORTATION_TYPE.CAR;
     }
 
+    public String getDisplacementVol() {
+        return displacementVol;
+    }
+
+    public String getTransmissionType() {
+        return transmissionType;
+    }
 }

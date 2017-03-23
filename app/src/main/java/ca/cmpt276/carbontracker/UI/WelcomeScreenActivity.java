@@ -117,6 +117,12 @@ public class WelcomeScreenActivity extends AppCompatActivity {
     private SingletonModel model = SingletonModel.getInstance();
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        model.closeDB();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_screen);
@@ -133,6 +139,8 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         ImageView recycle = (ImageView) findViewById(R.id.recycle);
 
         recycle.setTranslationY(-2000f);
+        model.openDB(context);
+        model.loadDataFromDB();
     }
 
     public static Context getContext(){
@@ -166,7 +174,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         protected void onPostExecute(CarCollection carCollection){
             Toast.makeText(WelcomeScreenActivity.getContext(),
                     getString(R.string.load_car_completed), Toast.LENGTH_SHORT).show();
-            model.setTotalCarCollection(carCollection);;
+            model.setTotalCarCollection(carCollection);
             DataReader.setFullDataLoaded();
         }
     }
