@@ -7,6 +7,7 @@ package ca.cmpt276.carbontracker.Model;
 public abstract class Transportation {
 
     public enum TRANSPORTATION_TYPE {CAR, BUS, SKYTRAIN, BIKE, WALK}
+    public static final String[] TYPE = new String[] {"CAR", "BUS", "SKYTRAIN", "BIKE", "WALK"};
 
     //default constructor
     public Transportation() {

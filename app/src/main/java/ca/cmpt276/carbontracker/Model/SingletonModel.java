@@ -55,10 +55,20 @@ public class SingletonModel extends AppCompatActivity{
 
     public void loadDataFromDB() {
         loadCarsFromDB();
+        loadRoutesFromDB();
+        loadJourneysFromDB();
     }
 
     private void addToCarDB(Car car) {
         database.insertCar(car);
+    }
+
+    private void addToRouteDB(Route route) {
+        database.insertRoute(route);
+    }
+
+    private void addToJourneyDB(Journey journey) {
+        database.insertJourney(journey);
     }
 
     private void loadCarsFromDB() {
@@ -82,6 +92,72 @@ public class SingletonModel extends AppCompatActivity{
                 car.setMilesPerGallonHway(hwyMPG);
 
                 currentCarCollection.add(car);
+            } while(cursor.moveToNext());
+        }
+    }
+
+    private void loadRoutesFromDB() {
+        Cursor cursor = database.getAllRouteRows();
+        if(cursor.moveToFirst()) {
+            do {
+                String name = cursor.getString(DBAdapter.COL_ROUTE_NAME);
+                float cityDistance = cursor.getFloat(DBAdapter.COL_ROUTE_CITYDISTANCE);
+                float hwyDistance = cursor.getFloat(DBAdapter.COL_ROUTE_HWYDISTANCE);
+
+                Route route = new Route(name, cityDistance, hwyDistance);
+                routeCollection.add(route);
+            } while(cursor.moveToNext());
+        }
+    }
+
+    private void loadJourneysFromDB() {
+        Cursor cursor = database.getAllJourneyRows();
+        Transportation transportation = new Car();
+        if(cursor.moveToFirst()) {
+            do {
+                String type = cursor.getString(DBAdapter.COL_JOURNEY_TYPE);
+                switch (type) {
+                    case "CAR":
+                        String name = cursor.getString(DBAdapter.COL_JOURNEY_NAME);
+                        String model = cursor.getString(DBAdapter.COL_JOURNEY_MODEL);
+                        String make = cursor.getString(DBAdapter.COL_JOURNEY_MAKE);
+                        int year = cursor.getInt(DBAdapter.COL_JOURNEY_YEAR);
+                        String displacement = cursor.getString(DBAdapter.COL_JOURNEY_DISPLACEMENT_VOL);
+                        String transmission = cursor.getString(DBAdapter.COL_JOURNEY_TRANSMISSION_TYPE);
+                        String fuelType = cursor.getString(DBAdapter.COL_JOURNEY_FUEL_TYPE);
+                        float cityMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_CITYMPG);
+                        float hwyMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_HWYMPG);
+
+                        Car car = new Car(make, model, year, displacement, transmission);
+                        car.setNickname(name);
+                        car.setFuelType(fuelType);
+                        car.setMilesPerGallonCity(cityMPG);
+                        car.setMilesPerGallonHway(hwyMPG);
+                        transportation = car;
+                        break;
+                    case "BUS":
+                        transportation = new Bus();
+                        break;
+                    case "SKYTRAIN":
+                        transportation = new Skytrain();
+                        break;
+                    case "BIKE":
+                        transportation = new Bike();
+                        break;
+                    case "WALK":
+                        transportation = new Walk();
+                        break;
+                }
+
+                String name = cursor.getString(DBAdapter.COL_JOURNEY_NAME);
+                float cityDistance = cursor.getFloat(DBAdapter.COL_JOURNEY_CITYDISTANCE);
+                float hwyDistance = cursor.getFloat(DBAdapter.COL_JOURNEY_HWYDISTANCE);
+
+                Route route = new Route(name, cityDistance, hwyDistance);
+
+                Journey journey = new Journey(transportation, route);
+                journeyCollection.add(journey);
+
             } while(cursor.moveToNext());
         }
     }
@@ -232,6 +308,7 @@ public class SingletonModel extends AppCompatActivity{
     }
 
     public void addToCarCollection(Car car){
+        addToCarDB(car);
         currentCarCollection.add(car);
     }
 
@@ -254,6 +331,7 @@ public class SingletonModel extends AppCompatActivity{
     }
 
     public void addNewRoute(Route route){
+        addToRouteDB(route);
         routeCollection.add(route);
     }
 
@@ -276,6 +354,7 @@ public class SingletonModel extends AppCompatActivity{
         Route route = new Route(newRoute);
         Journey newJourney = new Journey(car, route);
         journeyCollection.add(newJourney);
+        addToJourneyDB(newJourney);
     }
 
     public void addNewJourney(Transportation newTransportation, Route newRoute){

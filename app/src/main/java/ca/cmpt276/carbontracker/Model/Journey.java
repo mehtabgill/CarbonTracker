@@ -48,9 +48,6 @@ public class Journey extends Emission {
     protected void calculateCarbonEmission(){
         switch (transportationType){
             case CAR:
-                Car car = (Car) transportation;
-                System.out.println(car.getAdditionalInfo());
-                Toast.makeText(WelcomeScreenActivity.getContext(), "Test: " + car.getFuelType(), Toast.LENGTH_SHORT).show();
                 float cityMilesPerGallon = transportation.getMilesPerGallonCity();
                 float hwyMilesPerGallon = transportation.getMilesPerGallonHway();
                 float cityDistance = route.getCityDriveDistance();
