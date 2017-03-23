@@ -84,7 +84,11 @@
     <string name="select">Select</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-
+    <string name="Car">Car</string>
+    <string name="Bus">Bus</string>
+    <string name="Skytrain">Skytrain</string>
+    <string name="Bike">Bike</string>
+    <string name="Walk">Walk</string>
 
 
 </resources>

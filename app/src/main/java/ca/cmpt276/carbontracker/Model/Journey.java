@@ -1,5 +1,7 @@
 package ca.cmpt276.carbontracker.Model;
 
+import android.text.style.BulletSpan;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -22,8 +24,9 @@ public class Journey extends Emission {
     private static final float CAR_GAS_CO2_CONSTANT = 8.89f;
     private static final float CAR_DIESEL_CO2_CONSTANT = 10.16f;
     private static final float CAR_MILES_TO_KILOMETERS_CONSTANT = 0.621371f;
-    private final float SKYTRAIN_CARBON_EMISSIONS_PER_KM_CONSTANT = 15f; //89g per km per person
-    private final float BUS_CARBON_EMISSIONS_PER_KM_CONSTANT = 89f; //89g per km
+
+    private final float SKYTRAIN_CARBON_EMISSIONS_PER_KM_CONSTANT = 0.015f; //89g per km per person
+    private final float BUS_CARBON_EMISSIONS_PER_KM_CONSTANT = 0.089f; //89g per km
 
     private static String GASOLINE = "Gasoline";
     private static String DIESEL = "Diesel";
@@ -93,7 +96,25 @@ public class Journey extends Emission {
         return this.transportation;
     }
 
-    public Route getRoute(){
+    public String getTransportationName(){
+        switch (transportation.getType()){
+            case CAR:
+                return ((Car)transportation).getNickname();
+            case BUS:
+                return Transportation.TRANSPORTATION_TYPE.BUS.toString();
+            case BIKE:
+                return Transportation.TRANSPORTATION_TYPE.BIKE.toString();
+            case SKYTRAIN:
+                return Transportation.TRANSPORTATION_TYPE.SKYTRAIN.toString();
+            case WALK:
+                return Transportation.TRANSPORTATION_TYPE.WALK.toString();
+            default:
+                return " ";
+        }
+    }
+
+    public Route getRoute()
+    {
         return this.route; 
     }
 

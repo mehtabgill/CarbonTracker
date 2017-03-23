@@ -1,5 +1,7 @@
 package ca.cmpt276.carbontracker.Model;
 
+import com.github.mikephil.charting.data.PieEntry;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -11,15 +13,16 @@ public class SingletonModel {
     //TODO: Move all code relating to car search to their own class
     //Singleton should only be the middle ground between logic and UI
 
-    CarCollection currentCarCollection = new CarCollection();
-    CarCollection currentSearchCollection = new CarCollection();
-    CarCollection totalCarCollection = new CarCollection();
-    CarCollection currentSearchPreviousState = new CarCollection();
-    RouteCollection routeCollection = new RouteCollection();
-    ArrayList<Emission> emissionArrayList = new ArrayList<Emission>();
-    JourneyCollection journeyCollection = new JourneyCollection();
-    UtilitiesCollection utilitiesCollection = new UtilitiesCollection();
-    ArrayList<String> carMakeList;
+    private CarCollection currentCarCollection = new CarCollection();
+    private CarCollection currentSearchCollection = new CarCollection();
+    private CarCollection totalCarCollection = new CarCollection();
+    private CarCollection currentSearchPreviousState = new CarCollection();
+    private RouteCollection routeCollection = new RouteCollection();
+
+    private JourneyCollection journeyCollection = new JourneyCollection();
+    private UtilitiesCollection utilitiesCollection = new UtilitiesCollection();
+
+    private ArrayList<String> carMakeList;
     public enum RetrieveEntries {Current, Search, Total};
 
     private static final SingletonModel instance = new SingletonModel();
@@ -309,8 +312,32 @@ public class SingletonModel {
         }
     }
 
+    public ArrayList<Emission> getEmissionListOnDay(Calendar date){
+        ArrayList<Emission> emissionArrayList = new ArrayList<>();
+        for (Journey journey : journeyCollection) {
+            int year = journey.getDate().get(Calendar.YEAR);
+            int dayOfYear = journey.getDate().get(Calendar.DAY_OF_YEAR);
+            if ( (date.get(Calendar.YEAR) == year) &&
+                (date.get(Calendar.DAY_OF_YEAR) == dayOfYear) ){
+                emissionArrayList.add(journey);
+            }
+        }
+
+        for(Utilities utilities : utilitiesCollection){
+            if(utilities.dateIsInBillingPeriod(date)){
+                emissionArrayList.add(utilities);
+            }
+        }
+        return emissionArrayList;
+    }
+
+
+
     public void editRoute(String originalName, String newName, float newCity, float newHighway){
         routeCollection.editRoute(originalName, newName, newCity, newHighway);
     }
+
+
+
 
 }

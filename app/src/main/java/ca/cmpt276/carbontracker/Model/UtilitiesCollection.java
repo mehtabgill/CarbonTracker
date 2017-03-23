@@ -26,9 +26,11 @@ public class UtilitiesCollection implements Iterable<Utilities> {
     public int size(){
         return utilityBillsCollection.size();
     }
+
     public ArrayList<Utilities> getAllUtilityBills(){
         return utilityBillsCollection;
     }
+
     public UtilitiesCollection getUtilityBillsByDate(Calendar date){
         UtilitiesCollection tempCollection = new UtilitiesCollection();
         for(Utilities utilities : utilityBillsCollection){
@@ -44,7 +46,7 @@ public class UtilitiesCollection implements Iterable<Utilities> {
     public int getCarbonEmissionValue(Calendar date){
         int emissionValue = 0;
         UtilitiesCollection tempCollection = this.getUtilityBillsByDate(date);
-        for(Utilities utilities : tempCollection){
+        for(Utilities utilities : tempCollection) {
             emissionValue += utilities.getDailyAverageEmission();
         }
         return emissionValue;

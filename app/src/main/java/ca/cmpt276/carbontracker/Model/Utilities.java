@@ -82,12 +82,14 @@ public class Utilities extends Emission {
 
     public boolean dateIsInBillingPeriod(Calendar date){
         Calendar currentCheckingDate = (Calendar) startDate.clone();
-        Calendar endDate = (Calendar) this.endDate.clone();
-        while(!currentCheckingDate.equals(endDate)){
-            if(currentCheckingDate.equals(date)){
+        Calendar endDateClone = (Calendar) endDate.clone();
+        while(!currentCheckingDate.getTime().equals(endDateClone.getTime())){
+
+            if( (currentCheckingDate.get(Calendar.YEAR) == date.get(Calendar.YEAR)) &&
+                    (currentCheckingDate.get(Calendar.MONTH) == date.get(Calendar.MONTH)) &&
+                    (currentCheckingDate.get(Calendar.DATE) == date.get(Calendar.DATE))) {
                 return true;
             }
-
             else{
                 currentCheckingDate.add(Calendar.DAY_OF_YEAR, 1);
             }

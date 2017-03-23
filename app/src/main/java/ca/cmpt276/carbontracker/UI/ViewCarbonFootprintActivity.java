@@ -39,6 +39,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
     ArrayList<String> totalDistanceList = model.getJourneysDistanceList();
     ArrayList<String> carNameList = model.getJourneyTransportationName();
     ArrayList<String> carbonEmissionList = model.getJourneysCarbonEmissionList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +98,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                     currentRow.addView(textView);
                 }
             }
+
             final Button pieChartButton = (Button) findViewById(R.id.switch_button);
             chart = (PieChart) findViewById(R.id.chart);
             pieChartButton.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +123,6 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
 
         for(int arrayIndex = 0; arrayIndex < ARRAY_SIZE; arrayIndex++)
         {
-            //Instead of testInt, put carbon emission, and dateString is journey date/name
             pieEntries.add(new PieEntry(Float.parseFloat(carbonEmissionList.get(arrayIndex)), journeyDateList.get(arrayIndex)));
         }
 
