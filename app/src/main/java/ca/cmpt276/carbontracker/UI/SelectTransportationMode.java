@@ -94,10 +94,6 @@ public class SelectTransportationMode extends AppCompatActivity {
                     String name = "name";
                     if(ModeSelected.equals("Walk"))
                     {
-                        /*mode = new Walk(inputDist);
-                        Route r = new Route(inputDist);
-                        model.addNewJourney(mode, r, 0f);*/
-
                         newTransportation = new Walk();
                         Route newRoute = new Route(name, inputDist, 0);
                         model.addNewJourney(newTransportation, newRoute);

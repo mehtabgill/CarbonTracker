@@ -161,4 +161,19 @@ public class Utilities extends Emission {
         calculateCarbonEmission();
     }
 
+    @Override
+    public String toString(){
+        sdf.setCalendar(new GregorianCalendar());
+        String startDateString = sdf.format(startDate.getTime());
+        String endDateString = sdf.format(endDate.getTime());
+        String description = " ";
+        if(this.billMode.equals(BILL.ELECTRICITY)){
+            description = this.billMode.toString() + " - " + this.electricityAmount + " kWh - " + startDateString + " - " +  endDateString + " - " + numberOfPeople + " people";
+        }
+        else{
+            description = this.billMode.toString() + " - " + this.gasAmount + " GJ - " + startDateString + " - " +  endDateString + " - " + numberOfPeople + " people";
+        }
+        return description;
+    }
+
 }

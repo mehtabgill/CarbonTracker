@@ -15,8 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenuActivity"></activity>
-        <activity android:name=".SelectTransportationMode"></activity>
+        <activity android:name=".MainMenuActivity" />
+        <activity android:name=".SelectTransportationMode" />
         <activity android:name=".CarSelectionActivity" />
         <activity android:name=".ViewCarbonFootprintActivity" />
         <activity android:name=".SelectRouteActivity" />
@@ -25,7 +25,8 @@
         <activity android:name=".DeleteRouteActivity" />
         <activity android:name=".AddCarActivity" />
         <activity android:name=".EditDeleteCarActivity" />
-        <activity android:name=".AddUtilitiesBillActivity"></activity>
+        <activity android:name=".AddUtilitiesBillActivity" />
+        <activity android:name=".EditDeleteUtilitiesActivity"></activity>
     </application>
 
 </manifest>

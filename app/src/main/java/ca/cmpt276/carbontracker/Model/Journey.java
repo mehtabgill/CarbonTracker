@@ -35,8 +35,6 @@ public class Journey extends Emission {
         transportationType = transportation.getType();
         this.route = new Route(route);
         calculateCarbonEmission();
-
-        sdf.setCalendar(calendar);
         date = Calendar.getInstance();
     }
 
@@ -80,15 +78,6 @@ public class Journey extends Emission {
 
     }
 
-    //alternate constructor
-    public Journey(Transportation transportation, Route route, float carbonEmissionValue)
-    {
-        this.transportation = transportation;
-        this.route = route;
-        this.carbonEmissionValue = carbonEmissionValue;
-        date = Calendar.getInstance();
-    }
-
     public void setTransportation(Transportation transportation){
         this.transportation = transportation;
         calculateCarbonEmission();
@@ -96,6 +85,7 @@ public class Journey extends Emission {
 
     public void setRoute(Route route){
         this.route = new Route(route);
+        this.route = (Route) route;
         calculateCarbonEmission();
     }
 
