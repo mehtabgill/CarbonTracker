@@ -39,13 +39,13 @@ public class Car extends Transportation{
         this.displacementVol = car.displacementVol;
         this.transmissionType = car.transmissionType;
         this.additionalInfo = car.displacementVol + " L " + car.transmissionType ;
-        updateCarDescriptions();
         this.milesPerGallonCity = car.milesPerGallonCity;
         this.milesPerGallonHway = car.milesPerGallonHway;
         this.fuelType = car.fuelType;
         if((car.nickname != null) && (!car.nickname.isEmpty())){
             this.nickname = car.getNickname();
         }
+        updateCarDescriptions();
     }
 
 
@@ -108,6 +108,7 @@ public class Car extends Transportation{
 
     public void setMilesPerGallonCity(float milesPerGallonCity) {
         this.milesPerGallonCity = milesPerGallonCity;
+        updateCarDescriptions();
     }
 
     public float getMilesPerGallonHway() {
@@ -116,6 +117,7 @@ public class Car extends Transportation{
 
     public void setMilesPerGallonHway(float milesPerGallonHway) {
         this.milesPerGallonHway = milesPerGallonHway;
+        updateCarDescriptions();
     }
 
     public void setDescription(String nickname, String make, String model, String year, String displacementVolume, String transmissionType){
