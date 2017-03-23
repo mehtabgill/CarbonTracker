@@ -22,6 +22,12 @@ public final class GraphDataRetriever {
     private static ArrayList<Float> carbonEmissionValueList = new ArrayList<>();
 
     public static void setUpGraphData(GRAPH_MODE mode, Calendar date){
+        if( (!emissionArrayList.isEmpty()) ||
+                (!emissionTypeList.isEmpty()) ||
+                (!emissionNameList.isEmpty()) ||
+                (!carbonEmissionValueList.isEmpty())){
+            resetCurrentCollection();
+        }
         switch (mode){
             case DAY:
                 emissionArrayList = model.getEmissionListOnDay(date);
@@ -36,7 +42,7 @@ public final class GraphDataRetriever {
                             carbonEmissionValueList.add(((Utilities) emission).getDailyAverageEmission());
                         }
                     }
-                    emissionTypeList.add(emission.getClass().getName());
+                    emissionTypeList.add(emission.getClass().getSimpleName());
                 }
                 break;
         }
@@ -56,5 +62,12 @@ public final class GraphDataRetriever {
 
     public static int getEmissionArrayListSize(){
         return emissionArrayList.size();
+    }
+
+    public static void resetCurrentCollection(){
+        ArrayList<Emission> emissionArrayList = new ArrayList<>();
+        ArrayList<String> emissionTypeList = new ArrayList<>();
+        ArrayList<String> emissionNameList = new ArrayList<>();
+        ArrayList<Float> carbonEmissionValueList = new ArrayList<>();
     }
 }

@@ -118,6 +118,7 @@ public class AddCarActivity extends AppCompatActivity {
                                             getString(R.string.car_existed_message), Toast.LENGTH_SHORT).show();
                                     model.resetCurrentSearchCollection();
                                     dialog.dismiss();
+                                    finish();
                                 }
 
                                 else{

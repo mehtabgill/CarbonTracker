@@ -270,11 +270,14 @@ public class SingletonModel {
     }
 
     public void removeCar(String description){
+        int index = 0;
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
-                currentCarCollection.remove(car);
+                index = currentCarCollection.getIndex(car);
+                break;
             }
         }
+        currentCarCollection.remove(index);
     }
 
 
@@ -344,18 +347,18 @@ public class SingletonModel {
     }
 
     public void editCar(String description, Car newCar){
-        int index;
+        int index = 0;
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
                 index = currentCarCollection.getIndex(car);
-                if(index == 0){
-                    currentCarCollection.add(newCar);
-                }
-                else{
-                    currentCarCollection.add(index, newCar);
-                }
-                //currentCarCollection.remove(car);
             }
+        }
+        if(currentCarCollection.isEmpty()){
+            currentCarCollection.add(newCar);
+        }
+        else{
+            currentCarCollection.add(index, newCar);
+            currentCarCollection.remove(index+1);
         }
     }
 
@@ -448,25 +451,29 @@ public class SingletonModel {
     }
 
     public void deleteUtilities(String description){
+        int index = 0;
         for(Utilities utilities : utilitiesCollection){
             if(utilities.toString().equals(description)){
-                utilitiesCollection.remove(utilities);
+                index = utilitiesCollection.getIndex(utilities);
             }
         }
+        utilitiesCollection.remove(index);
     }
 
     public void editUtilities(String originalUtilities, Utilities editedUtilities){
+        int index = 0;
         for(Utilities utilities : utilitiesCollection){
             if (utilities.toString().equals(originalUtilities)){
-                int index = utilitiesCollection.getIndex(utilities);
-                utilitiesCollection.remove(utilities);
-                if(utilitiesCollection.size() == 0){
-                    utilitiesCollection.add(editedUtilities);
-                }
-                else{
-                    utilitiesCollection.add(index, editedUtilities);
-                }
+                index = utilitiesCollection.getIndex(utilities);
+                break;
             }
+        }
+        if(utilitiesCollection.size() == 0){
+            utilitiesCollection.add(editedUtilities);
+        }
+        else{
+            utilitiesCollection.add(index, editedUtilities);
+            utilitiesCollection.remove(index+1);
         }
     }
 

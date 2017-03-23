@@ -50,7 +50,7 @@
     <string name="welcomeMessage1">Want to save the Earth?</string>
     <string name="welcomeMessage2">Click the picture!</string>
     <string name="skip">SKIP</string>
-    <string name="table_header">SUMMARY OF CARBON FOORPRINT</string>
+    <string name="table_header">SUMMARY OF CARBON FOOTPRINT</string>
     <string name="journey_date_header">Date</string>
     <string name="journey_distance_header">Distance\n(km) </string>
     <string name="journey_car_name_header">Car Name </string>
@@ -92,6 +92,7 @@
     <string name="Skytrain">Skytrain</string>
     <string name="Bike">Bike</string>
     <string name="Walk">Walk</string>
-
+    <string name="Journey">Journey</string>
+    <string name="Utilities">Utilities</string>
 
 </resources>
