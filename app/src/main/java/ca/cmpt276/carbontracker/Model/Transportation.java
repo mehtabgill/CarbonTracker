@@ -7,6 +7,7 @@ package ca.cmpt276.carbontracker.Model;
 public abstract class Transportation {
 
     public enum TRANSPORTATION_TYPE {CAR, BUS, SKYTRAIN, BIKE, WALK}
+    public static final String[] TYPE = new String[] {"CAR", "BUS", "SKYTRAIN", "BIKE", "WALK"};
 
     //default constructor
     public Transportation() {
@@ -18,11 +19,11 @@ public abstract class Transportation {
         return "";
     }
 
-    public int getMilesPerGallonCity() {
+    public float getMilesPerGallonCity() {
         return 0;
     }
 
-    public int getMilesPerGallonHway() {
+    public float getMilesPerGallonHway() {
         return 0;
     }
 

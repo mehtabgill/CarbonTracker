@@ -1,10 +1,12 @@
 package ca.cmpt276.carbontracker.Model;
 
-import android.text.style.BulletSpan;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
 /**
  * Keeps all information about a journey,
@@ -45,8 +47,8 @@ public class Journey extends Emission {
     protected void calculateCarbonEmission(){
         switch (transportationType){
             case CAR:
-                int cityMilesPerGallon = transportation.getMilesPerGallonCity();
-                int hwyMilesPerGallon = transportation.getMilesPerGallonHway();
+                float cityMilesPerGallon = transportation.getMilesPerGallonCity();
+                float hwyMilesPerGallon = transportation.getMilesPerGallonHway();
                 float cityDistance = route.getCityDriveDistance();
                 float hwyDistance = route.getHighwayDriveDistance();
 
