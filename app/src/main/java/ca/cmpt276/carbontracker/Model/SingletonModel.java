@@ -2,9 +2,12 @@ package ca.cmpt276.carbontracker.Model;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
 /**
  * Created by Elvin Laptop on 2017-03-06.
@@ -276,6 +279,8 @@ public class SingletonModel {
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
                 currentCarCollection.remove(car);
+                long id = findCarInDataBase(car);
+                database.deleteCarRow(id);
             }
         }
     }
@@ -351,15 +356,47 @@ public class SingletonModel {
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
                 index = currentCarCollection.getIndex(car);
-                if(index == 0){
-                    currentCarCollection.add(newCar);
-                }
-                else{
-                    currentCarCollection.add(index, newCar);
-                }
+                currentCarCollection.add(index, newCar);
+                ArrayList<Car> cars = new ArrayList<>();
+
                 //currentCarCollection.remove(car);
+                long id = findCarInDataBase(car);
+                database.updateCar(id, newCar);
             }
         }
+
+    }
+
+    private long findCarInDataBase(Car findCar) {
+        Cursor cursor = database.getAllCarRows();
+        if(cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(DBAdapter.COL_ROWID);
+                String name = cursor.getString(DBAdapter.COL_CAR_NAME);
+                String model = cursor.getString(DBAdapter.COL_CAR_MODEL);
+                String make = cursor.getString(DBAdapter.COL_CAR_MAKE);
+                int year = cursor.getInt(DBAdapter.COL_CAR_YEAR);
+                String displacement = cursor.getString(DBAdapter.COL_CAR_DISPLACEMENT_VOL);
+                String transmission = cursor.getString(DBAdapter.COL_CAR_TRANSMISSION_TYPE);
+                String fuelType = cursor.getString(DBAdapter.COL_CAR_FUEL_TYPE);
+                float cityMPG = cursor.getFloat(DBAdapter.COL_CAR_CITYMPG);
+                float hwyMPG = cursor.getFloat(DBAdapter.COL_CAR_HWYMPG);
+
+                Car car = new Car(make, model, year, displacement, transmission);
+                car.setNickname(name);
+                car.setFuelType(fuelType);
+                car.setMilesPerGallonCity(cityMPG);
+                car.setMilesPerGallonHway(hwyMPG);
+
+                if(findCar.getDescription().equals(car.getDescription())){
+                    return id;
+                }
+
+
+
+            } while(cursor.moveToNext());
+        }
+        return -1;
     }
 
     public Route getRouteByName(String name){
