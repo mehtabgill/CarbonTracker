@@ -12,8 +12,8 @@ public class EmissionCalculator {
     private static String DIESEL = "Diesel";
 
     public static float calculate(Transportation car, Route route) {
-        int cityMilesPerGallon = car.getMilesPerGallonCity();
-        int hwyMilesPerGallon = car.getMilesPerGallonHway();
+        float cityMilesPerGallon = car.getMilesPerGallonCity();
+        float hwyMilesPerGallon = car.getMilesPerGallonHway();
         float cityDistance = route.getCityDriveDistance();
         float hwyDistance = route.getHighwayDriveDistance();
 
