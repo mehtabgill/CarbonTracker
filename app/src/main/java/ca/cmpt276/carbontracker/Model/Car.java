@@ -43,7 +43,7 @@ public class Car extends Transportation{
         this.milesPerGallonCity = car.milesPerGallonCity;
         this.milesPerGallonHway = car.milesPerGallonHway;
         this.fuelType = car.fuelType;
-        if(!nickname.isEmpty()){
+        if((car.nickname != null) && (!car.nickname.isEmpty())){
             this.nickname = car.getNickname();
         }
     }

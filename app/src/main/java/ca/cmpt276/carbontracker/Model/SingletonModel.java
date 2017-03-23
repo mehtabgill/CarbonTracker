@@ -229,6 +229,7 @@ public class SingletonModel {
         }
         return routeNames;
     }
+
     //Choose one
     public void addNewJourney(String carDescription, String routeName){
         Car newCar = getCarFromCollection(carDescription, RetrieveEntries.Current);
