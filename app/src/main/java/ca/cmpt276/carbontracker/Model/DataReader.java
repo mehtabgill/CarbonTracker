@@ -87,7 +87,9 @@ public class DataReader {
                 car.setMilesPerGallonCity(Integer.parseInt(tokens[6]));
                 car.setMilesPerGallonHway(Integer.parseInt(tokens[7]));
                 carList.add(car);
+
             }
+            carList.updateDescriptionList();
         }
         catch (IOException e){
             Log.wtf("DataReader", "Error reading data file on line " + line, e);

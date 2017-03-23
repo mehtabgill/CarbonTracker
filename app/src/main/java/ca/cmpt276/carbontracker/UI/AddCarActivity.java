@@ -101,7 +101,7 @@ public class AddCarActivity extends AppCompatActivity {
                 builder1.setTitle(getString(R.string.select_car_popup_title));
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(AddCarActivity.this, android.R.layout.select_dialog_singlechoice);
-                for (String description : model.getCarEntriesDescription(SingletonModel.RetriveEntries.Search)) {
+                for (String description : model.getCarEntriesDescription(SingletonModel.RetrieveEntries.Search)) {
                     arrayAdapter.add(description);
                 }
                 builder1.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
@@ -113,7 +113,7 @@ public class AddCarActivity extends AppCompatActivity {
                         builder2.setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                if(model.isCurrentCarAdded(selection)){
+                                if(model.isCurrentCarAdded(nicknameInput, selection)){
                                     Toast.makeText(AddCarActivity.this,
                                             getString(R.string.car_existed_message), Toast.LENGTH_SHORT).show();
                                     model.resetCurrentSearchCollection();
@@ -121,7 +121,7 @@ public class AddCarActivity extends AppCompatActivity {
                                 }
 
                                 else{
-                                    model.addNewCarBasedOnDecsription(nicknameInput, selection);
+                                    model.addNewCarWithNickname(nicknameInput, selection);
                                     dialog.dismiss();
                                     model.resetCurrentSearchCollection();
                                     finish();

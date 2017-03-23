@@ -11,6 +11,10 @@ import java.util.Iterator;
 
 public class JourneyCollection implements Iterable<Journey>{
     private ArrayList<Journey> journeys = new ArrayList<>();
+    private ArrayList<String> dateList = new ArrayList<>();
+    private ArrayList<String> carsNameList = new ArrayList<>();
+    private ArrayList<Float> totalDistanceList = new ArrayList<>();
+    private ArrayList<Float> carbonEmissionList = new ArrayList<>();
 
     public void add(Journey journey) {
         journeys.add(journey);
@@ -38,13 +42,32 @@ public class JourneyCollection implements Iterable<Journey>{
     }
 
     public ArrayList<String> getAllJourneyDates(){
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         ArrayList<String> dateList = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         for(Journey journey : journeys){
             Calendar date = journey.getDate();
             dateList.add(sdf.format(date.getTime()));
         }
         return dateList;
+    }
+
+    public ArrayList<Float> getJourneyCarbonEmissionList(){
+        ArrayList<Float> carbonEmissionList = new ArrayList<>();
+        for(Journey journey : journeys){
+            carbonEmissionList.add(journey.getCarbonEmissionValue());
+        }
+        return carbonEmissionList;
+    }
+    public ArrayList<Journey> getAllJourneys(){
+        return journeys;
+    }
+
+    public ArrayList<Float> getTotalDistanceList(){
+        ArrayList<Float> totalDistanceList = new ArrayList<>();
+        for(Journey journey : journeys){
+            totalDistanceList.add(journey.getRoute().getTotalDistance());
+        }
+        return totalDistanceList;
     }
 
     public ArrayList<String> getTransportationNameList(){
@@ -72,24 +95,8 @@ public class JourneyCollection implements Iterable<Journey>{
         }
         return transportationNameList;
     }
-    public ArrayList<Float> getTotalDistanceList(){
-        ArrayList<Float> totalDistanceList = new ArrayList<>();
-        for(Journey journey : journeys){
-            totalDistanceList.add(journey.getRoute().getTotalDistance());
-        }
-        return totalDistanceList;
-    }
-    public ArrayList<Float> getCarbonEmissionList(){
-        ArrayList<Float> carbonEmissionList = new ArrayList<>();
-        for(Journey journey : journeys){
-            carbonEmissionList.add(journey.getCarbonEmissionValue());
-        }
-        return carbonEmissionList;
-    }
 
-    public ArrayList<Journey> getAllJourneys(){
-        return journeys;
-    }
+
 
     @Override
     public Iterator<Journey> iterator() {

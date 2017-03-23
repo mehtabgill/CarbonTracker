@@ -31,9 +31,6 @@ public abstract class Transportation {
         return "";
     }
 
-    public float getCarbonEmitted(){
-        return 0;
-    }
 
     public abstract TRANSPORTATION_TYPE getType();
 }

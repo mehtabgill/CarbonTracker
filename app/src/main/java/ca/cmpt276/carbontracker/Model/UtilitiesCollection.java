@@ -22,6 +22,10 @@ public class UtilitiesCollection implements Iterable<Utilities> {
     public void remove(Utilities utilities){
         utilityBillsCollection.remove(utilities);
     }
+
+    public int size(){
+        return utilityBillsCollection.size();
+    }
     public ArrayList<Utilities> getAllUtilityBills(){
         return utilityBillsCollection;
     }
@@ -44,6 +48,16 @@ public class UtilitiesCollection implements Iterable<Utilities> {
             emissionValue += utilities.getDailyAverageEmission();
         }
         return emissionValue;
+    }
+
+    public int getIndex(Utilities utilities){
+        int index = -1;
+        for(int i = 0; i < utilityBillsCollection.size(); i++){
+            if (utilityBillsCollection.get(i).equals(utilities)){
+                index = i;
+            }
+        }
+        return index;
     }
 
     @Override
