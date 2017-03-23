@@ -356,10 +356,7 @@ public class SingletonModel {
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
                 index = currentCarCollection.getIndex(car);
-                currentCarCollection.add(index, newCar);
-                ArrayList<Car> cars = new ArrayList<>();
-
-                //currentCarCollection.remove(car);
+                currentCarCollection.set(index, newCar);
                 long id = findCarInDataBase(car);
                 database.updateCar(id, newCar);
             }

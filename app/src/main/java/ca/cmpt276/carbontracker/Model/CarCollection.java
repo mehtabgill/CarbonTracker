@@ -30,6 +30,10 @@ public class CarCollection implements Iterable<Car> {
         }
     }
 
+    public void set(int index, Car car) {
+        cars.set(index, car);
+    }
+
     public void remove(Car car) {
         cars.remove(car);
         updateDescriptionList();
