@@ -2,6 +2,7 @@ package ca.cmpt276.carbontracker.UI;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -46,6 +47,12 @@ public class SelectRouteActivity extends AppCompatActivity {
     Button btnDelete;
     Button btnEditRoute;
     Button btnSelectRoute;
+
+    //tip array for add_car_journey
+    Resources res = getResources();
+    String[] carTips = res.getStringArray(R.array.add_car_journey);
+    int counter = 0; //determines the priority
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +81,14 @@ public class SelectRouteActivity extends AppCompatActivity {
                     model.addNewJourney(selectedCarDescription, selectedRouteName);
                     Intent intent = new Intent(SelectRouteActivity.this, MainMenuActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                    //show tip
+                    Toast.makeText(SelectRouteActivity.this, carTips[counter], Toast.LENGTH_LONG);
+                    counter++;
+                    if(counter == 8)
+                        counter = 0;
+
+
                     startActivity(intent);
                 }
             }
