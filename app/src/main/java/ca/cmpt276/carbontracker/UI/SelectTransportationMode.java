@@ -1,6 +1,7 @@
 package ca.cmpt276.carbontracker.UI;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,12 +29,17 @@ public class SelectTransportationMode extends AppCompatActivity {
     ArrayList<String> TransportationModeList = new ArrayList<>() ;
     Button btnOk ;
     Button btnCancel ;
+
+    //tips
+    static int counter = 0; //determines the priority
+
+
     String CAR;
     String BUS;
     String BIKE;
     String SKYTRAIN;
     String WALK;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +90,11 @@ public class SelectTransportationMode extends AppCompatActivity {
         });
 
 
+        //tip array for add_not_car
+        Resources res = getResources();
+        final String[] carTips = res.getStringArray(R.array.add_not_car);
+
+
 
         btnOk = (Button) findViewById(R.id.buttonOkForSelectedTransportationMode);
         btnOk.setOnClickListener(new View.OnClickListener() {
@@ -128,8 +139,37 @@ public class SelectTransportationMode extends AppCompatActivity {
                         model.addNewJourney(newTransportation, newRoute);
                     }
 
-                    Toast.makeText(SelectTransportationMode.this, "Journey Added", Toast.LENGTH_SHORT).show();
+                    int latest = model.getJourneysCarbonEmissionList().size() - 1;
+                    String s = model.getJourneysCarbonEmissionList().get(latest);
+
+                    if(counter<4) {
+
+                        Toast.makeText(SelectTransportationMode.this, carTips[counter] + s, Toast.LENGTH_LONG).show();
+                    }
+                    else if (counter==4){ //walks (need searchByDate for JourneyCollection)
+                        s = model.getWalks()+"";
+                        Toast.makeText(SelectTransportationMode.this, carTips[counter] + s, Toast.LENGTH_LONG).show();
+                    }
+                    else if (counter==5){ //bikes
+                        s = model.getBike()+"";
+                        Toast.makeText(SelectTransportationMode.this, carTips[counter] + s, Toast.LENGTH_LONG).show();
+                    }
+                    else if (counter==6){ //bus
+                        s = model.getBus()+"";
+                        Toast.makeText(SelectTransportationMode.this, carTips[counter] + s, Toast.LENGTH_LONG).show();
+                    }
+                    else if (counter==7){ //skytrain
+                        s = model.getSkytrain()+"";
+                        Toast.makeText(SelectTransportationMode.this, carTips[counter] + s, Toast.LENGTH_LONG).show();
+                    }
+                    counter++;
+                    if(counter == 8)
+                        counter = 0;
+
+                    //Toast.makeText(SelectTransportationMode.this, "Journey Added", Toast.LENGTH_SHORT).show();
                     finish();
+
+
                 }
             }
         });
