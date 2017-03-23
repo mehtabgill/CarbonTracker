@@ -115,7 +115,7 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
                             editBillLayout.setVisibility(View.VISIBLE);
                         }
                         else{
-                            model.deleteUtilities(selectedBill);
+                            model.removeUtilities(selectedBill);
                             Toast.makeText(EditDeleteUtilitiesActivity.this,
                                     getString(R.string.deleted_bill_confirmed), Toast.LENGTH_SHORT).show();
                             setupUtilitiesBillListSpinner();

@@ -2,9 +2,12 @@ package ca.cmpt276.carbontracker.Model;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
 public class SingletonModel {
     //TODO: Move all code relating to car search to their own class
@@ -269,16 +272,6 @@ public class SingletonModel {
         currentCarCollection.setDescriptionNoNicknameList(updatedDescriptionNoNickname);
     }
 
-    public void removeCar(String description){
-        int index = 0;
-        for(Car car: currentCarCollection){
-            if(car.getDescription().equals(description)){
-                index = currentCarCollection.getIndex(car);
-                break;
-            }
-        }
-        currentCarCollection.remove(index);
-    }
 
 
     public void setTotalCarCollection(CarCollection totalCarCollection){
@@ -347,19 +340,60 @@ public class SingletonModel {
     }
 
     public void editCar(String description, Car newCar){
+        int index;
+        for(Car car: currentCarCollection){
+            if(car.getDescription().equals(description)){
+                index = currentCarCollection.getIndex(car);
+                currentCarCollection.set(index, newCar);
+                long id = findCarInDataBase(car);
+                database.updateCar(id, newCar);
+            }
+        }
+    }
+
+    public void removeCar(String description){
         int index = 0;
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
                 index = currentCarCollection.getIndex(car);
+                long id = findCarInDataBase(car);
+                database.deleteCarRow(id);
+                break;
             }
         }
-        if(currentCarCollection.isEmpty()){
-            currentCarCollection.add(newCar);
+        currentCarCollection.remove(index);
+    }
+
+    private long findCarInDataBase(Car findCar) {
+        Cursor cursor = database.getAllCarRows();
+        if(cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(DBAdapter.COL_ROWID);
+                String name = cursor.getString(DBAdapter.COL_CAR_NAME);
+                String model = cursor.getString(DBAdapter.COL_CAR_MODEL);
+                String make = cursor.getString(DBAdapter.COL_CAR_MAKE);
+                int year = cursor.getInt(DBAdapter.COL_CAR_YEAR);
+                String displacement = cursor.getString(DBAdapter.COL_CAR_DISPLACEMENT_VOL);
+                String transmission = cursor.getString(DBAdapter.COL_CAR_TRANSMISSION_TYPE);
+                String fuelType = cursor.getString(DBAdapter.COL_CAR_FUEL_TYPE);
+                float cityMPG = cursor.getFloat(DBAdapter.COL_CAR_CITYMPG);
+                float hwyMPG = cursor.getFloat(DBAdapter.COL_CAR_HWYMPG);
+
+                Car car = new Car(make, model, year, displacement, transmission);
+                car.setNickname(name);
+                car.setFuelType(fuelType);
+                car.setMilesPerGallonCity(cityMPG);
+                car.setMilesPerGallonHway(hwyMPG);
+
+                if(findCar.getDescription().equals(car.getDescription())){
+                    return id;
+                }
+
+
+
+            } while(cursor.moveToNext());
         }
-        else{
-            currentCarCollection.add(index, newCar);
-            currentCarCollection.remove(index+1);
-        }
+        return -1;
     }
 
     public Route getRouteByName(String name){
@@ -450,7 +484,7 @@ public class SingletonModel {
         addToUtilitiesDB(newBill);
     }
 
-    public void deleteUtilities(String description){
+    public void removeUtilities(String description){
         int index = 0;
         for(Utilities utilities : utilitiesCollection){
             if(utilities.toString().equals(description)){
@@ -465,15 +499,8 @@ public class SingletonModel {
         for(Utilities utilities : utilitiesCollection){
             if (utilities.toString().equals(originalUtilities)){
                 index = utilitiesCollection.getIndex(utilities);
-                break;
+                utilitiesCollection.set(index, editedUtilities);
             }
-        }
-        if(utilitiesCollection.size() == 0){
-            utilitiesCollection.add(editedUtilities);
-        }
-        else{
-            utilitiesCollection.add(index, editedUtilities);
-            utilitiesCollection.remove(index+1);
         }
     }
 

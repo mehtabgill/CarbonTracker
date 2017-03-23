@@ -13,6 +13,24 @@ public class Route {
     public Route(){
 
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) {
+            return false;
+        }
+
+        if(obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Route other = (Route) obj;
+
+        return (this.name.equals(other.name)) &&
+                (this.cityDriveDistance == other.cityDriveDistance) &&
+                (this.highwayDriveDistance == other.highwayDriveDistance) &&
+                (this.totalDistance == other.totalDistance);
+    }
+
     public Route(float totalDistance){
         name ="";
         cityDriveDistance = 0;

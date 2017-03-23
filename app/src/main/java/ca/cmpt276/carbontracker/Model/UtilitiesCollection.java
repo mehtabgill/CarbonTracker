@@ -23,6 +23,10 @@ public class UtilitiesCollection implements Iterable<Utilities> {
         utilityBillsCollection.remove(utilities);
     }
 
+    public void set(int index, Utilities utilities){
+        utilityBillsCollection.set(index, utilities);
+    }
+
     public int size(){
         return utilityBillsCollection.size();
     }
