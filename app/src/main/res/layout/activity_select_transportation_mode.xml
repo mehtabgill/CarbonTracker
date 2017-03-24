@@ -30,7 +30,7 @@
         android:layout_alignParentBottom="true"/>
 
     <Button
-        android:id="@+id/buttonCancelForTRansporttationModeSelected"
+        android:id="@+id/buttonCancelForTransporttationModeSelected"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/cancel"
@@ -56,8 +56,8 @@
         android:layout_marginLeft="22dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="92dp"
-        android:layout_toEndOf="@+id/buttonCancelForTRansporttationModeSelected"
-        android:layout_toRightOf="@+id/buttonCancelForTRansporttationModeSelected"
+        android:layout_toEndOf="@+id/buttonCancelForTransporttationModeSelected"
+        android:layout_toRightOf="@+id/buttonCancelForTransporttationModeSelected"
         android:ems="10"
         android:inputType="number"
         android:visibility="invisible" />

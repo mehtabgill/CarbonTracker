@@ -155,9 +155,9 @@ public class SelectTransportationMode extends AppCompatActivity {
 
                 }
             }
-        };
+        }});
 
-        btnCancel = (Button) findViewById (R.id.buttonCancelForTRansporttationModeSelected);
+        btnCancel = (Button) findViewById (R.id.buttonCancelForTransporttationModeSelected);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

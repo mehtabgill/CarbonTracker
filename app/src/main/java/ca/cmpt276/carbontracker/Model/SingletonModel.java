@@ -280,17 +280,6 @@ public class SingletonModel {
         currentCarCollection.setDescriptionNoNicknameList(updatedDescriptionNoNickname);
     }
 
-    public void removeCar(String description){
-        for(Car car: currentCarCollection){
-            if(car.getDescription().equals(description)){
-                currentCarCollection.remove(car);
-                long id = database.findCar(car);
-                database.deleteCarRow(id);
-            }
-        }
-    }
-
-
     public void setTotalCarCollection(CarCollection totalCarCollection){
         this.totalCarCollection = totalCarCollection;
 
@@ -373,7 +362,7 @@ public class SingletonModel {
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
                 index = currentCarCollection.getIndex(car);
-                long id = findCarInDataBase(car);
+                long id = database.findCar(car);
                 database.deleteCarRow(id);
                 break;
             }
@@ -490,7 +479,7 @@ public class SingletonModel {
         int index = 0;
         for(Utilities utilities : utilitiesCollection){
             if (utilities.toString().equals(originalUtilities)){
-                int index = utilitiesCollection.getIndex(utilities);
+                index = utilitiesCollection.getIndex(utilities);
                 utilitiesCollection.set(index, editedUtilities);
                 long id = database.findUtilities(utilities);
                 database.updateUtilities(id, editedUtilities);
@@ -504,11 +493,6 @@ public class SingletonModel {
         long id = database.findRoute(oldRoute);
         database.updateRoute(id, route);
         routeCollection.editRoute(index, route);
-    }
-                index = utilitiesCollection.getIndex(utilities);
-                utilitiesCollection.set(index, editedUtilities);
-            }
-        }
     }
 
     public ArrayList<Emission> getEmissionListOnDay(Calendar date){

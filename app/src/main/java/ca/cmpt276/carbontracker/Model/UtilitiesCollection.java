@@ -54,9 +54,6 @@ public class UtilitiesCollection implements Iterable<Utilities> {
         return emissionValue;
     }
 
-    public void set(int index, Utilities utilities) {
-        utilityBillsCollection.set(index, utilities);
-    }
 
     public int getIndex(Utilities utilities){
         int index = -1;
