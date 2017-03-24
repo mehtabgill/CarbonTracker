@@ -29,7 +29,7 @@ public class SelectTransportationMode extends AppCompatActivity {
     String ModeSelected = "" ;
     ArrayList<String> TransportationModeList = new ArrayList<>() ;
     Button btnOk ;
-    Button btnCancel ;
+    Button btnCancel;
 
     //tips
     static int counter = 0; //determines the priority
@@ -155,7 +155,7 @@ public class SelectTransportationMode extends AppCompatActivity {
 
                 }
             }
-        });
+        };
 
         btnCancel = (Button) findViewById (R.id.buttonCancelForTRansporttationModeSelected);
         btnCancel.setOnClickListener(new View.OnClickListener() {

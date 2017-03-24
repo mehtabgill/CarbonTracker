@@ -25,6 +25,8 @@ import ca.cmpt276.carbontracker.Model.GraphDataRetriever;
 import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
+import static ca.cmpt276.carbontracker.Model.GraphDataRetriever.GRAPH_MODE.DAY;
+
 /*
  * UI Class for displaying carbon footprint activity, either by table or by pie chart
  */
@@ -53,26 +55,17 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         getExtraFromIntent();
         GraphDataRetriever.setUpGraphData(graphMode, date);
         setContentView(R.layout.activity_view_carbon_footprint);
-        setupLayout();
+        setupLayout_Day();
         Intent tipsWindow = new Intent(ViewCarbonFootprintActivity.this, TipsActivity.class);
         tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_VIEW_FOOTPRINT);
         startActivity(tipsWindow);
-    }
-        switch (graphMode){
-            case DAY:
-                ROW_NUM = GraphDataRetriever.getEmissionArrayListSize() + 1;
-                ARRAY_SIZE = GraphDataRetriever.getEmissionArrayListSize();
-                emissionTypeList = GraphDataRetriever.getEmissionTypeList_Day();
-                emissionNameList = GraphDataRetriever.getEmissionNameList_Day();
-                carbonEmissionList = GraphDataRetriever.getEmissionValueList_Day();
-                setupLayout_Day();
-                setupPieChart();
-        }
-
-
-        Intent tipsWindow = new Intent(ViewCarbonFootprintActivity.this, TipsActivity.class);
-        tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_VIEW_FOOTPRINT);
-        startActivity(tipsWindow);
+        ROW_NUM = GraphDataRetriever.getEmissionArrayListSize() + 1;
+        ARRAY_SIZE = GraphDataRetriever.getEmissionArrayListSize();
+        emissionTypeList = GraphDataRetriever.getEmissionTypeList_Day();
+        emissionNameList = GraphDataRetriever.getEmissionNameList_Day();
+        carbonEmissionList = GraphDataRetriever.getEmissionValueList_Day();
+        setupLayout_Day();
+        setupPieChart();
     }
 
     private void setupLayout_Day() {
@@ -147,7 +140,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         if(extra != null){
             String selected_mode = extra.getString(MainMenuActivity.MODE_KEY);
             if (selected_mode.equals("1 DAY")){
-                graphMode = GraphDataRetriever.GRAPH_MODE.DAY;
+                graphMode = DAY;
             }
             else if(selected_mode.equals("LAST 28 DAY")){
                 graphMode = GraphDataRetriever.GRAPH_MODE.MONTH;

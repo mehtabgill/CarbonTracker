@@ -89,9 +89,6 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="nextTip">Next Tip</string>
-
-
-
     <string name="Car">Car</string>
     <string name="Bus">Bus</string>
     <string name="Skytrain">Skytrain</string>
@@ -99,7 +96,6 @@
     <string name="Walk">Walk</string>
     <string name="Journey">Journey</string>
     <string name="Utilities">Utilities</string>
-    <string name="nextTip">Next Tip</string>
     <string name="select_time_range_popup">Select your time range:</string>
     <string name="mode_1_day">1 DAY</string>
     <string name="mode_28_day">LAST 28 DAY</string>
