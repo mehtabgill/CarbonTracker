@@ -592,7 +592,7 @@ public class DBAdapter {
 
     public long findUtilities(Utilities utilities) {
 
-        Utilities.BILL type = utilities.getBillMode();
+        Utilities.BILL type = utilities.getBill();
         String billType = "";
         switch (type) {
             case ELECTRICITY:
@@ -839,7 +839,7 @@ public class DBAdapter {
     public boolean updateUtilities(long rowId, Utilities utilities) {
         String where = KEY_ROWID + "=" + rowId;
 
-        Utilities.BILL type = utilities.getBillMode();
+        Utilities.BILL type = utilities.getBill();
         String billType = "";
         switch (type) {
             case ELECTRICITY:
