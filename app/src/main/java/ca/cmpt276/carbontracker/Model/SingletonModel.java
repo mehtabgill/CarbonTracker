@@ -523,7 +523,7 @@ public class SingletonModel {
         return journeyCollection.getNumBus();
     }
 
-    public int getSkytrain(){
+    public int getSkytrain() {
         return journeyCollection.getNumSkytrain();
     }
 

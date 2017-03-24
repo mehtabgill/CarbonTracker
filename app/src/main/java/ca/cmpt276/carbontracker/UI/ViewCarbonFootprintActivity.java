@@ -1,5 +1,6 @@
 package ca.cmpt276.carbontracker.UI;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /*
@@ -44,6 +46,9 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_carbon_footprint);
         setupLayout();
+        Intent tipsWindow = new Intent(ViewCarbonFootprintActivity.this, TipsActivity.class);
+        tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_VIEW_FOOTPRINT);
+        startActivity(tipsWindow);
     }
 
     private void setupLayout() {
