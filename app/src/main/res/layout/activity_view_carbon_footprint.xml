@@ -39,10 +39,8 @@
         android:text="@string/switch_button" />
 
     <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/chart"
+        android:id="@+id/pieChart"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         />
-    //comment in to be commit-able
-
 </RelativeLayout>

@@ -95,5 +95,10 @@
     <string name="Walk">Walk</string>
     <string name="Journey">Journey</string>
     <string name="Utilities">Utilities</string>
-
+    <string name="nextTip">Next Tip</string>
+    <string name="select_time_range_popup">Select your time range:</string>
+    <string name="mode_1_day">1 DAY</string>
+    <string name="mode_28_day">LAST 28 DAY</string>
+    <string name="mode_365_day">LAST 365 DAY</string>
+    <string name="calendar_header">Select your date: </string>
 </resources>

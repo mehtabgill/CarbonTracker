@@ -1,5 +1,6 @@
 package ca.cmpt276.carbontracker.UI;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,11 +15,13 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import ca.cmpt276.carbontracker.Model.GraphDataRetriever;
+import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /*
@@ -40,24 +43,33 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
     ArrayList<String> emissionTypeList;
     ArrayList<String> emissionNameList;
     ArrayList<Float> carbonEmissionList;
+    Calendar date = Calendar.getInstance();
+    GraphDataRetriever.GRAPH_MODE graphMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getExtraFromIntent();
+        GraphDataRetriever.setUpGraphData(graphMode, date);
         setContentView(R.layout.activity_view_carbon_footprint);
-        Calendar date = Calendar.getInstance();
-        date.set(2017, 2, 24);
-        GraphDataRetriever.setUpGraphData(GraphDataRetriever.GRAPH_MODE.DAY, date);
-        ROW_NUM = GraphDataRetriever.getEmissionArrayListSize() + 1;
-        ARRAY_SIZE = GraphDataRetriever.getEmissionArrayListSize();
-        emissionTypeList = GraphDataRetriever.getEmissionTypeList();
-        emissionNameList = GraphDataRetriever.getEmissionNameList();
-        carbonEmissionList = GraphDataRetriever.getCarbonEmissionValueList();
-        setupLayout();
-        setupPieChart();
+        switch (graphMode){
+            case DAY:
+                ROW_NUM = GraphDataRetriever.getEmissionArrayListSize() + 1;
+                ARRAY_SIZE = GraphDataRetriever.getEmissionArrayListSize();
+                emissionTypeList = GraphDataRetriever.getEmissionTypeList_Day();
+                emissionNameList = GraphDataRetriever.getEmissionNameList_Day();
+                carbonEmissionList = GraphDataRetriever.getEmissionValueList_Day();
+                setupLayout_Day();
+                setupPieChart();
+        }
+
+
+        Intent tipsWindow = new Intent(ViewCarbonFootprintActivity.this, TipsActivity.class);
+        tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_VIEW_FOOTPRINT);
+        startActivity(tipsWindow);
     }
 
-    private void setupLayout() {
+    private void setupLayout_Day() {
         tableLayout = (TableLayout) findViewById(R.id.table_Layout);
         for (int row = 0; row < ROW_NUM; row++) {
             arrayIndex = row - 1;
@@ -105,7 +117,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
             }
 
             final Button pieChartButton = (Button) findViewById(R.id.switch_button);
-            chart = (PieChart) findViewById(R.id.chart);
+            chart = (PieChart) findViewById(R.id.pieChart);
             pieChartButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -118,6 +130,29 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+    }
+
+    private void setupLayout_Month(){
+    }
+
+    private void getExtraFromIntent(){
+        Bundle extra = getIntent().getExtras();
+        if(extra != null){
+            String selected_mode = extra.getString(MainMenuActivity.MODE_KEY);
+            if (selected_mode.equals("1 DAY")){
+                graphMode = GraphDataRetriever.GRAPH_MODE.DAY;
+            }
+            else if(selected_mode.equals("LAST 28 DAY")){
+                graphMode = GraphDataRetriever.GRAPH_MODE.MONTH;
+            }
+            else{
+                graphMode = GraphDataRetriever.GRAPH_MODE.YEAR;
+            }
+            int selected_date = extra.getInt(MainMenuActivity.SELECTED_DATE_KEY);
+            int selected_month = extra.getInt(MainMenuActivity.SELECTED_MONTH_KEY);
+            int selected_year = extra.getInt(MainMenuActivity.SELECTED_YEAR_KEY);
+            date.set(selected_year, selected_month, selected_date);
         }
     }
 

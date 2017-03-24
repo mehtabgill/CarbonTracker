@@ -84,29 +84,31 @@ public class Utilities extends Emission {
         Calendar currentCheckingDate = (Calendar) startDate.clone();
         Calendar endDateClone = (Calendar) endDate.clone();
         endDateClone.add(Calendar.DATE, 1);
+        boolean equal = false;
         while(!equalDate(currentCheckingDate, endDateClone)){
             if(equalDate(currentCheckingDate, date)) {
-                return true;
+                equal = true;
+                break;
             }
             else{
                 currentCheckingDate.add(Calendar.DAY_OF_YEAR, 1);
             }
         }
-        return false;
+        return equal;
     }
 
     private boolean equalDate(Calendar day1, Calendar day2){
-        if( (day1.get(Calendar.YEAR) == day2.get(Calendar.YEAR)) &&
-                (day1.get(Calendar.MONTH) == day2.get(Calendar.MONTH)) &&
-                (day1.get(Calendar.DATE) == day2.get(Calendar.DATE))) {
-            return true;
+        boolean equal = false;
+        boolean yearEqual = day1.get(Calendar.YEAR) == day2.get(Calendar.YEAR);
+        boolean monthEqual = day1.get(Calendar.MONTH) == day2.get(Calendar.MONTH);
+        boolean dateEqual = day1.get(Calendar.DATE) == day2.get(Calendar.DATE);
+        if((yearEqual && monthEqual) && dateEqual) {
+            equal = true;
         }
-        else{
-            return false;
-        }
+        return equal;
     }
 
-    public BILL getBillMode() {
+    public BILL getBill() {
         return billMode;
     }
 

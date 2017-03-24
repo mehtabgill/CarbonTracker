@@ -2,12 +2,9 @@ package ca.cmpt276.carbontracker.Model;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
 public class SingletonModel {
     //TODO: Move all code relating to car search to their own class
@@ -522,8 +519,27 @@ public class SingletonModel {
         return emissionArrayList;
     }
 
-    public Utilities getRelativeUtilitiesValue(Calendar date){
-        
+    public Utilities getRelativeUtilitiesValue(Calendar date, Utilities.BILL billType){
+        Utilities relativeUtilities = new Utilities();
+        Calendar dateForward = (Calendar) date.clone();
+        Calendar dateBackward = (Calendar) date.clone();
+        int maxDayDistance = 90;
+        int dayDistance = 1;
+
+        while (dayDistance <= maxDayDistance){
+            dateForward.add(Calendar.DATE, dayDistance);
+            dateBackward.add(Calendar.DATE, -dayDistance);
+            for(Utilities utilities : utilitiesCollection){
+                if ((utilities.dateIsInBillingPeriod(dateForward)) ||
+                        (utilities.dateIsInBillingPeriod(dateBackward)) ){
+                    if (utilities.getBill().equals(billType)){
+                        relativeUtilities = utilities;
+                    }
+                }
+            }
+            dayDistance++;
+        }
+        return relativeUtilities;
     }
 
 
@@ -544,7 +560,7 @@ public class SingletonModel {
         return journeyCollection.getNumBus();
     }
 
-    public int getSkytrain(){
+    public int getSkytrain() {
         return journeyCollection.getNumSkytrain();
     }
 
