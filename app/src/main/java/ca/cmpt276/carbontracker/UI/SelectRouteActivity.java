@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.Route;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
@@ -55,7 +56,7 @@ public class SelectRouteActivity extends AppCompatActivity {
     Button btnSelectRoute;
 
     //tips
-    static int counter = 0; //determines the priority
+    //static int counter = 0; //determines the priority
     //private LayoutInflater layoutInflater;
 
     @Override
@@ -73,8 +74,8 @@ public class SelectRouteActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
         //tip array for add_car_journey
-        Resources res = getResources();
-        final String[] carTips = res.getStringArray(R.array.add_car_journey);
+        //Resources res = getResources();
+        //final String[] carTips = res.getStringArray(R.array.add_car_journey);
         //*final RelativeLayout parent = new RelativeLayout(this);
 
 
@@ -91,10 +92,13 @@ public class SelectRouteActivity extends AppCompatActivity {
                 else{
                     selectedRouteName = spinner.getSelectedItem().toString();
                     model.addNewJourney(selectedCarDescription, selectedRouteName);
-                    //Toast.makeText(getApplicationContext(), "Journey added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Journey added", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(SelectRouteActivity.this, MainMenuActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
+                    //TODO delete later
+
+                    //*************************************************************************************
                     //show tip------------------------------------------------------------------------------
 
                     //**layoutInflater= (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -109,7 +113,7 @@ public class SelectRouteActivity extends AppCompatActivity {
                         }
 
                     }, 100L);*/
-
+                    /*
                     int latest = model.getJourneysCarbonEmissionList().size() - 1;
                     String s = model.getJourneysCarbonEmissionList().get(latest);
 
@@ -117,10 +121,15 @@ public class SelectRouteActivity extends AppCompatActivity {
                     counter++;
                     if(counter == 8)
                         counter = 0;
-
+                    */
                     //show tip-----------------------------------------------------------------------------
-
+                    //**************************************************************************************
+                    //end TODO
                     startActivity(intent);
+
+                    Intent tipsWindow = new Intent(SelectRouteActivity.this, TipsActivity.class);
+                    tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_SELECT_ROUTE);
+                    startActivity(tipsWindow);
 
                 }
             }

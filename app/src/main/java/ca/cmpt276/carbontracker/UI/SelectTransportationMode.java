@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.Bike;
 import ca.cmpt276.carbontracker.Model.Bus;
 import ca.cmpt276.carbontracker.Model.Route;
@@ -155,8 +156,12 @@ public class SelectTransportationMode extends AppCompatActivity {
                     if(counter == 8)
                         counter = 0;
 
-                    //Toast.makeText(SelectTransportationMode.this, "Journey Added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SelectTransportationMode.this, "Journey Added", Toast.LENGTH_SHORT).show();
                     finish();
+
+                    Intent tipsWindow = new Intent(SelectTransportationMode.this, TipsActivity.class);
+                    tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_SELECT_TRANSPORTATION_MODE);
+                    startActivity(tipsWindow);
 
 
                 }
