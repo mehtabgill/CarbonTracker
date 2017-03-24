@@ -18,23 +18,12 @@ public class RouteCollection implements Iterable<Route>{
     }
 
 
-    public void remove(String routeName){
-        for(Route route: routes){
-            if(route.getName().toLowerCase().equals(routeName.toLowerCase())){
-                remove(route);
-            }
-        }
+    public void remove(int index){
+        routes.remove(index);
     }
 
-    public void editRoute(String orignalName, String name, float cityDriveDistance, float highwayDriveDistance) {
-        for( Route route : this.routes){
-            if (route.getName().toLowerCase().equals(orignalName.toLowerCase()))
-            {
-                route.setName(name);
-                route.setCityDriveDistance(cityDriveDistance);
-                route.setHighwayDriveDistance(highwayDriveDistance);
-            }
-        }
+    public void editRoute(int index, Route route) {
+        routes.set(index, route);
     }
 
     public Route getRoute(int index){

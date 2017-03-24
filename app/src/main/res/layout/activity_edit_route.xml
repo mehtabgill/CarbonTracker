@@ -19,7 +19,7 @@
         android:layout_below="@+id/editTextEditRouteName"
         android:layout_marginTop="47dp"
         android:ems="10"
-        android:inputType="textPersonName|numberDecimal" />
+        android:inputType="numberDecimal" />
 
     <Button
         android:text="@string/cancel_text"
@@ -44,15 +44,15 @@
         android:layout_alignParentEnd="true" />
 
     <EditText
+        android:id="@+id/editTextEditRouteName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_marginTop="68dp"
-        android:id="@+id/editTextEditRouteName"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="68dp"
+        android:ems="10"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editTextEditHighway"
@@ -63,7 +63,7 @@
         android:layout_below="@+id/editTextEditCity"
         android:layout_marginTop="50dp"
         android:ems="10"
-        android:inputType="textPersonName|numberDecimal" />
+        android:inputType="numberDecimal" />
 
     <TextView
         android:text="@string/route_highway_distance_text"

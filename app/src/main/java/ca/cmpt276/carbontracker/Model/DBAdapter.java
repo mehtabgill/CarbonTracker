@@ -108,7 +108,6 @@ public class DBAdapter {
     public static final int COL_UTILITIES_END_DAY = 8;
     public static final int COL_UTILITIES_NUM_PPL = 9;
 
-    public static String[] ALL_KEYS;
 
     public static final String[] CAR_ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_MODEL, KEY_MAKE,
             KEY_YEAR, KEY_DISPLACEMENT_VOL, KEY_TRANSMISSION_TYPE, KEY_FUEL_TYPE, KEY_CITYMPG, KEY_HWYMPG};
@@ -303,7 +302,6 @@ public class DBAdapter {
         initialValues.put(KEY_ROUTE_NAME, name);
         initialValues.put(KEY_CITYDISTANCE, cityDistance);
         initialValues.put(KEY_HWYDISTANCE, hwyDistance);
-
 
         // Insert it into the database.
         return db.insert(DATABASE_ROUTE_TABLE, null, initialValues);
@@ -543,14 +541,169 @@ public class DBAdapter {
     }
 
     // Get a specific row (by rowId)
-    public Cursor getRow(long rowId) {
-        String where = KEY_ROWID + "=" + rowId;
-        Cursor c = 	db.query(true, DATABASE_TABLE, ALL_KEYS,
-                where, null, null, null, null, null);
+    public long findCar(Car car) {
+
+        String name = car.getNickname();
+        String model = car.getModel();
+        String make = car.getMake();
+        int year = car.getYear();
+        String displacementVol = car.getDisplacementVol();
+        String transmissionType = car.getTransmissionType();
+        String fuelType = car.getFuelType();
+        float cityMPG = car.getMilesPerGallonCity();
+        float hwyMPG = car.getMilesPerGallonHway();
+
+        String[] values = new String[]{name, model, make, String.valueOf(year), displacementVol,
+                                        transmissionType, fuelType, String.valueOf(cityMPG), String.valueOf(hwyMPG)};
+
+        String where = KEY_NAME + "=? and " + KEY_MODEL + "=? and " + KEY_MAKE + "=? and " +
+                KEY_YEAR + "=? and " + KEY_DISPLACEMENT_VOL + "=? and " + KEY_TRANSMISSION_TYPE + "=? and " +
+                KEY_FUEL_TYPE + "=? and " + KEY_CITYMPG + "=? and " + KEY_HWYMPG + "=?";
+
+        Cursor c = 	db.query(true, DATABASE_CAR_TABLE, CAR_ALL_KEYS,
+                where, values, null, null, null, null);
+        long id = -1;
+
         if (c != null) {
             c.moveToFirst();
+            id = c.getLong(COL_ROWID);
+            c.close();
         }
-        return c;
+        return id;
+    }
+
+    public long findRoute(Route route) {
+
+        String name = route.getName();
+        float cityDistance = route.getCityDriveDistance();
+        float hwyDistance = route.getHighwayDriveDistance();
+
+        String[] values = new String[]{name, String.valueOf(cityDistance), String.valueOf(hwyDistance)};
+
+        String where = KEY_ROUTE_NAME + "=? and " + KEY_CITYDISTANCE + "=? and " + KEY_HWYDISTANCE + "=?";
+
+        Cursor c = 	db.query(true, DATABASE_ROUTE_TABLE, ROUTE_ALL_KEYS,
+                where, values, null, null, null, null);
+
+        long id = -1;
+
+        if (c != null && c.moveToFirst()) {
+            id = c.getLong(COL_ROWID);
+            c.close();
+        }
+        return id;
+    }
+
+    public long findUtilities(Utilities utilities) {
+
+        Utilities.BILL type = utilities.getBillMode();
+        String billType = "";
+        switch (type) {
+            case ELECTRICITY:
+                billType = "ELECTRICITY";
+                break;
+            case GAS:
+                billType = "GAS";
+                break;
+        }
+        Calendar start = utilities.getStartDate();
+        Calendar end = utilities.getEndDate();
+        float amount = utilities.getElectricityAmount() + utilities.getGasAmount();
+        int numPpl = utilities.getNumberOfPeople();
+
+        int startYear = start.get(Calendar.YEAR);
+        int startMonth = start.get(Calendar.MONTH);
+        int startDay = start.get(Calendar.DAY_OF_MONTH);
+
+        int endYear = end.get(Calendar.YEAR);
+        int endMonth = end.get(Calendar.MONTH);
+        int endDay = end.get(Calendar.DAY_OF_MONTH);
+
+        String[] values = new String[]{billType, String.valueOf(amount), String.valueOf(startYear), String.valueOf(startMonth),
+                                        String.valueOf(startDay), String.valueOf(endYear), String.valueOf(endMonth),
+                                        String.valueOf(endDay), String.valueOf(numPpl)};
+
+        String where = KEY_BILL_TYPE + "=? and " + KEY_AMOUNT + "=? and " + KEY_START_YEAR + "=? and " +
+                        KEY_START_MONTH + "=? and " + KEY_START_DAY + "=? and " + KEY_END_YEAR + "=? and " +
+                        KEY_END_MONTH + "=? and " + KEY_END_DAY + "=? and " + KEY_NUM_PPL + "=?";
+
+        Cursor c = 	db.query(true, DATABASE_UTILITIES_TABLE, UTILITIES_ALL_KEYS,
+                where, values, null, null, null, null);
+        long id = -1;
+
+        if (c != null) {
+            c.moveToFirst();
+            id = c.getLong(COL_ROWID);
+            c.close();
+        }
+        return id;
+    }
+
+    public long findJourney(Journey journey) {
+
+        String[] values = new String[] {};
+        String where = "";
+
+        Transportation transportation = journey.getTransportation();
+        Route route = journey.getRoute();
+
+        String routeName = route.getName();
+        float cityDistance = route.getCityDriveDistance();
+        float hwyDistance = route.getHighwayDriveDistance();
+
+        Transportation.TRANSPORTATION_TYPE type = transportation.getType();
+        String transportationType = "";
+        switch (type) {
+            case CAR:
+                transportationType = "CAR";
+                Car car = (Car) transportation;
+                String name = car.getNickname();
+                String model = car.getModel();
+                String make = car.getMake();
+                int year = car.getYear();
+                String displacementVol = car.getDisplacementVol();
+                String transmissionType = car.getTransmissionType();
+                String fuelType = car.getFuelType();
+                float cityMPG = car.getMilesPerGallonCity();
+                float hwyMPG = car.getMilesPerGallonHway();
+
+                values = new String[]{transportationType, name, model, make, String.valueOf(year), displacementVol, transmissionType, fuelType,
+                        String.valueOf(cityMPG), String.valueOf(hwyMPG), routeName, String.valueOf(cityDistance), String.valueOf(hwyDistance)};
+
+                where = KEY_TYPE + "=? and " + KEY_NAME + "=? and " + KEY_MODEL + "=? and "
+                        + KEY_MAKE + "=? and " + KEY_YEAR + "=? and "+ KEY_DISPLACEMENT_VOL + "=? and "
+                        + KEY_TRANSMISSION_TYPE + "=? and " + KEY_FUEL_TYPE + "=? and " + KEY_CITYMPG + "=? and "
+                        + KEY_HWYMPG + "=? and " + KEY_ROUTE_NAME + "=? and " + KEY_CITYDISTANCE + "=? and "
+                        + KEY_HWYDISTANCE + "=?";
+                break;
+            case BUS:
+                transportationType = "BUS";
+                break;
+            case SKYTRAIN:
+                transportationType = "SKYTRAIN";
+                break;
+            case BIKE:
+                transportationType = "BIKE";
+                break;
+            case WALK:
+                transportationType = "WALK";
+                break;
+        }
+
+        if(type != Transportation.TRANSPORTATION_TYPE.CAR) {
+            values = new String[]{transportationType, routeName, String.valueOf(cityDistance), String.valueOf(hwyDistance)};
+            where = KEY_TYPE + "=? and " + KEY_ROUTE_NAME + "=? and " + KEY_CITYDISTANCE + "=? and " + KEY_HWYDISTANCE + "=?";
+        }
+        Cursor c = 	db.query(true, DATABASE_JOURNEY_TABLE, JOURNEY_ALL_KEYS,
+                where, values, null, null, null, null);
+        long id = -1;
+
+        if (c != null) {
+            c.moveToFirst();
+            id = c.getLong(COL_ROWID);
+            c.close();
+        }
+        return id;
     }
 
     // Change an existing row to be equal to new data.
@@ -616,12 +769,116 @@ public class DBAdapter {
         float hwyDistance = route.getHighwayDriveDistance();
 
         ContentValues newValues = new ContentValues();
-        newValues.put(KEY_NAME, name);
+        newValues.put(KEY_ROUTE_NAME, name);
         newValues.put(KEY_CITYDISTANCE, cityDistance);
         newValues.put(KEY_HWYDISTANCE, hwyDistance);
 
         // Insert it into the database.
         return db.update(DATABASE_ROUTE_TABLE, newValues, where, null) != 0;
+    }
+
+    public boolean updateJourney(long rowId, Journey journey) {
+        String where = KEY_ROWID + "=" + rowId;
+
+        Transportation transportation = journey.getTransportation();
+        Route route = journey.getRoute();
+        Transportation.TRANSPORTATION_TYPE type = transportation.getType();
+        ContentValues newValues = new ContentValues();
+
+        switch (type) {
+            case CAR:
+                Car car = (Car) transportation;
+                String name = car.getNickname();
+                String model = car.getModel();
+                String make = car.getMake();
+                int year = car.getYear();
+                String displacementVol = car.getDisplacementVol();
+                String transmissionType = car.getTransmissionType();
+                String fuelType = car.getFuelType();
+                float cityMPG = car.getMilesPerGallonCity();
+                float hwyMPG = car.getMilesPerGallonHway();
+
+                int value = Transportation.TRANSPORTATION_TYPE.CAR.ordinal();
+                newValues.put(KEY_TYPE, Transportation.TYPE[value]);
+                newValues.put(KEY_NAME, name);
+                newValues.put(KEY_MODEL, model);
+                newValues.put(KEY_MAKE, make);
+                newValues.put(KEY_YEAR, year);
+                newValues.put(KEY_DISPLACEMENT_VOL, displacementVol);
+                newValues.put(KEY_TRANSMISSION_TYPE, transmissionType);
+                newValues.put(KEY_FUEL_TYPE, fuelType);
+                newValues.put(KEY_CITYMPG, cityMPG);
+                newValues.put(KEY_HWYMPG, hwyMPG);
+                break;
+            case BUS:
+                value = Transportation.TRANSPORTATION_TYPE.BUS.ordinal();
+                newValues.put(KEY_TYPE, Transportation.TYPE[value]);
+                break;
+            case SKYTRAIN:
+                value = Transportation.TRANSPORTATION_TYPE.SKYTRAIN.ordinal();
+                newValues.put(KEY_TYPE, Transportation.TYPE[value]);
+                break;
+            case BIKE:
+                value = Transportation.TRANSPORTATION_TYPE.BIKE.ordinal();
+                newValues.put(KEY_TYPE, Transportation.TYPE[value]);
+                break;
+            case WALK:
+                value = Transportation.TRANSPORTATION_TYPE.WALK.ordinal();
+                newValues.put(KEY_TYPE, Transportation.TYPE[value]);
+                break;
+        }
+
+        String routeName = route.getName();
+        float cityDistance = route.getCityDriveDistance();
+        float hwyDistance = route.getHighwayDriveDistance();
+
+        newValues.put(KEY_ROUTE_NAME, routeName);
+        newValues.put(KEY_CITYDISTANCE, cityDistance);
+        newValues.put(KEY_HWYDISTANCE, hwyDistance);
+
+        // Insert it into the database.
+        return db.update(DATABASE_JOURNEY_TABLE, newValues, where, null) != 0;
+    }
+
+    public boolean updateUtilities(long rowId, Utilities utilities) {
+        String where = KEY_ROWID + "=" + rowId;
+
+        Utilities.BILL type = utilities.getBillMode();
+        String billType = "";
+        switch (type) {
+            case ELECTRICITY:
+                billType = "ELECTRICITY";
+                break;
+            case GAS:
+                billType = "GAS";
+                break;
+        }
+        Calendar start = utilities.getStartDate();
+        Calendar end = utilities.getEndDate();
+        float amount = utilities.getElectricityAmount() + utilities.getGasAmount();
+        int numPpl = utilities.getNumberOfPeople();
+
+        int startYear = start.get(Calendar.YEAR);
+        int startMonth = start.get(Calendar.MONTH);
+        int startDay = start.get(Calendar.DAY_OF_MONTH);
+
+        int endYear = end.get(Calendar.YEAR);
+        int endMonth = end.get(Calendar.MONTH);
+        int endDay = end.get(Calendar.DAY_OF_MONTH);
+
+        ContentValues newValues = new ContentValues();
+        newValues.put(KEY_BILL_TYPE, billType);
+        newValues.put(KEY_AMOUNT, amount);
+        newValues.put(KEY_START_YEAR, startYear);
+        newValues.put(KEY_START_MONTH, startMonth);
+        newValues.put(KEY_START_DAY, startDay);
+        newValues.put(KEY_END_YEAR, endYear);
+        newValues.put(KEY_END_MONTH, endMonth);
+        newValues.put(KEY_END_DAY, endDay);
+        newValues.put(KEY_NUM_PPL, numPpl);
+
+        // Insert it into the database.
+        return db.update(DATABASE_UTILITIES_TABLE, newValues, where, null) != 0;
     }
 
 
