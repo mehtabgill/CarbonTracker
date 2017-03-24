@@ -96,7 +96,7 @@ public class TipsActivity extends AppCompatActivity {
 
         TextView tip = (TextView) findViewById(R.id.tip);
 
-        tip.setText(carTips[carTipsCounter]+s);
+        tip.setText(carTips[carTipsCounter]+s+" kg");
 
         carTipsCounter++;
         if(carTipsCounter == 8)
@@ -116,7 +116,7 @@ public class TipsActivity extends AppCompatActivity {
 
         if(notCarTipsCounter<4) {
 
-            tip.setText(notCarTips[notCarTipsCounter]+s);
+            tip.setText(notCarTips[notCarTipsCounter]+s+" kg");
         }
         else if (notCarTipsCounter==4){ //walks (need searchByDate for JourneyCollection)
             s = model.getWalks()+"";
@@ -160,7 +160,7 @@ public class TipsActivity extends AppCompatActivity {
 
         if(generalTipsCounter<4) {
 
-            tip.setText(generalTips[generalTipsCounter]+s);
+            tip.setText(generalTips[generalTipsCounter]+s+" kg");
         }
         else if (generalTipsCounter==4){ //walks (need searchByDate for JourneyCollection)
             s = model.getWalks()+"";
