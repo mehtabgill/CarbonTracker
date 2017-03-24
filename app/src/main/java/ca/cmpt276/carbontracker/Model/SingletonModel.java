@@ -501,4 +501,20 @@ public class SingletonModel {
         return journeyCollection.getNumSkytrain();
     }
 
+    public int getWalks(){
+        return journeyCollection.getNumWalk();
+    }
+
+    public int getBike(){
+        return journeyCollection.getNumBike();
+    }
+
+    public int getBus(){
+        return journeyCollection.getNumBus();
+    }
+
+    public int getSkytrain() {
+        return journeyCollection.getNumSkytrain();
+    }
+
 }
