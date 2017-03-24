@@ -1,6 +1,7 @@
 package ca.cmpt276.carbontracker.UI;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.Bike;
 import ca.cmpt276.carbontracker.Model.Bus;
 import ca.cmpt276.carbontracker.Model.Route;
@@ -28,6 +30,10 @@ public class SelectTransportationMode extends AppCompatActivity {
     ArrayList<String> TransportationModeList = new ArrayList<>() ;
     Button btnOk ;
     Button btnCancel ;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +80,9 @@ public class SelectTransportationMode extends AppCompatActivity {
 
 
 
+
+
+
         btnOk = (Button) findViewById(R.id.buttonOkForSelectedTransportationMode);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,8 +126,14 @@ public class SelectTransportationMode extends AppCompatActivity {
                         model.addNewJourney(newTransportation, newRoute);
                     }
 
+
+
                     Toast.makeText(SelectTransportationMode.this, "Journey Added", Toast.LENGTH_SHORT).show();
                     finish();
+
+                    Intent tipsWindow = new Intent(SelectTransportationMode.this, TipsActivity.class);
+                    tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_SELECT_TRANSPORTATION_MODE);
+                    startActivity(tipsWindow);
 
 
                 }

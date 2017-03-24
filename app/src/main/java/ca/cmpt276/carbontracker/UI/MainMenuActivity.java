@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.DataReader;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
@@ -72,6 +73,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 break;
             case VIEW_CARBON_FOOTPRINT:
                 startActivity(new Intent(MainMenuActivity.this, ViewCarbonFootprintActivity.class));
+
                 break;
             case EDIT_DELETE_UTILTITY:
                 startActivity(new Intent(MainMenuActivity.this, EditDeleteUtilitiesActivity.class));

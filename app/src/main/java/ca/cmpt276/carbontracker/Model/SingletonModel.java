@@ -368,6 +368,7 @@ public class SingletonModel {
 
     }
 
+
     public Route getRouteByName(String name){
         Route returnRoute = new Route();
         for (Route route: routeCollection){
@@ -482,6 +483,22 @@ public class SingletonModel {
         routeCollection.editRoute(originalName, newName, newCity, newHighway);
         Route route = new Route(newName, newCity, newHighway);
         long id = database.findRoute(route);
+    }
+
+    public int getWalks(){
+        return journeyCollection.getNumWalk();
+    }
+
+    public int getBike(){
+        return journeyCollection.getNumBike();
+    }
+
+    public int getBus(){
+        return journeyCollection.getNumBus();
+    }
+
+    public int getSkytrain(){
+        return journeyCollection.getNumSkytrain();
     }
 
 }

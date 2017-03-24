@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="add_car_journey">
+        <item>Hold on! Consider taking the bus! This trip cost you this much CO2: </item>
+        <item>Next time consider public transit! CO2 used: </item>
+        <item>Why don\'t you bike instead? CO2 you will save = </item>
+        <item>Consider walking part way next time! You will emit less CO2! You\'ve emitted this much: </item>
+        <item>Did you have to drive today? This is how much CO2 was wasted: </item>
+        <item>Stop driving so much! Save the environment! CO2 produced this trip: </item>
+        <item>Be greener! CO2 used: </item>
+        <item>Save the Earth!! CO2 used: </item>
+    </string-array>
+
+    <string-array name="general">
+        <item>This is how much CO2 you\'ve used:  </item>
+        <item>CO2 used is over 9000!! J.K it\'s actually:  </item>
+        <item>Walk more! You\'ve used so much CO2: </item>
+        <item>Be nicer to the environment! CO2 used: </item>
+        <item>This is how many walks you\'ve logged: </item>
+        <item>Let\'s save the Earth together! Number of bike trips you\'ve made: </item>
+        <item>Be greener! This is the number of times you\'ve taken the bus: </item>
+        <item>Number of times you\'ve taken the skytrain to date: </item>
+    </string-array>
+
+    <string-array name="add_not_car">
+        <item>Great Job! You\'ve only spent this much CO2 this trip: </item>
+        <item>Good Job! Amount of CO2 used: </item>
+        <item>You are saving our environment! CO2 used: </item>
+        <item>You are helping save the Earth! Co2 used this trip: </item>
+        <item>Doing well! Number of walks you\'ve had in total: </item>
+        <item>Nice! Number of times you\'ve ridden the bike overall: </item>
+        <item>You are being green! Number of times you\'ve taken the bus ever:  </item>
+        <item>Very good! Number of times you\'ve taken the skytrain:  </item>
+    </string-array>
+</resources>
