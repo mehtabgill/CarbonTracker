@@ -387,8 +387,11 @@ public class SingletonModel {
         routeCollection.add(route);
     }
 
-    public void removeFromRouteCollection(String routeName){
-        routeCollection.remove(routeName);
+    public void removeFromRouteCollection(int index){
+        Route route = routeCollection.getRoute(index);
+        long id = database.findRoute(route);
+        database.deleteRouteRow(id);
+        routeCollection.remove(index);
     }
 
     public ArrayList<String> getRouteCollectionNames(){
@@ -479,10 +482,16 @@ public class SingletonModel {
         }
     }
 
-    public void editRoute(String originalName, String newName, float newCity, float newHighway){
-        routeCollection.editRoute(originalName, newName, newCity, newHighway);
+    public void editRoute(int index, String newName, float newCity, float newHighway){
         Route route = new Route(newName, newCity, newHighway);
-        long id = database.findRoute(route);
+        Route oldRoute = routeCollection.getRoute(index);
+        long id = database.findRoute(oldRoute);
+        database.updateRoute(id, route);
+        routeCollection.editRoute(index, route);
+    }
+
+    public Route getRoute(int index) {
+        return routeCollection.getRoute(index);
     }
 
     public int getWalks(){

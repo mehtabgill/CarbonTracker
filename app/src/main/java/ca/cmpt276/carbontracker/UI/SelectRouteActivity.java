@@ -2,19 +2,12 @@ package ca.cmpt276.carbontracker.UI;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -43,11 +36,11 @@ public class SelectRouteActivity extends AppCompatActivity {
     public static final String EDITED_NAME_STRING = "editedName";
     public static final String EDITED_HIGHWAY_STRING = "editedHighway";
     public static final String EDITED_CITY_STRING = "editedCity";
-    public static final String SIGNAL_ORIGINAL_NAME_STRING = "signalOrignalName";
-    public final String NEW_ADDED_NAME_STRING = "NewAddedName";
-    public final String NEW_ADDED_CITY_STRING = "NewAddedCity";
-    public final String NEW_ADDED_HIGHWAY_STRING = "NewAddedHighway";
-    public final String SIGNAL_DELETING_NAME = "signalDeletingName";
+    public static final String SIGNAL_ORIGINAL_INDEX = "signalOrignalIndex";
+    public static final String NEW_ADDED_NAME_STRING = "NewAddedName";
+    public static final String NEW_ADDED_CITY_STRING = "NewAddedCity";
+    public static final String NEW_ADDED_HIGHWAY_STRING = "NewAddedHighway";
+    public static final String SIGNAL_DELETING_INDEX = "signalDeletingName";
     String selectedRoute;
     String ERROR_NO_ROUTE;
     Button btnAddRoute;
@@ -148,14 +141,14 @@ public class SelectRouteActivity extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedRouteName = spinner.getSelectedItem().toString();
-                if(selectedRouteName.isEmpty()){
+                if(spinner.getCount() == 0){
                     Toast.makeText(SelectRouteActivity.this,
                             getString(R.string.error_no_route_selected),
                             Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Intent intent = DeleteRouteActivity.intentMakerDeleteRoute(SelectRouteActivity.this, orignalName);
+                    Intent intent = new Intent(getApplicationContext(), DeleteRouteActivity.class);
+                    intent.putExtra(SIGNAL_DELETING_INDEX, spinner.getSelectedItemPosition());
                     startActivityForResult(intent, REQUEST_CODE_LaunchDeleteRoute);
                 }
 
@@ -166,13 +159,14 @@ public class SelectRouteActivity extends AppCompatActivity {
         btnEditRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedRouteName = spinner.getSelectedItem().toString();
-                if (selectedRouteName.isEmpty()) {
+
+                if (spinner.getCount() == 0) {
                     Toast.makeText(SelectRouteActivity.this,
                             getString(R.string.error_no_route_selected),
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = EditRouteActivity.intentMakerEditRoute(SelectRouteActivity.this, orignalName);
+                    Intent intent = new Intent(getApplicationContext(), EditRouteActivity.class);
+                    intent.putExtra(SIGNAL_ORIGINAL_INDEX, spinner.getSelectedItemPosition());
                     startActivityForResult(intent, REQUEST_CODE_EditRoute);
                 }
             }
@@ -205,31 +199,34 @@ public class SelectRouteActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data.hasExtra(EDITED_NAME_STRING) && data.hasExtra(EDITED_CITY_STRING) && data.hasExtra(EDITED_HIGHWAY_STRING) && data.hasExtra(SIGNAL_ORIGINAL_NAME_STRING)) {
-            String newName = data.getStringExtra(EDITED_NAME_STRING);
-            float newCity = data.getFloatExtra(EDITED_CITY_STRING, 0);
-            float newHighway = data.getFloatExtra(EDITED_HIGHWAY_STRING, 0);
-            String orignalName = data.getStringExtra(SIGNAL_ORIGINAL_NAME_STRING);
-            model.editRoute(orignalName, newName, newCity, newHighway);
-        }
-        switch(requestCode) {
-        case REQUEST_CODE_LauchAddRoute:
-            if (resultCode == Activity.RESULT_OK) {
+        if(resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_LauchAddRoute:
+                    name = data.getStringExtra(NEW_ADDED_NAME_STRING);
 
-                name = data.getStringExtra(NEW_ADDED_NAME_STRING);
+                    CityDriveDistance = data.getFloatExtra(NEW_ADDED_CITY_STRING, 0);
 
-                CityDriveDistance = data.getFloatExtra(NEW_ADDED_CITY_STRING, 0);
-
-                HighwayDriveDistance = data.getFloatExtra(NEW_ADDED_HIGHWAY_STRING, 0);
-                Route newRoute = new Route(name, CityDriveDistance, HighwayDriveDistance);
-                model.addNewRoute(newRoute);
-        }
-        case REQUEST_CODE_LaunchDeleteRoute:
-            if (resultCode == Activity.RESULT_OK) {
-                String deletingName = data.getStringExtra(SIGNAL_DELETING_NAME);
-                if (data.hasExtra(SIGNAL_DELETING_NAME)) {
-                    model.removeFromRouteCollection(deletingName);
-                }
+                    HighwayDriveDistance = data.getFloatExtra(NEW_ADDED_HIGHWAY_STRING, 0);
+                    Route newRoute = new Route(name, CityDriveDistance, HighwayDriveDistance);
+                    model.addNewRoute(newRoute);
+                    if(!btnDelete.isEnabled() || !btnEditRoute.isEnabled()){
+                        btnDelete.setEnabled(true);
+                        btnEditRoute.setEnabled(true);
+                    }
+                    break;
+                case REQUEST_CODE_LaunchDeleteRoute:
+                    int deletingIndex = data.getIntExtra(SIGNAL_DELETING_INDEX, 0);
+                    if (data.hasExtra(SIGNAL_DELETING_INDEX)) {
+                        model.removeFromRouteCollection(deletingIndex);
+                    }
+                    break;
+                case REQUEST_CODE_EditRoute:
+                    String newName = data.getStringExtra(EDITED_NAME_STRING);
+                    float newCity = data.getFloatExtra(EDITED_CITY_STRING, 0);
+                    float newHighway = data.getFloatExtra(EDITED_HIGHWAY_STRING, 0);
+                    int orignalIndex = data.getIntExtra(SIGNAL_ORIGINAL_INDEX, 0);
+                    model.editRoute(orignalIndex, newName, newCity, newHighway);
+                    break;
             }
         }
     }
@@ -241,6 +238,10 @@ public class SelectRouteActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner spinner = (Spinner) findViewById(R.id.select_route_spinner);
         spinner.setAdapter(adapter);
+        if(spinner.getCount() == 0) {
+            btnDelete.setEnabled(false);
+            btnEditRoute.setEnabled(false);
+        }
 
     }
     private void receiveDescription(){

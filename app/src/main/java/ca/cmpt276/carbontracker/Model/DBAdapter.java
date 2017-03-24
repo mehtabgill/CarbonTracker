@@ -303,7 +303,6 @@ public class DBAdapter {
         initialValues.put(KEY_CITYDISTANCE, cityDistance);
         initialValues.put(KEY_HWYDISTANCE, hwyDistance);
 
-
         // Insert it into the database.
         return db.insert(DATABASE_ROUTE_TABLE, null, initialValues);
     }
@@ -585,10 +584,10 @@ public class DBAdapter {
 
         Cursor c = 	db.query(true, DATABASE_ROUTE_TABLE, ROUTE_ALL_KEYS,
                 where, values, null, null, null, null);
+
         long id = -1;
 
-        if (c != null) {
-            c.moveToFirst();
+        if (c != null && c.moveToFirst()) {
             id = c.getLong(COL_ROWID);
             c.close();
         }
@@ -770,7 +769,7 @@ public class DBAdapter {
         float hwyDistance = route.getHighwayDriveDistance();
 
         ContentValues newValues = new ContentValues();
-        newValues.put(KEY_NAME, name);
+        newValues.put(KEY_ROUTE_NAME, name);
         newValues.put(KEY_CITYDISTANCE, cityDistance);
         newValues.put(KEY_HWYDISTANCE, hwyDistance);
 

@@ -16,20 +16,20 @@ import ca.cmpt276.carbontracker.UI.R;
 
 public class DeleteRouteActivity extends AppCompatActivity {
 
-    String name ;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_route);
-        ExtractdataFRomIntent();
+
+        Intent intent = getIntent() ;
+        final int index = intent.getIntExtra(SelectRouteActivity.SIGNAL_DELETING_INDEX, 0) ;
 
         Button btnDelete = (Button) findViewById(R.id.buttonDeleteitforMe) ;
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent() ;
-                intent1.putExtra("signalDeletingName", name) ;
+                intent1.putExtra(SelectRouteActivity.SIGNAL_DELETING_INDEX, index) ;
                 setResult(Activity.RESULT_OK , intent1);
                 finish();
             }
@@ -38,21 +38,12 @@ public class DeleteRouteActivity extends AppCompatActivity {
         btnCancelDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(Activity.RESULT_CANCELED);
                 finish();
             }
         });
 
     }
-    private void ExtractdataFRomIntent() {
-        Intent intent = getIntent() ;
-        intent.hasExtra("signaldeleteName11");
-        name = intent.getStringExtra("signaldeleteName11") ;
-    }
 
-    public static Intent intentMakerDeleteRoute(Context context, String name){
-        Intent intent  =  new Intent(context, DeleteRouteActivity.class);
-        intent.putExtra("signaldeleteName11" , name) ;
-        return intent ;
-    }
 }
 
