@@ -13,7 +13,7 @@ import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /**
- * Created by RoronoaZoro on 3/23/2017.
+ * Responsible for displaying pop up window with tips
  */
 
 
