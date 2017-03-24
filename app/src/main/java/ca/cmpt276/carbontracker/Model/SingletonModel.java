@@ -2,9 +2,16 @@ package ca.cmpt276.carbontracker.Model;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
+
+/**
+ * Created by Elvin Laptop on 2017-03-06.
+ */
 
 public class SingletonModel {
     //TODO: Move all code relating to car search to their own class
@@ -95,6 +102,7 @@ public class SingletonModel {
                 currentCarCollection.add(car);
             } while(cursor.moveToNext());
         }
+        cursor.close();
     }
 
     private void loadRoutesFromDB() {
@@ -109,6 +117,7 @@ public class SingletonModel {
                 routeCollection.add(route);
             } while(cursor.moveToNext());
         }
+        cursor.close();
     }
 
     private void loadJourneysFromDB() {
@@ -161,6 +170,7 @@ public class SingletonModel {
 
             } while(cursor.moveToNext());
         }
+        cursor.close();
     }
 
     private void loadUtilitiesFromDB() {
@@ -191,6 +201,7 @@ public class SingletonModel {
 
             } while(cursor.moveToNext());
         }
+        cursor.close();
     }
 
     public ArrayList<String> getCarModelsOfMake(String make){
@@ -269,6 +280,15 @@ public class SingletonModel {
         currentCarCollection.setDescriptionNoNicknameList(updatedDescriptionNoNickname);
     }
 
+    public void removeCar(String description){
+        for(Car car: currentCarCollection){
+            if(car.getDescription().equals(description)){
+                currentCarCollection.remove(car);
+                long id = database.findCar(car);
+                database.deleteCarRow(id);
+            }
+        }
+    }
 
 
     public void setTotalCarCollection(CarCollection totalCarCollection){
@@ -342,7 +362,7 @@ public class SingletonModel {
             if(car.getDescription().equals(description)){
                 index = currentCarCollection.getIndex(car);
                 currentCarCollection.set(index, newCar);
-                long id = findCarInDataBase(car);
+                long id = database.findCar(car);
                 database.updateCar(id, newCar);
             }
         }
@@ -359,38 +379,6 @@ public class SingletonModel {
             }
         }
         currentCarCollection.remove(index);
-    }
-
-    private long findCarInDataBase(Car findCar) {
-        Cursor cursor = database.getAllCarRows();
-        if(cursor.moveToFirst()) {
-            do {
-                long id = cursor.getLong(DBAdapter.COL_ROWID);
-                String name = cursor.getString(DBAdapter.COL_CAR_NAME);
-                String model = cursor.getString(DBAdapter.COL_CAR_MODEL);
-                String make = cursor.getString(DBAdapter.COL_CAR_MAKE);
-                int year = cursor.getInt(DBAdapter.COL_CAR_YEAR);
-                String displacement = cursor.getString(DBAdapter.COL_CAR_DISPLACEMENT_VOL);
-                String transmission = cursor.getString(DBAdapter.COL_CAR_TRANSMISSION_TYPE);
-                String fuelType = cursor.getString(DBAdapter.COL_CAR_FUEL_TYPE);
-                float cityMPG = cursor.getFloat(DBAdapter.COL_CAR_CITYMPG);
-                float hwyMPG = cursor.getFloat(DBAdapter.COL_CAR_HWYMPG);
-
-                Car car = new Car(make, model, year, displacement, transmission);
-                car.setNickname(name);
-                car.setFuelType(fuelType);
-                car.setMilesPerGallonCity(cityMPG);
-                car.setMilesPerGallonHway(hwyMPG);
-
-                if(findCar.getDescription().equals(car.getDescription())){
-                    return id;
-                }
-
-
-
-            } while(cursor.moveToNext());
-        }
-        return -1;
     }
 
     public Route getRouteByName(String name){
@@ -411,8 +399,11 @@ public class SingletonModel {
         routeCollection.add(route);
     }
 
-    public void removeFromRouteCollection(String routeName){
-        routeCollection.remove(routeName);
+    public void removeFromRouteCollection(int index){
+        Route route = routeCollection.getRoute(index);
+        long id = database.findRoute(route);
+        database.deleteRouteRow(id);
+        routeCollection.remove(index);
     }
 
     public ArrayList<String> getRouteCollectionNames(){
@@ -437,6 +428,7 @@ public class SingletonModel {
     public void addNewJourney(Transportation newTransportation, Route newRoute){
         Journey newJourney = new Journey(newTransportation, newRoute);
         journeyCollection.add(newJourney);
+        addToJourneyDB(newJourney);
     }
 
     public int getJourneyCollectionSize(){
@@ -485,6 +477,9 @@ public class SingletonModel {
         int index = 0;
         for(Utilities utilities : utilitiesCollection){
             if(utilities.toString().equals(description)){
+                utilitiesCollection.remove(utilities);
+                long id = database.findUtilities(utilities);
+                database.deleteUtilitiesRow(id);
                 index = utilitiesCollection.getIndex(utilities);
             }
         }
@@ -495,6 +490,21 @@ public class SingletonModel {
         int index = 0;
         for(Utilities utilities : utilitiesCollection){
             if (utilities.toString().equals(originalUtilities)){
+                int index = utilitiesCollection.getIndex(utilities);
+                utilitiesCollection.set(index, editedUtilities);
+                long id = database.findUtilities(utilities);
+                database.updateUtilities(id, editedUtilities);
+            }
+        }
+    }
+
+    public void editRoute(int index, String newName, float newCity, float newHighway){
+        Route route = new Route(newName, newCity, newHighway);
+        Route oldRoute = routeCollection.getRoute(index);
+        long id = database.findRoute(oldRoute);
+        database.updateRoute(id, route);
+        routeCollection.editRoute(index, route);
+    }
                 index = utilitiesCollection.getIndex(utilities);
                 utilitiesCollection.set(index, editedUtilities);
             }
@@ -544,8 +554,8 @@ public class SingletonModel {
 
 
 
-    public void editRoute(String originalName, String newName, float newCity, float newHighway){
-        routeCollection.editRoute(originalName, newName, newCity, newHighway);
+    public Route getRoute(int index) {
+        return routeCollection.getRoute(index);
     }
 
     public int getWalks(){

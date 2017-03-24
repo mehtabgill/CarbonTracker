@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.GraphDataRetriever;
 import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
@@ -52,6 +53,11 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         getExtraFromIntent();
         GraphDataRetriever.setUpGraphData(graphMode, date);
         setContentView(R.layout.activity_view_carbon_footprint);
+        setupLayout();
+        Intent tipsWindow = new Intent(ViewCarbonFootprintActivity.this, TipsActivity.class);
+        tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_VIEW_FOOTPRINT);
+        startActivity(tipsWindow);
+    }
         switch (graphMode){
             case DAY:
                 ROW_NUM = GraphDataRetriever.getEmissionArrayListSize() + 1;

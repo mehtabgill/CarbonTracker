@@ -31,6 +31,8 @@ public class SelectTransportationMode extends AppCompatActivity {
     Button btnOk ;
     Button btnCancel ;
 
+    //tips
+    static int counter = 0; //determines the priority
 
 
 
@@ -90,7 +92,9 @@ public class SelectTransportationMode extends AppCompatActivity {
         });
 
 
-
+        //tip array for add_not_car
+        Resources res = getResources();
+        final String[] carTips = res.getStringArray(R.array.add_not_car);
 
 
 
@@ -137,7 +141,10 @@ public class SelectTransportationMode extends AppCompatActivity {
                         model.addNewJourney(newTransportation, newRoute);
                     }
 
+                    int latest = model.getJourneysCarbonEmissionList().size() - 1;
+                    String s = model.getJourneysCarbonEmissionList().get(latest);
 
+                    if(counter<4) {
 
                     Toast.makeText(SelectTransportationMode.this, "Journey Added", Toast.LENGTH_SHORT).show();
                     finish();
@@ -146,12 +153,11 @@ public class SelectTransportationMode extends AppCompatActivity {
                     tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_SELECT_TRANSPORTATION_MODE);
                     startActivity(tipsWindow);
 
-
                 }
             }
         });
 
-        btnCancel = (Button) findViewById(R.id.buttonCancelForTRansporttationModeSelected);
+        btnCancel = (Button) findViewById (R.id.buttonCancelForTRansporttationModeSelected);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

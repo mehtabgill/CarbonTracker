@@ -15,9 +15,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
+import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import java.util.Calendar;
 
 import ca.cmpt276.carbontracker.Model.DataReader;
+import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /*
  * UI class to display main menu, including create new journey and view current carbon emission
