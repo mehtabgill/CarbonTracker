@@ -101,6 +101,7 @@ public class SingletonModel {
                 currentCarCollection.add(car);
             } while(cursor.moveToNext());
         }
+        cursor.close();
     }
 
     private void loadRoutesFromDB() {
@@ -115,6 +116,7 @@ public class SingletonModel {
                 routeCollection.add(route);
             } while(cursor.moveToNext());
         }
+        cursor.close();
     }
 
     private void loadJourneysFromDB() {
@@ -167,6 +169,7 @@ public class SingletonModel {
 
             } while(cursor.moveToNext());
         }
+        cursor.close();
     }
 
     private void loadUtilitiesFromDB() {
@@ -197,6 +200,7 @@ public class SingletonModel {
 
             } while(cursor.moveToNext());
         }
+        cursor.close();
     }
 
     public ArrayList<String> getCarModelsOfMake(String make){
@@ -279,7 +283,7 @@ public class SingletonModel {
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
                 currentCarCollection.remove(car);
-                long id = findCarInDataBase(car);
+                long id = database.findCar(car);
                 database.deleteCarRow(id);
             }
         }
@@ -357,43 +361,11 @@ public class SingletonModel {
             if(car.getDescription().equals(description)){
                 index = currentCarCollection.getIndex(car);
                 currentCarCollection.set(index, newCar);
-                long id = findCarInDataBase(car);
+                long id = database.findCar(car);
                 database.updateCar(id, newCar);
             }
         }
 
-    }
-
-    private long findCarInDataBase(Car findCar) {
-        Cursor cursor = database.getAllCarRows();
-        if(cursor.moveToFirst()) {
-            do {
-                long id = cursor.getLong(DBAdapter.COL_ROWID);
-                String name = cursor.getString(DBAdapter.COL_CAR_NAME);
-                String model = cursor.getString(DBAdapter.COL_CAR_MODEL);
-                String make = cursor.getString(DBAdapter.COL_CAR_MAKE);
-                int year = cursor.getInt(DBAdapter.COL_CAR_YEAR);
-                String displacement = cursor.getString(DBAdapter.COL_CAR_DISPLACEMENT_VOL);
-                String transmission = cursor.getString(DBAdapter.COL_CAR_TRANSMISSION_TYPE);
-                String fuelType = cursor.getString(DBAdapter.COL_CAR_FUEL_TYPE);
-                float cityMPG = cursor.getFloat(DBAdapter.COL_CAR_CITYMPG);
-                float hwyMPG = cursor.getFloat(DBAdapter.COL_CAR_HWYMPG);
-
-                Car car = new Car(make, model, year, displacement, transmission);
-                car.setNickname(name);
-                car.setFuelType(fuelType);
-                car.setMilesPerGallonCity(cityMPG);
-                car.setMilesPerGallonHway(hwyMPG);
-
-                if(findCar.getDescription().equals(car.getDescription())){
-                    return id;
-                }
-
-
-
-            } while(cursor.moveToNext());
-        }
-        return -1;
     }
 
     public Route getRouteByName(String name){
@@ -440,6 +412,7 @@ public class SingletonModel {
     public void addNewJourney(Transportation newTransportation, Route newRoute){
         Journey newJourney = new Journey(newTransportation, newRoute);
         journeyCollection.add(newJourney);
+        addToJourneyDB(newJourney);
     }
 
     public int getJourneyCollectionSize(){
@@ -488,6 +461,8 @@ public class SingletonModel {
         for(Utilities utilities : utilitiesCollection){
             if(utilities.toString().equals(description)){
                 utilitiesCollection.remove(utilities);
+                long id = database.findUtilities(utilities);
+                database.deleteUtilitiesRow(id);
             }
         }
     }
@@ -496,19 +471,17 @@ public class SingletonModel {
         for(Utilities utilities : utilitiesCollection){
             if (utilities.toString().equals(originalUtilities)){
                 int index = utilitiesCollection.getIndex(utilities);
-                utilitiesCollection.remove(utilities);
-                if(utilitiesCollection.size() == 0){
-                    utilitiesCollection.add(editedUtilities);
-                }
-                else{
-                    utilitiesCollection.add(index, editedUtilities);
-                }
+                utilitiesCollection.set(index, editedUtilities);
+                long id = database.findUtilities(utilities);
+                database.updateUtilities(id, editedUtilities);
             }
         }
     }
 
     public void editRoute(String originalName, String newName, float newCity, float newHighway){
         routeCollection.editRoute(originalName, newName, newCity, newHighway);
+        Route route = new Route(newName, newCity, newHighway);
+        long id = database.findRoute(route);
     }
 
 }
