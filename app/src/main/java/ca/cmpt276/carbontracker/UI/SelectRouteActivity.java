@@ -130,7 +130,6 @@ public class SelectRouteActivity extends AppCompatActivity {
                     Intent tipsWindow = new Intent(SelectRouteActivity.this, TipsActivity.class);
                     tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_SELECT_ROUTE);
                     startActivity(tipsWindow);
-
                 }
             }
         });

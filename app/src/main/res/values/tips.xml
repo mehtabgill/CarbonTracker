@@ -13,14 +13,14 @@
     </string-array>
 
     <string-array name="general">
-        <item>This is how much CO2 you\'ve used this week:  </item>
-        <item>CO2 used this week is over 9000!! J.K it\'s actually:  </item>
-        <item>Walk more! You\'ve used so much CO2 this week: </item>
+        <item>This is how much CO2 you\'ve used:  </item>
+        <item>CO2 used is over 9000!! J.K it\'s actually:  </item>
+        <item>Walk more! You\'ve used so much CO2: </item>
         <item>Be nicer to the environment! CO2 used: </item>
-        <item>Let\'s save the Earth together! Number of car trips you\'ve made this week: </item>
-        <item>This is how many walks you\'ve logged this week: </item>
-        <item>Be greener! This is the amount of CO2 for this week: </item>
-        <item>Number of times you\'ve ridden the bike this week: </item>
+        <item>This is how many walks you\'ve logged: </item>
+        <item>Let\'s save the Earth together! Number of bike trips you\'ve made: </item>
+        <item>Be greener! This is the number of times you\'ve taken the bus: </item>
+        <item>Number of times you\'ve taken the skytrain to date: </item>
     </string-array>
 
     <string-array name="add_not_car">

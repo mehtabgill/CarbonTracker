@@ -28,6 +28,7 @@ public class TipsActivity extends AppCompatActivity {
 
     static int carTipsCounter = 0; //determines the priority
     static int notCarTipsCounter = 0; //determines priority for 2nd type of tips
+    static int generalTipsCounter = 0; //for general tips
 
 
 
@@ -68,6 +69,15 @@ public class TipsActivity extends AppCompatActivity {
                 next.setOnClickListener(new View.OnClickListener(){
                     public void onClick(View v){
                         notCarTips();
+                    }
+                });
+                break;
+            case ActivityConstants.ACTIVITY_VIEW_FOOTPRINT:
+                generalTips();
+                //cycle tips on button click
+                next.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v){
+                        generalTips();
                     }
                 });
                 break;
@@ -128,6 +138,49 @@ public class TipsActivity extends AppCompatActivity {
         if(notCarTipsCounter == 8)
             notCarTipsCounter = 0;
 
+    }
+
+    //will appear when view carbon footprint is clicked for now
+    public void generalTips(){
+
+        //tip array for add_not_car
+        Resources res = getResources();
+        final String[] generalTips = res.getStringArray(R.array.general);
+
+        float total = 0; //total carbon emitted
+
+        for(String i: model.getJourneysCarbonEmissionList())
+        {
+            float temp = Float.parseFloat(i);
+            total+=temp;
+        }
+
+        String s = total+"";
+        TextView tip = (TextView) findViewById(R.id.tip);
+
+        if(generalTipsCounter<4) {
+
+            tip.setText(generalTips[generalTipsCounter]+s);
+        }
+        else if (generalTipsCounter==4){ //walks (need searchByDate for JourneyCollection)
+            s = model.getWalks()+"";
+            tip.setText(generalTips[generalTipsCounter]+s);
+        }
+        else if (generalTipsCounter==5){ //bikes
+            s = model.getBike()+"";
+            tip.setText(generalTips[generalTipsCounter]+s);
+        }
+        else if (generalTipsCounter==6){ //bus
+            s = model.getBus()+"";
+            tip.setText(generalTips[generalTipsCounter]+s);
+        }
+        else if (generalTipsCounter==7){ //skytrain
+            s = model.getSkytrain()+"";
+            tip.setText(generalTips[generalTipsCounter]+s);
+        }
+        generalTipsCounter++;
+        if(generalTipsCounter == 8)
+            generalTipsCounter = 0;
     }
 
 
