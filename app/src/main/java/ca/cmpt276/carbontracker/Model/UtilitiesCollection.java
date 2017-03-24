@@ -31,10 +31,6 @@ public class UtilitiesCollection implements Iterable<Utilities> {
         return utilityBillsCollection.size();
     }
 
-    public ArrayList<Utilities> getAllUtilityBills(){
-        return utilityBillsCollection;
-    }
-
     public UtilitiesCollection getUtilityBillsByDate(Calendar date){
         UtilitiesCollection tempCollection = new UtilitiesCollection();
         for(Utilities utilities : utilityBillsCollection){
@@ -47,14 +43,15 @@ public class UtilitiesCollection implements Iterable<Utilities> {
 
     //function for finding emission value of one specific day,
     //journeyCollection probably would need one too
-    public int getCarbonEmissionValue(Calendar date){
-        int emissionValue = 0;
+    public float getCarbonEmissionValue(Calendar date){
+        float emissionValue = 0;
         UtilitiesCollection tempCollection = this.getUtilityBillsByDate(date);
         for(Utilities utilities : tempCollection) {
             emissionValue += utilities.getDailyAverageEmission();
         }
         return emissionValue;
     }
+
 
     public int getIndex(Utilities utilities){
         int index = -1;

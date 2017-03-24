@@ -56,7 +56,8 @@
     <string name="journey_car_name_header">Car Name </string>
     <string name="emission_type_header">Emission Type</string>
     <string name="emission_name_header">Emission Name</string>
-    <string name="emission_value_header">Emission Value</string>
+    <string name="emission_value_header">Emission Value (kg)</string>
+    <string name="emission_value_formatted_string">%.3f</string>
     <string name="journey_carbon_emission_header">Carbon Emission\n(kg)</string>
     <string name="switch_button">SWITCH TO PIE CHART/TABLE</string>
     <string name="existing_car_text">Existing Routes</string>

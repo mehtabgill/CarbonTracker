@@ -176,7 +176,7 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //TODO: Handle Error of start date set after end date
-                if((selectedBillType == null) || (billAmount <= 0) || (numberOfPeople <= 0) ||
+                if((selectedBillType == null) || (billAmount == null) || (numberOfPeople <= 0) ||
                         (startDate == null) || (endDate == null)){
                     Toast.makeText(AddUtilitiesBillActivity.this, getString(R.string.add_bill_button_error), Toast.LENGTH_SHORT).show();
                 }

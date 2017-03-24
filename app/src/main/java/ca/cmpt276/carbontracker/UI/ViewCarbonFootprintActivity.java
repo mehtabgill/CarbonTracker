@@ -45,12 +45,16 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_carbon_footprint);
-        GraphDataRetriever.setUpGraphData(GraphDataRetriever.GRAPH_MODE.DAY, Calendar.getInstance());
+        Calendar date = Calendar.getInstance();
+        date.set(2017, 2, 24);
+        GraphDataRetriever.setUpGraphData(GraphDataRetriever.GRAPH_MODE.DAY, date);
         ROW_NUM = GraphDataRetriever.getEmissionArrayListSize() + 1;
+        ARRAY_SIZE = GraphDataRetriever.getEmissionArrayListSize();
         emissionTypeList = GraphDataRetriever.getEmissionTypeList();
         emissionNameList = GraphDataRetriever.getEmissionNameList();
         carbonEmissionList = GraphDataRetriever.getCarbonEmissionValueList();
         setupLayout();
+        setupPieChart();
     }
 
     private void setupLayout() {
@@ -92,7 +96,8 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                             textView.setText(emissionNameList.get(arrayIndex));
                             break;
                         case 2:
-                            textView.setText(carbonEmissionList.get(arrayIndex).toString());
+                            String formattedValue = String.format(getString(R.string.emission_value_formatted_string), carbonEmissionList.get(arrayIndex));
+                            textView.setText(formattedValue);
                             break;
                     }
                     currentRow.addView(textView);
@@ -107,7 +112,6 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                     if (tableLayout.getVisibility() == View.VISIBLE) {
                         tableLayout.setVisibility(View.INVISIBLE);
                         chart.setVisibility(View.VISIBLE);
-                        setupPieChart();
                     } else {
                         tableLayout.setVisibility(View.VISIBLE);
                         chart.setVisibility(View.INVISIBLE);
@@ -142,6 +146,8 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         chart.animateY(1000);
 
         chart.invalidate();
+
+        chart.setVisibility(View.INVISIBLE);
 
     }
 }

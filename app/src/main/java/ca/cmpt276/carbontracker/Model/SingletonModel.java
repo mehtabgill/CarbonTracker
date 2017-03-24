@@ -514,13 +514,16 @@ public class SingletonModel {
                 emissionArrayList.add(journey);
             }
         }
-
         for(Utilities utilities : utilitiesCollection){
             if(utilities.dateIsInBillingPeriod(date)){
                 emissionArrayList.add(utilities);
             }
         }
         return emissionArrayList;
+    }
+
+    public Utilities getRelativeUtilitiesValue(Calendar date){
+        
     }
 
 

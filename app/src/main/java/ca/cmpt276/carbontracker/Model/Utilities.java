@@ -83,11 +83,9 @@ public class Utilities extends Emission {
     public boolean dateIsInBillingPeriod(Calendar date){
         Calendar currentCheckingDate = (Calendar) startDate.clone();
         Calendar endDateClone = (Calendar) endDate.clone();
-        while(!currentCheckingDate.getTime().equals(endDateClone.getTime())){
-
-            if( (currentCheckingDate.get(Calendar.YEAR) == date.get(Calendar.YEAR)) &&
-                    (currentCheckingDate.get(Calendar.MONTH) == date.get(Calendar.MONTH)) &&
-                    (currentCheckingDate.get(Calendar.DATE) == date.get(Calendar.DATE))) {
+        endDateClone.add(Calendar.DATE, 1);
+        while(!equalDate(currentCheckingDate, endDateClone)){
+            if(equalDate(currentCheckingDate, date)) {
                 return true;
             }
             else{
@@ -95,6 +93,17 @@ public class Utilities extends Emission {
             }
         }
         return false;
+    }
+
+    private boolean equalDate(Calendar day1, Calendar day2){
+        if( (day1.get(Calendar.YEAR) == day2.get(Calendar.YEAR)) &&
+                (day1.get(Calendar.MONTH) == day2.get(Calendar.MONTH)) &&
+                (day1.get(Calendar.DATE) == day2.get(Calendar.DATE))) {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public BILL getBillMode() {
@@ -132,7 +141,6 @@ public class Utilities extends Emission {
     public void setGasAmount(float gasAmount) {
         this.gasAmount = gasAmount;
     }
-
 
     @Override
     public float getCarbonEmissionValue() {

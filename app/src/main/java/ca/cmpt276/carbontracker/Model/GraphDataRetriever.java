@@ -20,6 +20,7 @@ public final class GraphDataRetriever {
     private static ArrayList<String> emissionTypeList = new ArrayList<>();
     private static ArrayList<String> emissionNameList = new ArrayList<>();
     private static ArrayList<Float> carbonEmissionValueList = new ArrayList<>();
+    private static boolean dateInBill = false;
 
     public static void setUpGraphData(GRAPH_MODE mode, Calendar date){
         if( (!emissionArrayList.isEmpty()) ||
@@ -38,11 +39,13 @@ public final class GraphDataRetriever {
                     }
                     else{
                         if(emission instanceof Utilities){
+                            dateInBill = true;
                             emissionNameList.add(((Utilities) emission).getBillMode().toString());
                             carbonEmissionValueList.add(((Utilities) emission).getDailyAverageEmission());
                         }
                     }
                     emissionTypeList.add(emission.getClass().getSimpleName());
+
                 }
                 break;
         }
@@ -65,9 +68,10 @@ public final class GraphDataRetriever {
     }
 
     public static void resetCurrentCollection(){
-        ArrayList<Emission> emissionArrayList = new ArrayList<>();
-        ArrayList<String> emissionTypeList = new ArrayList<>();
-        ArrayList<String> emissionNameList = new ArrayList<>();
-        ArrayList<Float> carbonEmissionValueList = new ArrayList<>();
+        emissionArrayList = new ArrayList<>();
+        emissionTypeList = new ArrayList<>();
+        emissionNameList = new ArrayList<>();
+        carbonEmissionValueList = new ArrayList<>();
+        dateInBill = false;
     }
 }
