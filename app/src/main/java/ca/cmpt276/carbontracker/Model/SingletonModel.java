@@ -466,7 +466,6 @@ public class SingletonModel {
         int index = 0;
         for(Utilities utilities : utilitiesCollection){
             if(utilities.toString().equals(description)){
-                utilitiesCollection.remove(utilities);
                 long id = database.findUtilities(utilities);
                 database.deleteUtilitiesRow(id);
                 index = utilitiesCollection.getIndex(utilities);
