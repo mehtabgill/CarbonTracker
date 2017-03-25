@@ -89,7 +89,7 @@ public class MainMenuActivity extends AppCompatActivity {
             case CREATE_UTILITY_BILL:
                 startActivity(new Intent(MainMenuActivity.this, AddUtilitiesBillActivity.class));
                 break;
-            case VIEW_CARBON_FOOTPRINT:/*
+            case VIEW_CARBON_FOOTPRINT:
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainMenuActivity.this, android.R.layout.select_dialog_singlechoice);
                 arrayAdapter.add(getString(R.string.mode_1_day));
                 arrayAdapter.add(getString(R.string.mode_28_day));
@@ -101,9 +101,29 @@ public class MainMenuActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         selected_mode = arrayAdapter.getItem(which);
                         if(selected_mode.equals(getString(R.string.mode_1_day))){
-                            */
-
-                        /*}
+                            final Calendar c = Calendar.getInstance();
+                            int mYear = c.get(Calendar.YEAR);
+                            int mMonth = c.get(Calendar.MONTH);
+                            int mDay = c.get(Calendar.DAY_OF_MONTH);
+                            DatePickerDialog datePickerDialog = new DatePickerDialog(MainMenuActivity.this,
+                                    new DatePickerDialog.OnDateSetListener() {
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year,
+                                                              int month, int day) {
+                                            selected_year = year;
+                                            selected_month = month;
+                                            selected_date = day;
+                                            Intent intent = new Intent(MainMenuActivity.this, ViewCarbonFootprintActivity.class);
+                                            selected_mode = getString(R.string.mode_1_day);
+                                            intent.putExtra(MODE_KEY, selected_mode);
+                                            intent.putExtra(SELECTED_DATE_KEY, selected_date);
+                                            intent.putExtra(SELECTED_MONTH_KEY, selected_month);
+                                            intent.putExtra(SELECTED_YEAR_KEY, selected_year);
+                                            startActivity(intent);
+                                        }
+                                    }, mYear, mMonth, mDay);
+                            datePickerDialog.show();
+                        }
                         else{
                             Calendar currentDate = Calendar.getInstance();
                             selected_date = currentDate.get(Calendar.DATE);
@@ -118,29 +138,7 @@ public class MainMenuActivity extends AppCompatActivity {
                         }
                     }
                 });
-                builder.show();*/
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR);
-                int mMonth = c.get(Calendar.MONTH);
-                int mDay = c.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(MainMenuActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int month, int day) {
-                                selected_year = year;
-                                selected_month = month;
-                                selected_date = day;
-                                Intent intent = new Intent(MainMenuActivity.this, ViewCarbonFootprintActivity.class);
-                                selected_mode = getString(R.string.mode_1_day);
-                                intent.putExtra(MODE_KEY, selected_mode);
-                                intent.putExtra(SELECTED_DATE_KEY, selected_date);
-                                intent.putExtra(SELECTED_MONTH_KEY, selected_month);
-                                intent.putExtra(SELECTED_YEAR_KEY, selected_year);
-                                startActivity(intent);
-                            }
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.show();
+                builder.show();
                 break;
             case EDIT_DELETE_UTILTITY:
                 startActivity(new Intent(MainMenuActivity.this, EditDeleteUtilitiesActivity.class));

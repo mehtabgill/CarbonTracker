@@ -1,5 +1,7 @@
 package ca.cmpt276.carbontracker.Model;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,7 +28,7 @@ public final class GraphDataRetriever {
 
     //These are used for Month
 
-    private static ArrayList<String> dateList = new ArrayList<>();
+    private static ArrayList<String> dateList_Month = new ArrayList<>();
     private static ArrayList<String> emissionTypeList_Month = new ArrayList<>();
     private static ArrayList<Float> carEmissionValueList_Month = new ArrayList<>();
     private static ArrayList<Float> skytrainEmissionValueList_Month = new ArrayList<>();
@@ -72,48 +74,51 @@ public final class GraphDataRetriever {
                 break;
 
             case MONTH:
+                resetCurrentCollection(GRAPH_MODE.MONTH);
                 emissionTypeList_Month.add("Car");
                 emissionTypeList_Month.add("Skytrain");
                 emissionTypeList_Month.add("Bus");
                 emissionTypeList_Month.add("Electricity Bill");
                 emissionTypeList_Month.add("Gas Bill");
-
-                int daysBackward = 27;
-                while(daysBackward >= 0){
+                final int DAY_BACKWARD = 28;
+                Calendar currentDate = (Calendar) date.clone();
+                currentDate.add(Calendar.DATE, -DAY_BACKWARD);
+                Calendar endDate = (Calendar) date.clone();
+                while(!currentDate.getTime().equals(endDate.getTime()) ){
                     float carValueByDay = 0;
                     float busValueByDay = 0;
                     float skytrainValueByDay = 0;
                     float elecBillValueByDay = 0;
                     float gasBillValueByDay = 0;
-                    Calendar currentDate = (Calendar) date.clone();
-                    currentDate.add(Calendar.DATE, -daysBackward);
                     emissionArrayList = model.getEmissionListOnDay(currentDate);
                     boolean elecBillByDay = false;
                     boolean gasBillByDay = false;
                     for (Emission emission :emissionArrayList){
-                        if(emission instanceof Journey){
-                            switch ( ((Journey) emission).getTransportation().getType()){
-                                case CAR:
-                                    carValueByDay += emission.getCarbonEmissionValue();
-                                    break;
-                                case SKYTRAIN:
-                                    skytrainValueByDay += emission.getCarbonEmissionValue();
-                                    break;
-                                case BUS:
-                                    busValueByDay += emission.getCarbonEmissionValue();
-                                    break;
+                        if(emissionArrayList.size() > 0){
+                            if(emission instanceof Journey){
+                                switch ( ((Journey) emission).getTransportation().getType()){
+                                    case CAR:
+                                        carValueByDay += emission.getCarbonEmissionValue();
+                                        break;
+                                    case SKYTRAIN:
+                                        skytrainValueByDay += emission.getCarbonEmissionValue();
+                                        break;
+                                    case BUS:
+                                        busValueByDay += emission.getCarbonEmissionValue();
+                                        break;
+                                }
                             }
-                        }
-                        else if(emission instanceof Utilities){
-                            switch (((Utilities) emission).getBill()){
-                                case ELECTRICITY:
-                                    elecBillByDay = true;
-                                    elecBillValueByDay += ((Utilities) emission).getDailyAverageEmission();
-                                    break;
-                                case GAS:
-                                    gasBillByDay = true;
-                                    gasBillValueByDay += ((Utilities) emission).getDailyAverageEmission();
-                                    break;
+                            else if(emission instanceof Utilities){
+                                switch (((Utilities) emission).getBill()){
+                                    case ELECTRICITY:
+                                        elecBillByDay = true;
+                                        elecBillValueByDay += ((Utilities) emission).getDailyAverageEmission();
+                                        break;
+                                    case GAS:
+                                        gasBillByDay = true;
+                                        gasBillValueByDay += ((Utilities) emission).getDailyAverageEmission();
+                                        break;
+                                }
                             }
                         }
                     }
@@ -132,10 +137,10 @@ public final class GraphDataRetriever {
                     busEmissionValueList_Month.add(busValueByDay);
                     electricityBillEmissionValueList_Month.add(elecBillValueByDay);
                     gasBillEmissionValueList_Month.add(gasBillValueByDay);
-                    dateList.add(sdf.format(currentDate));
-                    daysBackward--;
-                    break;
+                    dateList_Month.add(sdf.format(currentDate.getTime()));
+                    currentDate.add(Calendar.DATE, 1);
                 }
+                break;
         }
     }
 
@@ -152,6 +157,27 @@ public final class GraphDataRetriever {
         return emissionValueList_Day;
     }
 
+    public static ArrayList<String> getDateList_Month(){
+        return dateList_Month;
+    }
+
+    public static ArrayList<Float> getCarEmissionValueList_Month(){
+        return carEmissionValueList_Month;
+    }
+    public static ArrayList<Float> getBusEmissionValueList_Month(){
+        return busEmissionValueList_Month;
+    }
+    public static ArrayList<Float> getSkytrainEmissionValueList_Month(){
+        return skytrainEmissionValueList_Month;
+    }
+    public static ArrayList<Float> getElectricityBillEmissionValueList_Month(){
+        return electricityBillEmissionValueList_Month;
+    }
+    public static ArrayList<Float> getGasBillEmissionValueList_Month(){
+        return gasBillEmissionValueList_Month;
+    }
+
+
     public static int getEmissionArrayListSize(){
         return emissionArrayList.size();
     }
@@ -166,13 +192,13 @@ public final class GraphDataRetriever {
                 dateInBill = false;
                 break;
             case MONTH:
-                ArrayList<String> dateList = new ArrayList<>();
-                ArrayList<String> emissionTypeList_Month = new ArrayList<>();
-                ArrayList<Float> carEmissionValueList_Month = new ArrayList<>();
-                ArrayList<Float> skytrainEmissionValueList_Month = new ArrayList<>();
-                ArrayList<Float> busEmissionValueList_Month = new ArrayList<>();
-                ArrayList<Float> electricityBillEmissionValueList_Month = new ArrayList<>();
-                ArrayList<Float> gasBillEmissionValueList_Month = new ArrayList<>();
+                dateList_Month = new ArrayList<>();
+                emissionTypeList_Month = new ArrayList<>();
+                carEmissionValueList_Month = new ArrayList<>();
+                skytrainEmissionValueList_Month = new ArrayList<>();
+                busEmissionValueList_Month = new ArrayList<>();
+                electricityBillEmissionValueList_Month = new ArrayList<>();
+                gasBillEmissionValueList_Month = new ArrayList<>();
         }
 
     }
