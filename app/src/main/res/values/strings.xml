@@ -85,7 +85,9 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="nextTip">Next Tip</string>
-
+    <string name="KM">KM</string>
+    <string name="KG">KG</string>
+    <string name="view_journey">View Journey</string>
 
 
 </resources>
