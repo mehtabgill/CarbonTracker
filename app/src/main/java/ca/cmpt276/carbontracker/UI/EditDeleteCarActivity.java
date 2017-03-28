@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import ca.cmpt276.carbontracker.Model.Car;
+import ca.cmpt276.carbontracker.Model.CarStorage;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /*
@@ -24,6 +25,7 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
 public class EditDeleteCarActivity extends AppCompatActivity {
 
     private SingletonModel model = SingletonModel.getInstance();
+    private CarStorage carStorage = CarStorage.getInstance();
     private enum ButtonClicked{Delete, Save_Edited};
     private EditText nicknameEditText;
     private Spinner editMakeSpinner;
@@ -35,7 +37,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
     private String editedMake;
     private String editedModel;
     private String editedYear;
-    private String description;
+    private int selectedIndex;
     private String DELETED_MESSAGE;
     private String SAVE_EDITED_MESSAGE;
     private Car car;
@@ -45,7 +47,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_delete_car);
         receiveDescription();
-        car = model.getCarFromCollection(description, SingletonModel.RetrieveEntries.Current);
+        car = model.getCar(selectedIndex);
         nicknameEditText = (EditText) findViewById(R.id.edit_nickname_editText);
         editMakeSpinner = (Spinner) findViewById(R.id.edit_make_spinner);
         editModelSpinner = (Spinner) findViewById(R.id.edit_model_spinner);
@@ -55,7 +57,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
         DELETED_MESSAGE = getString(R.string.deleted_car_message);
         SAVE_EDITED_MESSAGE = getString(R.string.saved_data_message);
 
-        ArrayList<String> carMakeList = model.getCarMakeList();
+        ArrayList<String> carMakeList = carStorage.getCarMakeList();
         AddCarActivity.populateSpinner(EditDeleteCarActivity.this, editMakeSpinner, carMakeList);
         updateOnClickSpinner(AddCarActivity.Spinner.Model);
         updateOnClickSpinner(AddCarActivity.Spinner.Year);
@@ -67,7 +69,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
     private void receiveDescription(){
         Bundle extra = getIntent().getExtras();
         if(extra != null){
-            description = extra.getString(CarSelectionActivity.DESCRIPTION_KEY);
+            selectedIndex = extra.getInt(CarSelectionActivity.DESCRIPTION_KEY);
         }
     }
 
@@ -110,7 +112,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
                 deleteCarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        model.removeCar(description);
+                        model.removeCar(selectedIndex);
                         Toast.makeText(EditDeleteCarActivity.this,
                                 DELETED_MESSAGE, Toast.LENGTH_SHORT).show();
                         finish();
@@ -121,11 +123,11 @@ public class EditDeleteCarActivity extends AppCompatActivity {
                 saveEditedButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        model.updateCurrentSearchByYear(Integer.parseInt(editedYear));
+                        carStorage.updateCurrentSearchByYear(Integer.parseInt(editedYear));
                         android.support.v7.app.AlertDialog.Builder builder1 = new android.support.v7.app.AlertDialog.Builder(EditDeleteCarActivity.this);
                         builder1.setTitle(getString(R.string.select_car_popup_title));
                         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EditDeleteCarActivity.this, android.R.layout.select_dialog_singlechoice);
-                        for (String description : model.getCarEntriesDescription(SingletonModel.RetrieveEntries.Search)) {
+                        for(String description : carStorage.getCarSearchList()){
                             arrayAdapter.add(description);
                         }
                         builder1.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
@@ -137,10 +139,11 @@ public class EditDeleteCarActivity extends AppCompatActivity {
                                 builder2.setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        Car editedCar = model.getCarFromCollection(selection, SingletonModel.RetrieveEntries.Search);
+                                        int index = arrayAdapter.getPosition(selection);
+                                        Car editedCar = carStorage.getCarFromSearchList(index);
                                         editedCar.setNickname(editedNickname);
-                                        model.editCar(description, editedCar);
-                                        model.resetCurrentSearchCollection();
+                                        model.editCar(selectedIndex, editedCar);
+                                        carStorage.resetCurrentSearchCollection();
                                         finish();
                                     }
                                 });
@@ -161,8 +164,8 @@ public class EditDeleteCarActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         editedMake = editMakeSpinner.getSelectedItem().toString();
-                        model.resetCurrentSearchCollection();
-                        ArrayList<String> currentModelList = model.getCarModelsOfMake(editedMake);
+                        carStorage.resetCurrentSearchCollection();
+                        ArrayList<String> currentModelList = carStorage.getCarModelsOfMake(editedMake);
                         AddCarActivity.populateSpinner(EditDeleteCarActivity.this, editModelSpinner, currentModelList);
                     }
                     @Override
@@ -173,9 +176,9 @@ public class EditDeleteCarActivity extends AppCompatActivity {
             case Year:
                 editModelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)  {
                         editedModel = editModelSpinner.getSelectedItem().toString();
-                        ArrayList<String> currentYearList = model.getCarYearsOfModels(editedModel);
+                        ArrayList<String> currentYearList = carStorage.getCarYearsOfModels(editedModel);
                         AddCarActivity.populateSpinner(EditDeleteCarActivity.this, editYearSpinner, currentYearList);
                     }
                     @Override

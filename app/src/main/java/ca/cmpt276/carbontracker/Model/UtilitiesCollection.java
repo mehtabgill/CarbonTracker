@@ -65,6 +65,10 @@ public class UtilitiesCollection implements Iterable<Utilities> {
         return index;
     }
 
+    public Utilities getUtilities(int index){
+        return utilityBillsCollection.get(index);
+    }
+
     @Override
     public Iterator<Utilities> iterator(){
         return utilityBillsCollection.iterator();
