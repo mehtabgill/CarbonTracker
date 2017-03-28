@@ -181,7 +181,8 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
                     Toast.makeText(AddUtilitiesBillActivity.this, getString(R.string.add_bill_button_error), Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    model.addNewUtilitiesBill(selectedBillType, billAmount, startDate, endDate, numberOfPeople);
+                    Utilities utilities = new Utilities(selectedBillType, billAmount, startDate, endDate, numberOfPeople);
+                    model.addNewUtilities(utilities);
                     finish();
                 }
 

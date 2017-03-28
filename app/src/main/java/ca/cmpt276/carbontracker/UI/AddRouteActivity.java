@@ -3,18 +3,14 @@ package ca.cmpt276.carbontracker.UI;
 import android.widget.Button;
 
 import ca.cmpt276.carbontracker.Model.Route;
-import android.app.Activity;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
-import ca.cmpt276.carbontracker.Model.Route;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 
@@ -112,7 +108,7 @@ public class AddRouteActivity extends AppCompatActivity {
                 route.setName(name);
                 route.setCityDriveDistance(cityDis);
                 route.setHighwayDriveDistance(highwayDis);
-                model.addNewRoute(route);
+                model.addRoute(route);
                 finish();
 
             }

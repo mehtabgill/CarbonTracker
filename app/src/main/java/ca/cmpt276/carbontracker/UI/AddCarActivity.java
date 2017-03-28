@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import ca.cmpt276.carbontracker.Model.Car;
+import ca.cmpt276.carbontracker.Model.CarStorage;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /*
@@ -23,6 +25,7 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
  */
 public class AddCarActivity extends AppCompatActivity {
     private SingletonModel model = SingletonModel.getInstance();
+    private CarStorage carStorage = CarStorage.getInstance();
     public enum Spinner {Model, Year};
     android.widget.Spinner makeSpinner;
     android.widget.Spinner modelSpinner;
@@ -45,7 +48,7 @@ public class AddCarActivity extends AppCompatActivity {
         searchButton = (Button) findViewById(R.id.search_button);
         nicknameEditText = (EditText) findViewById(R.id.enter_nickname_editText);
         NICKNAME_INPUT_ERROR = getString(R.string.nickname_input_error);
-        ArrayList<String> carMakeList = model.getCarMakeList();
+        ArrayList<String> carMakeList = carStorage.getCarMakeList();
         populateSpinner(AddCarActivity.this, makeSpinner, carMakeList);
         updateOnClickSpinner(Spinner.Model);
         updateOnClickSpinner(Spinner.Year);
@@ -93,17 +96,18 @@ public class AddCarActivity extends AppCompatActivity {
                 selectedMake = makeSpinner.getSelectedItem().toString();
                 selectedModel = modelSpinner.getSelectedItem().toString();
                 selectedYear = yearSpinner.getSelectedItem().toString();
-                model.updateCurrentSearchByYear(Integer.parseInt(selectedYear));
-
+                carStorage.updateCurrentSearchByYear(Integer.parseInt(selectedYear));
                 //Create a popup with list of current car entries matched search entries
                 //and ask the user to select one
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(AddCarActivity.this);
                 builder1.setTitle(getString(R.string.select_car_popup_title));
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(AddCarActivity.this, android.R.layout.select_dialog_singlechoice);
-                for (String description : model.getCarEntriesDescription(SingletonModel.RetrieveEntries.Search)) {
+
+                for(String description : carStorage.getCarSearchList()){
                     arrayAdapter.add(description);
                 }
+
                 builder1.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -116,15 +120,17 @@ public class AddCarActivity extends AppCompatActivity {
                                 if(model.isCurrentCarAdded(nicknameInput, selection)){
                                     Toast.makeText(AddCarActivity.this,
                                             getString(R.string.car_existed_message), Toast.LENGTH_SHORT).show();
-                                    model.resetCurrentSearchCollection();
+                                    carStorage.resetCurrentSearchCollection();
                                     dialog.dismiss();
                                     finish();
                                 }
 
                                 else{
-                                    model.addNewCarWithNickname(nicknameInput, selection);
-                                    dialog.dismiss();
-                                    model.resetCurrentSearchCollection();
+                                    int index = arrayAdapter.getPosition(selection);
+                                    Car selectedCar = carStorage.getCarFromSearchList(index);
+                                    selectedCar.setNickname(nicknameInput);
+                                    model.addCar(selectedCar);
+                                    carStorage.resetCurrentSearchCollection();
                                     finish();
 
                                 }
@@ -137,7 +143,7 @@ public class AddCarActivity extends AppCompatActivity {
                 builder1.setNegativeButton(getString(R.string.cancel_text), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        model.resetCurrentSearchCollection();
+                        carStorage.resetCurrentSearchCollection();
                         dialog.dismiss();
                     }
                 });
@@ -156,8 +162,8 @@ public class AddCarActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         selectedMake = makeSpinner.getSelectedItem().toString();
-                        model.resetCurrentSearchCollection();
-                        ArrayList<String> currentModelList = model.getCarModelsOfMake(selectedMake);
+                        carStorage.resetCurrentSearchCollection();
+                        ArrayList<String> currentModelList = carStorage.getCarModelsOfMake(selectedMake);
                         populateSpinner(AddCarActivity.this, modelSpinner, currentModelList);
                     }
                     @Override
@@ -170,7 +176,7 @@ public class AddCarActivity extends AppCompatActivity {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         selectedModel = modelSpinner.getSelectedItem().toString();
-                        ArrayList<String> currentYearList = model.getCarYearsOfModels(selectedModel);
+                        ArrayList<String> currentYearList = carStorage.getCarYearsOfModels(selectedModel);
                         populateSpinner(AddCarActivity.this, yearSpinner, currentYearList);
                     }
                     @Override

@@ -88,6 +88,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
 
     }
 
+
     private void setupLayout_Day() {
 
         tableLayout = (TableLayout) findViewById(R.id.table_Layout);
@@ -155,6 +156,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         setupPieChart();
     }
 
+
     private void setupLayout_Month(){
         setupLineChart();
     }
@@ -179,6 +181,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         }
     }
 
+    //For day only right now
     private void setupPieChart(){
         //populating a list of entries into the pie graph
         List<PieEntry> pieEntries = new ArrayList<>();
@@ -208,6 +211,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         pieChart.setVisibility(View.INVISIBLE);
     }
 
+    //Setup line chart for month
     private void setupLineChart(){
         LineChart lineChart = (LineChart) findViewById(R.id.lineChart);
         lineChart.setVisibility(View.VISIBLE);
@@ -255,7 +259,6 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         lineDataSets.add(skytrainLineDataSet);
         lineDataSets.add(electricityLineDataSet);
         lineDataSets.add(busLineDataSet);
-
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setGranularity(1.5f);

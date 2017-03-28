@@ -33,7 +33,8 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
     private Spinner selectUtilitiesBillSpinner;
     private Button selectUtilitiesBillButton;
     private RelativeLayout editBillLayout;
-    private String selectedBill;
+    /*private String selectedBill;*/
+    private int selectedBillIndex;
 
     private Spinner selectBillTypeSpinner;
     private EditText billAmountEditText;
@@ -88,7 +89,7 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
         selectUtilitiesBillSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedBill = selectUtilitiesBillSpinner.getSelectedItem().toString();
+                selectedBillIndex = selectBillTypeSpinner.getSelectedItemPosition();
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -115,7 +116,7 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
                             editBillLayout.setVisibility(View.VISIBLE);
                         }
                         else{
-                            model.removeUtilities(selectedBill);
+                            model.removeUtilities(selectedBillIndex);
                             Toast.makeText(EditDeleteUtilitiesActivity.this,
                                     getString(R.string.deleted_bill_confirmed), Toast.LENGTH_SHORT).show();
                             setupUtilitiesBillListSpinner();
@@ -151,6 +152,7 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
         setupSelectDate();
         setupSaveEditedButton();
     }
+
     private void setUpEditedBillTypeSpinner() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 EditDeleteUtilitiesActivity.this, android.R.layout.simple_spinner_item, billTypeArrayList
@@ -248,6 +250,7 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setupSaveEditedButton() {
         //TODO: Handle Error of start date set after end date
         saveEditedBillInfoButton.setOnClickListener(new View.OnClickListener() {
@@ -258,7 +261,7 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
                     Toast.makeText(EditDeleteUtilitiesActivity.this, getString(R.string.add_bill_button_error), Toast.LENGTH_SHORT).show();
                 } else {
                     Utilities editedUtilities = new Utilities(editedBillType, editedBillAmount, editedStartDate, editedEndDate, editedNumberOfPeople);
-                    model.editUtilities(selectedBill, editedUtilities);
+                    model.editUtilities(selectedBillIndex, editedUtilities);
                     finish();
                 }
             }

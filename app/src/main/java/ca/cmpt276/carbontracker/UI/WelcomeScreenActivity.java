@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import ca.cmpt276.carbontracker.Model.CarCollection;
+import ca.cmpt276.carbontracker.Model.CarStorage;
 import ca.cmpt276.carbontracker.Model.DataReader;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 /*
@@ -115,6 +116,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
     }
 
     private SingletonModel model = SingletonModel.getInstance();
+    private CarStorage carStorage = CarStorage.getInstance();
 
     @Override
     protected void onDestroy() {
@@ -159,7 +161,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<String> carMakeList) {
             Toast.makeText(WelcomeScreenActivity.getContext(),
                     getString(R.string.load_make_completed), Toast.LENGTH_SHORT).show();
-            model.setCarMakeList(carMakeList);
+            carStorage.setCarMakeList(carMakeList);
             DataReader.setMakeDataLoaded();
         }
     }
@@ -174,8 +176,9 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         protected void onPostExecute(CarCollection carCollection){
             Toast.makeText(WelcomeScreenActivity.getContext(),
                     getString(R.string.load_car_completed), Toast.LENGTH_SHORT).show();
-            model.setTotalCarCollection(carCollection);
+            carStorage.setTotalCarCollection(carCollection);
             DataReader.setFullDataLoaded();
+
         }
     }
 }
