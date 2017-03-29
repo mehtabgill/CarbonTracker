@@ -7,9 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.DataReader;
-import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /*
  * UI class to display main menu, including create new journey and view current carbon emission
@@ -85,7 +83,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivity(new Intent(MainMenuActivity.this, EditDeleteUtilitiesActivity.class));
                 break;
             case VIEW_JOURNEY:
-                startActivity(new Intent(MainMenuActivity.this, ViewJourney.class));
+                startActivity(new Intent(MainMenuActivity.this, ViewJourneyActivity.class));
                 break;
         }
     }

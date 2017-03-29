@@ -1,25 +1,28 @@
 package ca.cmpt276.carbontracker.UI;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import ca.cmpt276.carbontracker.Model.Journey;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 
-public class ViewJourney extends AppCompatActivity {
+public class ViewJourneyActivity extends AppCompatActivity {
 
+    private static final int REQUEST_CODE_EDIT_JOURNEY = 101;
     private ArrayList<String[]> journeyData;
+
+    public static final String EXTRA_POSITION = "EXTRA_POSITION";
 
     public static int COL_IMAGE = 0;
     public static int COL_TRANSPORTATION = 1;
@@ -38,6 +41,7 @@ public class ViewJourney extends AppCompatActivity {
 
         journeyData = model.getJourneyData();
         populateJourneyList();
+        registerClickCallback();
     }
 
     private void populateJourneyList() {
@@ -46,11 +50,24 @@ public class ViewJourney extends AppCompatActivity {
         list.setAdapter(adapter);
     }
 
+    private void registerClickCallback() {
+        ListView list = (ListView) findViewById(R.id.listView_journey);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ViewJourneyActivity.this, EditJourneyActivity.class);
+                intent.putExtra(EXTRA_POSITION, position);
+                startActivityForResult(intent, REQUEST_CODE_EDIT_JOURNEY);
+            }
+        });
+    }
+
 
     private class MyListAdapter extends ArrayAdapter<String[]> {
         public MyListAdapter() {
 
-            super(ViewJourney.this, R.layout.list_journey, journeyData);
+            super(ViewJourneyActivity.this, R.layout.list_journey, journeyData);
         }
         @NonNull
         @Override

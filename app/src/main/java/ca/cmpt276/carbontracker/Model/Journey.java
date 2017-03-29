@@ -92,7 +92,6 @@ public class Journey extends Emission {
 
     public void setRoute(Route route){
         this.route = new Route(route);
-        this.route = (Route) route;
         calculateCarbonEmission();
     }
 
