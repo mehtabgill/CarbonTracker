@@ -23,6 +23,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 
@@ -216,6 +217,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         LineChart lineChart = (LineChart) findViewById(R.id.lineChart);
         lineChart.setVisibility(View.VISIBLE);
         final String[] dateArray = new String[28];
+
         ArrayList<Entry> carEntries = new ArrayList<>();
         ArrayList<Entry> busEntries = new ArrayList<>();
         ArrayList<Entry> skytrainEntries = new ArrayList<>();
@@ -236,7 +238,6 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
             electricityBillEntries.add(new Entry(electricityBillEmissionList.get(i), i));
             gasBillEntries.add(new Entry(gasBillEmissionList.get(i), i));
         }
-        ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
         LineDataSet carLineDataSet = new LineDataSet(carEntries, getString(R.string.Car));
         LineDataSet busLineDataSet = new LineDataSet(busEntries, getString(R.string.Bus));
         LineDataSet skytrainLineDataSet = new LineDataSet(skytrainEntries, getString(R.string.Skytrain));
@@ -245,29 +246,34 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
 
         carLineDataSet.setDrawCircles(false);
         carLineDataSet.setColor(Color.RED);
+
         busLineDataSet.setDrawCircles(false);
         busLineDataSet.setColor(Color.GREEN);
+
         skytrainLineDataSet.setDrawCircles(false);
         skytrainLineDataSet.setColor(Color.BLUE);
+
         electricityLineDataSet.setDrawCircles(false);
         electricityLineDataSet.setColor(Color.YELLOW);
+
         gasLineDataSet.setDrawCircles(false);
         gasLineDataSet.setColor(Color.MAGENTA);
 
+        ArrayList<ILineDataSet> lineDataSets = new ArrayList<ILineDataSet>();
         lineDataSets.add(carLineDataSet);
         lineDataSets.add(busLineDataSet);
         lineDataSets.add(skytrainLineDataSet);
         lineDataSets.add(electricityLineDataSet);
-        lineDataSets.add(busLineDataSet);
+        lineDataSets.add(gasLineDataSet);
 
-        XAxis xAxis = lineChart.getXAxis();
-        xAxis.setGranularity(1.5f);
-        xAxis.setValueFormatter(new IAxisValueFormatter() {
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                    return dateArray[(int) value];
-            }
-        });
+        lineChart.setXAxisRenderer(new IAxisValueFormatter(
+            @Overridez
+            String getFormattedValue(float value, AxisBase axis){
+
+        }
+
+        ));
+
         lineChart.setData(new LineData(lineDataSets));
         lineChart.invalidate();
     }
