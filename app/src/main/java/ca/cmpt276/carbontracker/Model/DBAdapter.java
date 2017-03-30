@@ -35,7 +35,7 @@ public class DBAdapter {
     public static final String KEY_NAME = "name";
     public static final String KEY_MODEL = "model";
     public static final String KEY_MAKE = "make";
-    public static final String KEY_YEAR = "year";
+    public static final String KEY_CAR_YEAR = "carYear";
     public static final String KEY_DISPLACEMENT_VOL = "displacementVol";
     public static final String KEY_TRANSMISSION_TYPE = "transmissionType";
     public static final String KEY_FUEL_TYPE = "fuelType";
@@ -53,6 +53,10 @@ public class DBAdapter {
     public static final String KEY_END_MONTH = "endMonth";
     public static final String KEY_END_DAY = "endDay";
     public static final String KEY_NUM_PPL = "numPpl";
+    public static final String KEY_YEAR = "year";
+    public static final String KEY_MONTH = "month";
+    public static final String KEY_DAY = "day";
+
 
     // TODO: Setup your field numbers here (0 = KEY_ROWID, 1=...)
     // This set for cars
@@ -84,7 +88,7 @@ public class DBAdapter {
     public static final int COL_JOURNEY_NAME = 2;
     public static final int COL_JOURNEY_MODEL = 3;
     public static final int COL_JOURNEY_MAKE = 4;
-    public static final int COL_JOURNEY_YEAR = 5;
+    public static final int COL_JOURNEY_CAR_YEAR = 5;
     public static final int COL_JOURNEY_DISPLACEMENT_VOL = 6;
     public static final int COL_JOURNEY_TRANSMISSION_TYPE = 7;
     public static final int COL_JOURNEY_FUEL_TYPE = 8;
@@ -93,6 +97,10 @@ public class DBAdapter {
     public static final int COL_JOURNEY_ROUTE_NAME = 11;
     public static final int COL_JOURNEY_CITYDISTANCE = 12;
     public static final int COL_JOURNEY_HWYDISTANCE = 13;
+    public static final int COL_JOURNEY_YEAR = 14;
+    public static final int COL_JOURNEY_MONTH = 15;
+    public static final int COL_JOURNEY_DAY = 16;
+
 
     public static final int COL_UTILITIES_BILL_TYPE = 1;
     public static final int COL_UTILITIES_AMOUNT = 2;
@@ -115,7 +123,7 @@ public class DBAdapter {
 
     public static final String[] JOURNEY_ALL_KEYS = new String[] {KEY_ROWID, KEY_TYPE, KEY_NAME, KEY_MODEL, KEY_MAKE,
             KEY_YEAR, KEY_DISPLACEMENT_VOL, KEY_TRANSMISSION_TYPE, KEY_FUEL_TYPE, KEY_CITYMPG, KEY_HWYMPG, KEY_ROUTE_NAME,
-            KEY_CITYDISTANCE, KEY_HWYDISTANCE};
+            KEY_CITYDISTANCE, KEY_HWYDISTANCE, KEY_YEAR, KEY_MONTH, KEY_DAY};
 
     public static final String[] UTILITIES_ALL_KEYS = new String[] {KEY_ROWID, KEY_BILL_TYPE, KEY_AMOUNT, KEY_START_YEAR,
             KEY_START_MONTH, KEY_START_DAY, KEY_END_YEAR, KEY_END_MONTH, KEY_END_DAY, KEY_NUM_PPL};
@@ -131,7 +139,7 @@ public class DBAdapter {
     public static final String DATABASE_JOURNEY_TABLE = "JourneyTable";
     public static final String DATABASE_UTILITIES_TABLE = "UtilitiesTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
 
     private static final String CAR_DATABASE_CREATE_SQL =
             "create table " + DATABASE_CAR_TABLE
@@ -191,7 +199,10 @@ public class DBAdapter {
                     + KEY_HWYMPG + " real, "
                     + KEY_ROUTE_NAME + " text not null, "
                     + KEY_CITYDISTANCE + " real not null, "
-                    + KEY_HWYDISTANCE + " real not null"
+                    + KEY_HWYDISTANCE + " real not null, "
+                    + KEY_YEAR + " integer not null, "
+                    + KEY_MONTH + " integer not null, "
+                    + KEY_DAY + " integer not null"
 
                     // Rest  of creation:
                     + ");";
@@ -243,7 +254,7 @@ public class DBAdapter {
         String name = car.getNickname();
         String model = car.getModel();
         String make = car.getMake();
-        int year = car.getYear();
+        int carYear = car.getYear();
         String displacementVol = car.getDisplacementVol();
         String transmissionType = car.getTransmissionType();
         String fuelType = car.getFuelType();
@@ -254,7 +265,7 @@ public class DBAdapter {
         initialValues.put(KEY_NAME, name);
         initialValues.put(KEY_MODEL, model);
         initialValues.put(KEY_MAKE, make);
-        initialValues.put(KEY_YEAR, year);
+        initialValues.put(KEY_CAR_YEAR, carYear);
         initialValues.put(KEY_DISPLACEMENT_VOL, displacementVol);
         initialValues.put(KEY_TRANSMISSION_TYPE, transmissionType);
         initialValues.put(KEY_FUEL_TYPE, fuelType);
@@ -268,7 +279,7 @@ public class DBAdapter {
     public long insertTotalCar(Car car) {
         String model = car.getModel();
         String make = car.getMake();
-        int year = car.getYear();
+        int carYear = car.getYear();
         String displacementVol = car.getDisplacementVol();
         String transmissionType = car.getTransmissionType();
         String fuelType = car.getFuelType();
@@ -278,7 +289,7 @@ public class DBAdapter {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_MODEL, model);
         initialValues.put(KEY_MAKE, make);
-        initialValues.put(KEY_YEAR, year);
+        initialValues.put(KEY_CAR_YEAR, carYear);
         initialValues.put(KEY_DISPLACEMENT_VOL, displacementVol);
         initialValues.put(KEY_TRANSMISSION_TYPE, transmissionType);
         initialValues.put(KEY_FUEL_TYPE, fuelType);
@@ -309,13 +320,18 @@ public class DBAdapter {
         Transportation.TRANSPORTATION_TYPE type = transportation.getType();
         ContentValues initialValues = new ContentValues();
 
+        Calendar date = journey.getDate();
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH);
+        int day = date.get(Calendar.DAY_OF_MONTH);
+
         switch (type) {
             case CAR:
                 Car car = (Car) transportation;
                 String name = car.getNickname();
                 String model = car.getModel();
                 String make = car.getMake();
-                int year = car.getYear();
+                int carYear = car.getYear();
                 String displacementVol = car.getDisplacementVol();
                 String transmissionType = car.getTransmissionType();
                 String fuelType = car.getFuelType();
@@ -327,7 +343,7 @@ public class DBAdapter {
                 initialValues.put(KEY_NAME, name);
                 initialValues.put(KEY_MODEL, model);
                 initialValues.put(KEY_MAKE, make);
-                initialValues.put(KEY_YEAR, year);
+                initialValues.put(KEY_CAR_YEAR, carYear);
                 initialValues.put(KEY_DISPLACEMENT_VOL, displacementVol);
                 initialValues.put(KEY_TRANSMISSION_TYPE, transmissionType);
                 initialValues.put(KEY_FUEL_TYPE, fuelType);
@@ -359,6 +375,10 @@ public class DBAdapter {
         initialValues.put(KEY_ROUTE_NAME, routeName);
         initialValues.put(KEY_CITYDISTANCE, cityDistance);
         initialValues.put(KEY_HWYDISTANCE, hwyDistance);
+
+        initialValues.put(KEY_YEAR, year);
+        initialValues.put(KEY_MONTH, month);
+        initialValues.put(KEY_DAY, day);
 
         // Insert it into the database.
         return db.insert(DATABASE_JOURNEY_TABLE, null, initialValues);
@@ -542,14 +562,14 @@ public class DBAdapter {
         String name = car.getNickname();
         String model = car.getModel();
         String make = car.getMake();
-        int year = car.getYear();
+        int carYear = car.getYear();
         String displacementVol = car.getDisplacementVol();
         String transmissionType = car.getTransmissionType();
         String fuelType = car.getFuelType();
         float cityMPG = car.getMilesPerGallonCity();
         float hwyMPG = car.getMilesPerGallonHway();
 
-        String[] values = new String[]{name, model, make, String.valueOf(year), displacementVol,
+        String[] values = new String[]{name, model, make, String.valueOf(carYear), displacementVol,
                                         transmissionType, fuelType, String.valueOf(cityMPG), String.valueOf(hwyMPG)};
 
         String where = KEY_NAME + "=? and " + KEY_MODEL + "=? and " + KEY_MAKE + "=? and " +
@@ -647,6 +667,11 @@ public class DBAdapter {
         float cityDistance = route.getCityDriveDistance();
         float hwyDistance = route.getHighwayDriveDistance();
 
+        Calendar date = journey.getDate();
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH);
+        int day = date.get(Calendar.DAY_OF_MONTH);
+
         Transportation.TRANSPORTATION_TYPE type = transportation.getType();
         String transportationType = "";
         switch (type) {
@@ -656,21 +681,23 @@ public class DBAdapter {
                 String name = car.getNickname();
                 String model = car.getModel();
                 String make = car.getMake();
-                int year = car.getYear();
+                int carYear = car.getYear();
                 String displacementVol = car.getDisplacementVol();
                 String transmissionType = car.getTransmissionType();
                 String fuelType = car.getFuelType();
                 float cityMPG = car.getMilesPerGallonCity();
                 float hwyMPG = car.getMilesPerGallonHway();
 
-                values = new String[]{transportationType, name, model, make, String.valueOf(year), displacementVol, transmissionType, fuelType,
-                        String.valueOf(cityMPG), String.valueOf(hwyMPG), routeName, String.valueOf(cityDistance), String.valueOf(hwyDistance)};
+
+                values = new String[]{transportationType, name, model, make, String.valueOf(carYear), displacementVol, transmissionType, fuelType,
+                        String.valueOf(cityMPG), String.valueOf(hwyMPG), routeName, String.valueOf(cityDistance), String.valueOf(hwyDistance),
+                        String.valueOf(year), String.valueOf(month), String.valueOf(day)};
 
                 where = KEY_TYPE + "=? and " + KEY_NAME + "=? and " + KEY_MODEL + "=? and "
                         + KEY_MAKE + "=? and " + KEY_YEAR + "=? and "+ KEY_DISPLACEMENT_VOL + "=? and "
                         + KEY_TRANSMISSION_TYPE + "=? and " + KEY_FUEL_TYPE + "=? and " + KEY_CITYMPG + "=? and "
                         + KEY_HWYMPG + "=? and " + KEY_ROUTE_NAME + "=? and " + KEY_CITYDISTANCE + "=? and "
-                        + KEY_HWYDISTANCE + "=?";
+                        + KEY_HWYDISTANCE + "=? and " + KEY_YEAR + "=? and " + KEY_MONTH + "=? and " + KEY_DAY + "=?";
                 break;
             case BUS:
                 transportationType = "BUS";
@@ -687,8 +714,10 @@ public class DBAdapter {
         }
 
         if(type != Transportation.TRANSPORTATION_TYPE.CAR) {
-            values = new String[]{transportationType, routeName, String.valueOf(cityDistance), String.valueOf(hwyDistance)};
-            where = KEY_TYPE + "=? and " + KEY_ROUTE_NAME + "=? and " + KEY_CITYDISTANCE + "=? and " + KEY_HWYDISTANCE + "=?";
+            values = new String[]{transportationType, routeName, String.valueOf(cityDistance), String.valueOf(hwyDistance),
+                        String.valueOf(year), String.valueOf(month), String.valueOf(day)};
+            where = KEY_TYPE + "=? and " + KEY_ROUTE_NAME + "=? and " + KEY_CITYDISTANCE + "=? and " + KEY_HWYDISTANCE + "=? and "
+                    + KEY_YEAR + "=? and " + KEY_MONTH + "=? and " + KEY_DAY + "=?";
         }
         Cursor c = 	db.query(true, DATABASE_JOURNEY_TABLE, JOURNEY_ALL_KEYS,
                 where, values, null, null, null, null);
@@ -709,7 +738,7 @@ public class DBAdapter {
         String name = car.getNickname();
         String model = car.getModel();
         String make = car.getMake();
-        int year = car.getYear();
+        int carYear = car.getYear();
         String displacementVol = car.getDisplacementVol();
         String transmissionType = car.getTransmissionType();
         String fuelType = car.getFuelType();
@@ -720,7 +749,7 @@ public class DBAdapter {
         newValues.put(KEY_NAME, name);
         newValues.put(KEY_MODEL, model);
         newValues.put(KEY_MAKE, make);
-        newValues.put(KEY_YEAR, year);
+        newValues.put(KEY_CAR_YEAR, carYear);
         newValues.put(KEY_DISPLACEMENT_VOL, displacementVol);
         newValues.put(KEY_TRANSMISSION_TYPE, transmissionType);
         newValues.put(KEY_FUEL_TYPE, fuelType);
@@ -736,7 +765,7 @@ public class DBAdapter {
 
         String model = car.getModel();
         String make = car.getMake();
-        int year = car.getYear();
+        int carYear = car.getYear();
         String displacementVol = car.getDisplacementVol();
         String transmissionType = car.getTransmissionType();
         String fuelType = car.getFuelType();
@@ -746,7 +775,7 @@ public class DBAdapter {
         ContentValues newValues = new ContentValues();
         newValues.put(KEY_MODEL, model);
         newValues.put(KEY_MAKE, make);
-        newValues.put(KEY_YEAR, year);
+        newValues.put(KEY_CAR_YEAR, carYear);
         newValues.put(KEY_DISPLACEMENT_VOL, displacementVol);
         newValues.put(KEY_TRANSMISSION_TYPE, transmissionType);
         newValues.put(KEY_FUEL_TYPE, fuelType);
@@ -779,6 +808,12 @@ public class DBAdapter {
         Transportation transportation = journey.getTransportation();
         Route route = journey.getRoute();
         Transportation.TRANSPORTATION_TYPE type = transportation.getType();
+
+        Calendar date = journey.getDate();
+        int year = date.get(Calendar.YEAR);
+        int month = date.get(Calendar.MONTH);
+        int day = date.get(Calendar.DAY_OF_MONTH);
+
         ContentValues newValues = new ContentValues();
 
         switch (type) {
@@ -787,7 +822,7 @@ public class DBAdapter {
                 String name = car.getNickname();
                 String model = car.getModel();
                 String make = car.getMake();
-                int year = car.getYear();
+                int carYear = car.getYear();
                 String displacementVol = car.getDisplacementVol();
                 String transmissionType = car.getTransmissionType();
                 String fuelType = car.getFuelType();
@@ -799,12 +834,15 @@ public class DBAdapter {
                 newValues.put(KEY_NAME, name);
                 newValues.put(KEY_MODEL, model);
                 newValues.put(KEY_MAKE, make);
-                newValues.put(KEY_YEAR, year);
+                newValues.put(KEY_CAR_YEAR, carYear);
                 newValues.put(KEY_DISPLACEMENT_VOL, displacementVol);
                 newValues.put(KEY_TRANSMISSION_TYPE, transmissionType);
                 newValues.put(KEY_FUEL_TYPE, fuelType);
                 newValues.put(KEY_CITYMPG, cityMPG);
                 newValues.put(KEY_HWYMPG, hwyMPG);
+                newValues.put(KEY_YEAR, year);
+                newValues.put(KEY_MONTH, month);
+                newValues.put(KEY_DAY, day);
                 break;
             case BUS:
                 value = Transportation.TRANSPORTATION_TYPE.BUS.ordinal();
@@ -831,6 +869,10 @@ public class DBAdapter {
         newValues.put(KEY_ROUTE_NAME, routeName);
         newValues.put(KEY_CITYDISTANCE, cityDistance);
         newValues.put(KEY_HWYDISTANCE, hwyDistance);
+
+        newValues.put(KEY_YEAR, year);
+        newValues.put(KEY_MONTH, month);
+        newValues.put(KEY_DAY, day);
 
         // Insert it into the database.
         return db.update(DATABASE_JOURNEY_TABLE, newValues, where, null) != 0;
