@@ -265,15 +265,6 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         lineDataSets.add(skytrainLineDataSet);
         lineDataSets.add(electricityLineDataSet);
         lineDataSets.add(gasLineDataSet);
-
-        lineChart.setXAxisRenderer(new IAxisValueFormatter(
-            @Overridez
-            String getFormattedValue(float value, AxisBase axis){
-
-        }
-
-        ));
-
         lineChart.setData(new LineData(lineDataSets));
         lineChart.invalidate();
     }
