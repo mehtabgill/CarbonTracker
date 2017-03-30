@@ -26,7 +26,7 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
  */
 public class MainMenuActivity extends AppCompatActivity {
 
-    private enum BUTTONS{CREATE_JOURNEY, CREATE_UTILITY_BILL, VIEW_CARBON_FOOTPRINT, EDIT_DELETE_UTILTITY};
+    private enum BUTTONS{CREATE_JOURNEY, CREATE_UTILITY_BILL, VIEW_CARBON_FOOTPRINT, EDIT_DELETE_UTILTITY, VIEW_JOURNEY};
     private static int selected_year;
     private static int selected_month;
     private static int selected_date;
@@ -46,6 +46,7 @@ public class MainMenuActivity extends AppCompatActivity {
         Button viewCarbonFootprintButton = (Button) findViewById(R.id.viewCarbonFootprintButton);
         Button createUtilityBillButton = (Button) findViewById(R.id.create_utility_bill_button);
         Button editDeleteUtilityBillButton = (Button) findViewById(R.id.edit_delete_utility_buitton);
+        Button btnViewJourney = (Button) findViewById(R.id.btn_View_Journey);
         createJourneyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +73,12 @@ public class MainMenuActivity extends AppCompatActivity {
                 clickMainMenuButton(BUTTONS.EDIT_DELETE_UTILTITY);
             }
         });
-
+        btnViewJourney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickMainMenuButton(BUTTONS.VIEW_JOURNEY);
+            }
+        });
     }
 
     private void clickMainMenuButton(BUTTONS function) {
@@ -142,6 +148,9 @@ public class MainMenuActivity extends AppCompatActivity {
                 break;
             case EDIT_DELETE_UTILTITY:
                 startActivity(new Intent(MainMenuActivity.this, EditDeleteUtilitiesActivity.class));
+                break;
+            case VIEW_JOURNEY:
+                startActivity(new Intent(MainMenuActivity.this, ViewJourneyActivity.class));
                 break;
         }
     }

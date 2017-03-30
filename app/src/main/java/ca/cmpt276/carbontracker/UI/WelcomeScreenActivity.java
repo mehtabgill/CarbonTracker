@@ -141,6 +141,7 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         ImageView recycle = (ImageView) findViewById(R.id.recycle);
 
         recycle.setTranslationY(-2000f);
+        model.setContext(context);
         model.openDB(context);
         model.loadDataFromDB();
     }

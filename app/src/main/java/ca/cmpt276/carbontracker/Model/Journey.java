@@ -15,6 +15,9 @@ import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
 public class Journey extends Emission {
 
+    private String[] MONTH = new String[] {"January", "February", "March", "April", "May", "June",
+                                            "July", "August", "September", "October", "November", "December"};
+
     private Transportation transportation; // Car object, use getter methods to get required info if needed
     private Route route; //route object, use getter methods to get required info
     private float carbonEmissionValue;
@@ -90,7 +93,6 @@ public class Journey extends Emission {
 
     public void setRoute(Route route){
         this.route = new Route(route);
-        this.route = (Route) route;
         calculateCarbonEmission();
     }
 
@@ -124,6 +126,9 @@ public class Journey extends Emission {
         return carbonEmissionValue;
     }
 
+    public float getDistance() {
+        return route.getTotalDistance();
+    }
 
     public void setDate(Calendar newDate){
         date = newDate;
@@ -131,5 +136,13 @@ public class Journey extends Emission {
 
     public Calendar getDate(){
         return date;
+    }
+
+    public String getStringDate() {
+
+        String temp = MONTH[date.get(Calendar.MONTH)] + " "
+                    + date.get(Calendar.DAY_OF_MONTH) + ", "
+                    + date.get(Calendar.YEAR);
+        return temp;
     }
 }

@@ -9,6 +9,10 @@ public abstract class Transportation {
     public enum TRANSPORTATION_TYPE {CAR, BUS, SKYTRAIN, BIKE, WALK}
     public static final String[] TYPE = new String[] {"CAR", "BUS", "SKYTRAIN", "BIKE", "WALK"};
 
+    public static String getStringOfType(TRANSPORTATION_TYPE type) {
+        return TYPE[type.ordinal()];
+    }
+
     //default constructor
     public Transportation() {
 

@@ -2,9 +2,13 @@ package ca.cmpt276.carbontracker.Model;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import ca.cmpt276.carbontracker.UI.R;
+import ca.cmpt276.carbontracker.UI.ViewJourneyActivity;
 
 /**
  * Created by Elvin Laptop on 2017-03-06.
@@ -13,6 +17,8 @@ import java.util.Calendar;
 public class SingletonModel {
     //TODO: Move all code relating to car search to their own class
     //Singleton should only be the middle ground between logic and UI
+
+    Context context;
 
     private CarCollection currentCarCollection = new CarCollection();
     private RouteCollection routeCollection = new RouteCollection();
@@ -517,4 +523,41 @@ public class SingletonModel {
         return journeyCollection.getNumSkytrain();
     }
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public ArrayList<String[]> getJourneyData() {
+        ArrayList<String[]> list = new ArrayList<>();
+        for(Journey journey : journeyCollection) {
+            String[] temp = new String[ViewJourneyActivity.NUM_COLUMNS];
+            Transportation transportation = journey.getTransportation();
+            Transportation.TRANSPORTATION_TYPE type = transportation.getType();
+            String transportationType = Transportation.getStringOfType(type);
+            if(transportationType.equals(Transportation.TYPE[Transportation.TRANSPORTATION_TYPE.CAR.ordinal()])){
+                Car car = (Car) transportation;
+                String name = car.getNickname();
+                transportationType += " - " + name;
+            }
+            //TODO: Implement image icon for vehicles
+            //temp[ViewJourneyActivity.COL_IMAGE] = journey.getImageIcon();
+            temp[ViewJourneyActivity.COL_TRANSPORTATION] = transportationType;
+            temp[ViewJourneyActivity.COL_DISTANCE] = String.valueOf(journey.getDistance()) + context.getString(R.string.KM);
+            temp[ViewJourneyActivity.COL_DATE] = journey.getStringDate();
+            temp[ViewJourneyActivity.COL_CO2] = String.valueOf(journey.getCarbonEmissionValue()) + context.getString(R.string.KG);
+            list.add(temp);
+        }
+        return list;
+    }
+
+    public Transportation getTransportationOfJourneyAt(int index) {
+        return journeyCollection.get(index).getTransportation();
+    }
+    public Route getRouteOfJourneyAt(int index) {
+        return journeyCollection.get(index).getRoute();
+    }
 }

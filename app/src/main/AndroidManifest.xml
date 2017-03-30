@@ -26,9 +26,12 @@
         <activity android:name=".AddCarActivity" />
         <activity android:name=".EditDeleteCarActivity" />
         <activity android:name=".AddUtilitiesBillActivity" />
-        <activity android:name=".EditDeleteUtilitiesActivity"></activity>
-        <activity android:name=".TipsActivity"
-            android:theme="@style/AppTheme.popUpWindowTheme"></activity>
+        <activity android:name=".EditDeleteUtilitiesActivity" />
+        <activity
+            android:name=".TipsActivity"
+            android:theme="@style/AppTheme.popUpWindowTheme" />
+        <activity android:name=".ViewJourneyActivity" />
+        <activity android:name=".EditJourneyActivity"></activity>
     </application>
 
 </manifest>
