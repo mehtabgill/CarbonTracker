@@ -124,14 +124,14 @@ public class SingletonModel {
                         String name = cursor.getString(DBAdapter.COL_JOURNEY_NAME);
                         String model = cursor.getString(DBAdapter.COL_JOURNEY_MODEL);
                         String make = cursor.getString(DBAdapter.COL_JOURNEY_MAKE);
-                        int year = cursor.getInt(DBAdapter.COL_JOURNEY_YEAR);
+                        int carYear = cursor.getInt(DBAdapter.COL_JOURNEY_CAR_YEAR);
                         String displacement = cursor.getString(DBAdapter.COL_JOURNEY_DISPLACEMENT_VOL);
                         String transmission = cursor.getString(DBAdapter.COL_JOURNEY_TRANSMISSION_TYPE);
                         String fuelType = cursor.getString(DBAdapter.COL_JOURNEY_FUEL_TYPE);
                         float cityMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_CITYMPG);
                         float hwyMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_HWYMPG);
 
-                        Car car = new Car(make, model, year, displacement, transmission);
+                        Car car = new Car(make, model, carYear, displacement, transmission);
                         car.setNickname(name);
                         car.setFuelType(fuelType);
                         car.setMilesPerGallonCity(cityMPG);
@@ -158,7 +158,15 @@ public class SingletonModel {
 
                 Route route = new Route(name, cityDistance, hwyDistance);
 
+                int year = cursor.getInt(DBAdapter.COL_JOURNEY_YEAR);
+                int month = cursor.getInt(DBAdapter.COL_JOURNEY_MONTH);
+                int day = cursor.getInt(DBAdapter.COL_JOURNEY_DAY);
+
+                Calendar date = Calendar.getInstance();
+                date.set(year, month, day);
+
                 Journey journey = new Journey(transportation, route);
+                journey.setDate(date);
                 journeyCollection.add(journey);
 
             } while(cursor.moveToNext());
