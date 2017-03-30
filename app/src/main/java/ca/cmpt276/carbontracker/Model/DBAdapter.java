@@ -12,10 +12,6 @@ import android.util.Log;
 
 import java.util.Calendar;
 
-import static android.R.attr.endY;
-import static android.R.attr.name;
-import static ca.cmpt276.carbontracker.Model.Utilities.BILL.ELECTRICITY;
-
 
 // TO USE:
 // Change the package (at top) to match your project.
@@ -369,7 +365,7 @@ public class DBAdapter {
     }
 
     public long insertUtility(Utilities utilities) {
-        Utilities.BILL type = utilities.getBillMode();
+        Utilities.BILL type = utilities.getBill();
         String billType = "";
         switch (type) {
             case ELECTRICITY:
@@ -596,7 +592,7 @@ public class DBAdapter {
 
     public long findUtilities(Utilities utilities) {
 
-        Utilities.BILL type = utilities.getBillMode();
+        Utilities.BILL type = utilities.getBill();
         String billType = "";
         switch (type) {
             case ELECTRICITY:
@@ -843,7 +839,7 @@ public class DBAdapter {
     public boolean updateUtilities(long rowId, Utilities utilities) {
         String where = KEY_ROWID + "=" + rowId;
 
-        Utilities.BILL type = utilities.getBillMode();
+        Utilities.BILL type = utilities.getBill();
         String billType = "";
         switch (type) {
             case ELECTRICITY:

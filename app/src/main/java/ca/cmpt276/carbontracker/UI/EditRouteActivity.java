@@ -83,7 +83,9 @@ public class EditRouteActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                  cDistance = editCityDistance.getText().toString() ;
-                 temp1 = Float.parseFloat(cDistance);
+                 if(!cDistance.isEmpty()){
+                     temp1 = Float.parseFloat(cDistance);
+                 }
             }
         });
 
@@ -101,10 +103,11 @@ public class EditRouteActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 hDistance = editHighDistance.getText().toString() ;
-                temp2 = Float.parseFloat(hDistance) ;
+                if(!hDistance.isEmpty()){
+                    temp2 = Float.parseFloat(hDistance);
+                }
             }
         });
-
 
         Button btnOK = (Button) findViewById(R.id.buttonOKEdit) ;
         btnOK.setOnClickListener(new View.OnClickListener() {

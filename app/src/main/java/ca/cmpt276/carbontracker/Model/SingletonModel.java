@@ -2,6 +2,7 @@ package ca.cmpt276.carbontracker.Model;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,15 +20,12 @@ public class SingletonModel {
 
     Context context;
 
-    CarCollection currentCarCollection = new CarCollection();
-    CarCollection currentSearchCollection = new CarCollection();
-    CarCollection totalCarCollection = new CarCollection();
-    CarCollection currentSearchPreviousState = new CarCollection();
-    RouteCollection routeCollection = new RouteCollection();
-    ArrayList<Emission> emissionArrayList = new ArrayList<Emission>();
-    JourneyCollection journeyCollection = new JourneyCollection();
-    UtilitiesCollection utilitiesCollection = new UtilitiesCollection();
-    ArrayList<String> carMakeList;
+    private CarCollection currentCarCollection = new CarCollection();
+    private RouteCollection routeCollection = new RouteCollection();
+    private JourneyCollection journeyCollection = new JourneyCollection();
+    private UtilitiesCollection utilitiesCollection = new UtilitiesCollection();
+
+    private ArrayList<String> carMakeList;
     public enum RetrieveEntries {Current, Search, Total};
 
     private static final SingletonModel instance = new SingletonModel();
@@ -41,12 +39,6 @@ public class SingletonModel {
         return instance;
     }
 
-    /*
-     * getCarModelsOfMake, getCarYearsOfModels,
-     * updateCurrentSearchByYear, addNewCarWithNickname
-     * are logic functions for current search mode;
-     * May need to edit to adapt different modes of searching later
-     */
 
     public void openDB(Context context) {
         database = new DBAdapter(context);
@@ -205,30 +197,6 @@ public class SingletonModel {
         cursor.close();
     }
 
-    public ArrayList<String> getCarModelsOfMake(String make){
-        if(currentSearchCollection.size()== 0){
-            currentSearchCollection = totalCarCollection;
-        }
-        currentSearchCollection = totalCarCollection.findCarsWithMake(make);
-        currentSearchCollection.searchUniqueModelName();
-        ArrayList<String> currentModelList = currentSearchCollection.getUniqueModelNames();
-        currentSearchPreviousState = currentSearchCollection.getDuplicate();
-        return currentModelList;
-    }
-    public ArrayList<String> getCarYearsOfModels(String model){
-        if(currentSearchCollection.size()== 0){
-            currentSearchCollection = totalCarCollection;
-        }
-        currentSearchCollection = currentSearchPreviousState;
-        currentSearchCollection = currentSearchCollection.findCarsWithModel(model);
-        currentSearchCollection.searchUniqueModelYears();
-        ArrayList<String> currentYearList = currentSearchCollection.getUniqueModelYears();
-        return currentYearList;
-    }
-    public void updateCurrentSearchByYear(int year){
-        currentSearchCollection = currentSearchCollection.findCarsWithYear(year);
-    }
-
     public boolean isCurrentCarAdded(String nickname, String description){
         for(Car car : currentCarCollection){
             if (car.getDescriptionNoNickname().equals(description)){
@@ -241,7 +209,11 @@ public class SingletonModel {
         return false;
     }
 
-    public void addNewCarWithNickname(String nickname, String description){
+    public ArrayList<String> getCarEntriesDescription(){
+        return currentCarCollection.getDescriptionList();
+    }
+
+    /*public void addNewCarWithNickname(String nickname, String description){
         for(Car car: currentSearchCollection){
             if (car.getDescriptionNoNickname().equals(description)){
                 car.setNickname(nickname);
@@ -249,27 +221,8 @@ public class SingletonModel {
                 addToCarDB(car);
             }
         }
-    }
-
-    public void resetCurrentSearchCollection(){
-        for(int i = 0; i < currentSearchCollection.size(); i++){
-            currentSearchCollection.remove(i);
-        }
-    }
-
-    public ArrayList<String> getCarEntriesDescription(RetrieveEntries mode){
-        ArrayList<String> carEntriesDescription = new ArrayList<>();
-        switch (mode){
-            case Search:
-                carEntriesDescription = currentSearchCollection.getDescriptionNoNickNameList();
-                break;
-            case Current:
-                carEntriesDescription = currentCarCollection.getDescriptionList();
-                break;
-        }
-        return carEntriesDescription;
-    }
-
+    }*/
+    /*
     public void updateCurrentCarCollectionDescription(){
         ArrayList<String> updatedDescription = new ArrayList<>();
         ArrayList<String> updatedDescriptionNoNickname = new ArrayList<>();
@@ -280,84 +233,43 @@ public class SingletonModel {
         currentCarCollection.setDescriptionList(updatedDescription);
         currentCarCollection.setDescriptionNoNicknameList(updatedDescriptionNoNickname);
     }
+*/
 
-    public void removeCar(String description){
-        for(Car car: currentCarCollection){
-            if(car.getDescription().equals(description)){
-                currentCarCollection.remove(car);
-                long id = database.findCar(car);
-                database.deleteCarRow(id);
-            }
-        }
-    }
-
-
-    public void setTotalCarCollection(CarCollection totalCarCollection){
-        this.totalCarCollection = totalCarCollection;
-
-    }
-
-    public Car getCarFromCollection(String description, RetrieveEntries mode){
-
+    public Car getCar(String description){
         Car returnCar = new Car();
         String current;
         int compareValue;
-        switch (mode) {
-            case Current:
-                for (Car car : currentCarCollection) {
-                    current = car.getDescription();
-                    compareValue = description.compareTo(current);
-                    if (compareValue == 0) {
-                        returnCar = car;
-                    }
-                }
-                break;
-            case Total:
-                for (Car car : totalCarCollection) {
-                    current = car.getDescriptionNoNickname();
-                    compareValue = description.compareTo(current);
-                    if (compareValue == 0) {
-                        returnCar = car;
-                    }
-                }
-                break;
-            case Search:
-                for (Car car : currentSearchCollection) {
-                    current = car.getDescriptionNoNickname();
-                    compareValue = description.compareTo(current);
-                    if (compareValue == 0) {
-                        returnCar = car;
-                    }
-                }
-                break;
-
+        for (Car car : currentCarCollection) {
+            current = car.getDescription();
+            compareValue = description.compareTo(current);
+            if (compareValue == 0) {
+                returnCar = car;
+            }
         }
         return returnCar;
     }
 
+    public Car getCar(int index){
+        Car returnCar = currentCarCollection.getCar(index);
+        return returnCar;
+    }
 
-    public int getIndexOfCar(Car car){
+    //TODO: Rename this
+    public int getCarIndex(Car car){
         return currentCarCollection.getIndex(car);
-    }
-
-    public ArrayList<String> getCarMakeList() {
-        return carMakeList;
-    }
-
-    public void setCarMakeList(ArrayList<String> carMakeList) {
-        this.carMakeList = carMakeList;
     }
 
     public CarCollection getAllCurrentCars(){
         return currentCarCollection;
     }
 
-    public void addToCarCollection(Car car){
+    //TODO: Rename this
+    public void addCar(Car car){
         addToCarDB(car);
         currentCarCollection.add(car);
     }
 
-    public void editCar(String description, Car newCar){
+    /*public void editCar(String description, Car newCar){
         int index;
         for(Car car: currentCarCollection){
             if(car.getDescription().equals(description)){
@@ -367,11 +279,35 @@ public class SingletonModel {
                 database.updateCar(id, newCar);
             }
         }
+    }*/
 
+    public void editCar(int index, Car newCar){
+        currentCarCollection.set(index, newCar);
+        database.updateCar(index, newCar);
     }
 
+   /* public void removeCar(String description){
+        int index = 0;
+        for(Car car: currentCarCollection){
+            if(car.getDescription().equals(description)){
+                index = currentCarCollection.getIndex(car);
+                long id = database.findCar(car);
+                database.deleteCarRow(id);
+                break;
+            }
+        }
+        currentCarCollection.remove(index);
+    }*/
 
-    public Route getRouteByName(String name){
+    public void removeCar(int index){
+        Car car = currentCarCollection.getCar(index);
+        long id = database.findCar(car);
+        database.deleteCarRow(id);
+        currentCarCollection.remove(car);
+    }
+
+    //TODO: Rename this
+    public Route getRoute(String name){
         Route returnRoute = new Route();
         for (Route route: routeCollection){
             if(route.getName().toLowerCase().equals(name.toLowerCase())){
@@ -380,20 +316,40 @@ public class SingletonModel {
         }
         return returnRoute;
     }
+    public Route getRoute(int index) {
+        return routeCollection.getRoute(index);
+    }
+
     public RouteCollection getRouteCollection() {
         return routeCollection;
     }
 
-    public void addNewRoute(Route route){
+    //TODO: Rename this
+    public void addRoute(Route route){
         addToRouteDB(route);
         routeCollection.add(route);
     }
 
-    public void removeFromRouteCollection(int index){
+    public void removeRoute(int index){
         Route route = routeCollection.getRoute(index);
         long id = database.findRoute(route);
         database.deleteRouteRow(id);
         routeCollection.remove(index);
+    }
+
+    public void editRoute(int index, String newName, float newCity, float newHighway){
+        Route route = new Route(newName, newCity, newHighway);
+        Route oldRoute = routeCollection.getRoute(index);
+        long id = database.findRoute(oldRoute);
+        database.updateRoute(id, route);
+        routeCollection.editRoute(index, route);
+    }
+
+    public void editRoute(int index, Route newRoute){
+        Route oldRoute = routeCollection.getRoute(index);
+        long id = database.findRoute(oldRoute);
+        routeCollection.editRoute(index, newRoute);
+        database.updateRoute(id, newRoute);
     }
 
     public ArrayList<String> getRouteCollectionNames(){
@@ -404,16 +360,16 @@ public class SingletonModel {
         return routeNames;
     }
 
-    //Choose one
+/*
     public void addNewJourney(String carDescription, String routeName){
-        Car newCar = getCarFromCollection(carDescription, RetrieveEntries.Current);
+        Car newCar = getCar(carDescription);
         Car car = new Car(newCar);
-        Route newRoute = getRouteByName(routeName);
+        Route newRoute = getRoute(routeName);
         Route route = new Route(newRoute);
         Journey newJourney = new Journey(car, route);
         journeyCollection.add(newJourney);
         addToJourneyDB(newJourney);
-    }
+    }*/
 
     public void addNewJourney(Transportation newTransportation, Route newRoute){
         Journey newJourney = new Journey(newTransportation, newRoute);
@@ -457,26 +413,42 @@ public class SingletonModel {
         return utilitiesDescriptionList;
     }
 
-    public void addNewUtilitiesBill(Utilities.BILL billType, float amount, Calendar startDate, Calendar endDate, int numberOfPeople){
-        Utilities newBill = new Utilities(billType, amount, startDate, endDate, numberOfPeople);
-        utilitiesCollection.add(newBill);
-        addToUtilitiesDB(newBill);
+
+    public void addNewUtilities(Utilities.BILL billType, float amount, Calendar startDate, Calendar endDate, int numberOfPeople){
+        Utilities newUtilities = new Utilities(billType, amount, startDate, endDate, numberOfPeople);
+        utilitiesCollection.add(newUtilities);
+        addToUtilitiesDB(newUtilities);
     }
 
-    public void deleteUtilities(String description){
+    public void addNewUtilities(Utilities newUtilities){
+        utilitiesCollection.add(newUtilities);
+        addToUtilitiesDB(newUtilities);
+    }
+
+    public void removeUtilities(String description){
+        int index = 0;
         for(Utilities utilities : utilitiesCollection){
             if(utilities.toString().equals(description)){
-                utilitiesCollection.remove(utilities);
                 long id = database.findUtilities(utilities);
                 database.deleteUtilitiesRow(id);
+                index = utilitiesCollection.getIndex(utilities);
             }
         }
+        utilitiesCollection.remove(index);
+    }
+
+    public void removeUtilities(int index){
+        Utilities currentUtilities = utilitiesCollection.getUtilities(index);
+        long id = database.findUtilities(currentUtilities);
+        database.deleteUtilitiesRow(id);
+        utilitiesCollection.remove(index);
     }
 
     public void editUtilities(String originalUtilities, Utilities editedUtilities){
+        int index = 0;
         for(Utilities utilities : utilitiesCollection){
             if (utilities.toString().equals(originalUtilities)){
-                int index = utilitiesCollection.getIndex(utilities);
+                index = utilitiesCollection.getIndex(utilities);
                 utilitiesCollection.set(index, editedUtilities);
                 long id = database.findUtilities(utilities);
                 database.updateUtilities(id, editedUtilities);
@@ -484,16 +456,55 @@ public class SingletonModel {
         }
     }
 
-    public void editRoute(int index, String newName, float newCity, float newHighway){
-        Route route = new Route(newName, newCity, newHighway);
-        Route oldRoute = routeCollection.getRoute(index);
-        long id = database.findRoute(oldRoute);
-        database.updateRoute(id, route);
-        routeCollection.editRoute(index, route);
+    public void editUtilities(int index, Utilities editedUtilities){
+        Utilities currentUtilities = utilitiesCollection.getUtilities(index);
+        long id = database.findUtilities(currentUtilities);
+        utilitiesCollection.set(index, editedUtilities);
+        database.updateUtilities(id, editedUtilities);
     }
 
-    public Route getRoute(int index) {
-        return routeCollection.getRoute(index);
+
+
+
+    public ArrayList<Emission> getEmissionListOnDay(Calendar date){
+        ArrayList<Emission> emissionArrayList = new ArrayList<>();
+        for (Journey journey : journeyCollection) {
+            int year = journey.getDate().get(Calendar.YEAR);
+            int dayOfYear = journey.getDate().get(Calendar.DAY_OF_YEAR);
+            if ( (date.get(Calendar.YEAR) == year) &&
+                (date.get(Calendar.DAY_OF_YEAR) == dayOfYear) ){
+                emissionArrayList.add(journey);
+            }
+        }
+        for(Utilities utilities : utilitiesCollection){
+            if(utilities.dateIsInBillingPeriod(date)){
+                emissionArrayList.add(utilities);
+            }
+        }
+        return emissionArrayList;
+    }
+
+    public Utilities getRelativeUtilitiesValue(Calendar date, Utilities.BILL billType){
+        Utilities relativeUtilities = new Utilities();
+        Calendar dateForward = (Calendar) date.clone();
+        Calendar dateBackward = (Calendar) date.clone();
+        int maxDayDistance = 90;
+        int dayDistance = 1;
+
+        while (dayDistance <= maxDayDistance){
+            dateForward.add(Calendar.DATE, dayDistance);
+            dateBackward.add(Calendar.DATE, -dayDistance);
+            for(Utilities utilities : utilitiesCollection){
+                if ((utilities.dateIsInBillingPeriod(dateForward)) ||
+                        (utilities.dateIsInBillingPeriod(dateBackward)) ){
+                    if (utilities.getBill().equals(billType)){
+                        relativeUtilities = utilities;
+                    }
+                }
+            }
+            dayDistance++;
+        }
+        return relativeUtilities;
     }
 
     public int getWalks(){

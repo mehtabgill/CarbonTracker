@@ -36,13 +36,19 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:text="@string/switch_button" />
+        android:text="@string/switch_button"
+        android:visibility="invisible"/>
 
     <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/chart"
+        android:id="@+id/pieChart"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         />
-    //comment in to be commit-able
 
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/table_header_textView"
+        android:visibility="invisible"/>
 </RelativeLayout>

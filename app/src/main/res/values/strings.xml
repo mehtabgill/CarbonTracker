@@ -50,10 +50,14 @@
     <string name="welcomeMessage1">Want to save the Earth?</string>
     <string name="welcomeMessage2">Click the picture!</string>
     <string name="skip">SKIP</string>
-    <string name="table_header">SUMMARY OF CARBON FOORPRINT</string>
+    <string name="table_header">SUMMARY OF CARBON FOOTPRINT</string>
     <string name="journey_date_header">Date</string>
     <string name="journey_distance_header">Distance\n(km) </string>
     <string name="journey_car_name_header">Car Name </string>
+    <string name="emission_type_header">Emission Type</string>
+    <string name="emission_name_header">Emission Name</string>
+    <string name="emission_value_header">Emission Value (kg)</string>
+    <string name="emission_value_formatted_string">%.3f</string>
     <string name="journey_carbon_emission_header">Carbon Emission\n(kg)</string>
     <string name="switch_button">SWITCH TO PIE CHART/TABLE</string>
     <string name="existing_car_text">Existing Routes</string>
@@ -89,6 +93,16 @@
     <string name="KG">KG</string>
     <string name="view_journey">View Journey</string>
     <string name="route">Route</string>
-
-
+    <string name="Car">Car</string>
+    <string name="Bus">Bus</string>
+    <string name="Skytrain">Skytrain</string>
+    <string name="Bike">Bike</string>
+    <string name="Walk">Walk</string>
+    <string name="Journey">Journey</string>
+    <string name="Utilities">Utilities</string>
+    <string name="select_time_range_popup">Select your time range:</string>
+    <string name="mode_1_day">1 DAY</string>
+    <string name="mode_28_day">LAST 28 DAY</string>
+    <string name="mode_365_day">LAST 365 DAY</string>
+    <string name="calendar_header">Select your date: </string>
 </resources>

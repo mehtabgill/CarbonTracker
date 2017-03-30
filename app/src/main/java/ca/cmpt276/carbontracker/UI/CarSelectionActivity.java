@@ -18,9 +18,10 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
  * UI class to display Select transportation activity, including select car, delete car, edit car, add new car
  */
 public class CarSelectionActivity extends AppCompatActivity {
+
     private SingletonModel model = SingletonModel.getInstance();
     Spinner selectCarSpinner;
-    String selectedCarDescription;
+    int selectedCarIndex;
     Button selectCarButton;
     Button addCarButton;
     Button editDeleteCarButton;
@@ -46,7 +47,7 @@ public class CarSelectionActivity extends AppCompatActivity {
                 }
                 else{
                     Intent intent = new Intent(CarSelectionActivity.this, SelectRouteActivity.class);
-                    intent.putExtra(DESCRIPTION_KEY, selectedCarDescription);
+                    intent.putExtra(DESCRIPTION_KEY, selectedCarIndex);
                     startActivity(intent);
                 }
             }
@@ -72,10 +73,9 @@ public class CarSelectionActivity extends AppCompatActivity {
                 }
                 else{
                     Intent intent = new Intent(CarSelectionActivity.this, EditDeleteCarActivity.class);
-                    intent.putExtra(DESCRIPTION_KEY, selectedCarDescription);
+                    intent.putExtra(DESCRIPTION_KEY, selectedCarIndex);
                     startActivity(intent);
                 }
-
             }
         });
         selectCarSpinner = (Spinner)findViewById(R.id.select_car_spinner);
@@ -85,8 +85,7 @@ public class CarSelectionActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        //SingletonModel.updateCurrentCarCollectionDescription();
-        currentCarListDescription = model.getCarEntriesDescription(SingletonModel.RetrieveEntries.Current);
+        currentCarListDescription = model.getCarEntriesDescription();
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, currentCarListDescription
         );
@@ -95,7 +94,7 @@ public class CarSelectionActivity extends AppCompatActivity {
         selectCarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedCarDescription = selectCarSpinner.getSelectedItem().toString();
+                selectedCarIndex = selectCarSpinner.getSelectedItemPosition();
             }
 
             @Override
