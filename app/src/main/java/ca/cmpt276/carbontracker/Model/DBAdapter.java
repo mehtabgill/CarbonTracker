@@ -694,7 +694,7 @@ public class DBAdapter {
                         String.valueOf(year), String.valueOf(month), String.valueOf(day)};
 
                 where = KEY_TYPE + "=? and " + KEY_NAME + "=? and " + KEY_MODEL + "=? and "
-                        + KEY_MAKE + "=? and " + KEY_YEAR + "=? and "+ KEY_DISPLACEMENT_VOL + "=? and "
+                        + KEY_MAKE + "=? and " + KEY_CAR_YEAR + "=? and "+ KEY_DISPLACEMENT_VOL + "=? and "
                         + KEY_TRANSMISSION_TYPE + "=? and " + KEY_FUEL_TYPE + "=? and " + KEY_CITYMPG + "=? and "
                         + KEY_HWYMPG + "=? and " + KEY_ROUTE_NAME + "=? and " + KEY_CITYDISTANCE + "=? and "
                         + KEY_HWYDISTANCE + "=? and " + KEY_YEAR + "=? and " + KEY_MONTH + "=? and " + KEY_DAY + "=?";
