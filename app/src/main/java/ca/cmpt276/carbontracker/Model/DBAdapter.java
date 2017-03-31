@@ -114,7 +114,7 @@ public class DBAdapter {
 
 
     public static final String[] CAR_ALL_KEYS = new String[] {KEY_ROWID, KEY_NAME, KEY_MODEL, KEY_MAKE,
-            KEY_YEAR, KEY_DISPLACEMENT_VOL, KEY_TRANSMISSION_TYPE, KEY_FUEL_TYPE, KEY_CITYMPG, KEY_HWYMPG};
+            KEY_CAR_YEAR, KEY_DISPLACEMENT_VOL, KEY_TRANSMISSION_TYPE, KEY_FUEL_TYPE, KEY_CITYMPG, KEY_HWYMPG};
 
     public static final String[] TOTAL_ALL_KEYS = new String[] {KEY_ROWID, KEY_MODEL, KEY_MAKE,
             KEY_YEAR, KEY_DISPLACEMENT_VOL, KEY_TRANSMISSION_TYPE, KEY_FUEL_TYPE, KEY_CITYMPG, KEY_HWYMPG};
@@ -147,7 +147,7 @@ public class DBAdapter {
                     + KEY_NAME + " text not null, "
                     + KEY_MODEL + " text not null, "
                     + KEY_MAKE + " text not null, "
-                    + KEY_YEAR + " integer not null, "
+                    + KEY_CAR_YEAR + " integer not null, "
                     + KEY_DISPLACEMENT_VOL + " text not null, "
                     + KEY_TRANSMISSION_TYPE + " text not null, "
                     + KEY_FUEL_TYPE + " text not null, "
@@ -573,7 +573,7 @@ public class DBAdapter {
                                         transmissionType, fuelType, String.valueOf(cityMPG), String.valueOf(hwyMPG)};
 
         String where = KEY_NAME + "=? and " + KEY_MODEL + "=? and " + KEY_MAKE + "=? and " +
-                KEY_YEAR + "=? and " + KEY_DISPLACEMENT_VOL + "=? and " + KEY_TRANSMISSION_TYPE + "=? and " +
+                KEY_CAR_YEAR + "=? and " + KEY_DISPLACEMENT_VOL + "=? and " + KEY_TRANSMISSION_TYPE + "=? and " +
                 KEY_FUEL_TYPE + "=? and " + KEY_CITYMPG + "=? and " + KEY_HWYMPG + "=?";
 
         Cursor c = 	db.query(true, DATABASE_CAR_TABLE, CAR_ALL_KEYS,
