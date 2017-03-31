@@ -216,7 +216,6 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
     private void setupLineChart(){
         LineChart lineChart = (LineChart) findViewById(R.id.lineChart);
         lineChart.setVisibility(View.VISIBLE);
-        final String[] dateArray = new String[28];
 
         ArrayList<Entry> carEntries = new ArrayList<>();
         ArrayList<Entry> busEntries = new ArrayList<>();
@@ -231,13 +230,13 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         ArrayList<Float> electricityBillEmissionList = GraphDataRetriever.getElectricityBillEmissionValueList_Month();
         ArrayList<Float> gasBillEmissionList = GraphDataRetriever.getGasBillEmissionValueList_Month();
         for(int i = 0; i < 28; i++){
-            dateArray[i] = dateList.get(i);
             carEntries.add(new Entry(carEmissionList.get(i), i));
             busEntries.add(new Entry(busEmissionList.get(i), i));
             skytrainEntries.add(new Entry(skytrainEmissionList.get(i), i));
             electricityBillEntries.add(new Entry(electricityBillEmissionList.get(i), i));
             gasBillEntries.add(new Entry(gasBillEmissionList.get(i), i));
         }
+
         LineDataSet carLineDataSet = new LineDataSet(carEntries, getString(R.string.Car));
         LineDataSet busLineDataSet = new LineDataSet(busEntries, getString(R.string.Bus));
         LineDataSet skytrainLineDataSet = new LineDataSet(skytrainEntries, getString(R.string.Skytrain));
@@ -266,6 +265,15 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         lineDataSets.add(electricityLineDataSet);
         lineDataSets.add(gasLineDataSet);
         lineChart.setData(new LineData(lineDataSets));
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+        xAxis.setValueFormatter(new IAxisValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                return dateList.get((int)value/2000);
+            }
+        });
         lineChart.invalidate();
     }
 
