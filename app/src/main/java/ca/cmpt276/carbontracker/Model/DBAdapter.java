@@ -139,7 +139,7 @@ public class DBAdapter {
     public static final String DATABASE_JOURNEY_TABLE = "JourneyTable";
     public static final String DATABASE_UTILITIES_TABLE = "UtilitiesTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 7;
 
     private static final String CAR_DATABASE_CREATE_SQL =
             "create table " + DATABASE_CAR_TABLE
