@@ -105,4 +105,8 @@
     <string name="mode_28_day">LAST 28 DAY</string>
     <string name="mode_365_day">LAST 365 DAY</string>
     <string name="calendar_header">Select your date: </string>
+    <string name="distance_hwy">Distance (Hwy):</string>
+    <string name="distance_city">Distance (City):</string>
+    <string name="city_distance_km">City Distance (Km)</string>
+    <string name="highway_distance_km">Highway Distance (Km)</string>
 </resources>

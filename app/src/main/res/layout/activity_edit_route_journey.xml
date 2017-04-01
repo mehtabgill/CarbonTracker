@@ -12,20 +12,20 @@
         android:layout_marginLeft="35dp"
         android:layout_marginStart="35dp"
         android:layout_marginTop="32dp"
-        android:text="Distance (City):" />
+        android:text="@string/distance_city" />
 
     <TextView
         android:id="@+id/textView_hwy_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="Distance (Hwy):"
-        android:layout_below="@+id/editText"
+        android:text="@string/distance_hwy"
+        android:layout_below="@+id/editText_cityDistance"
         android:layout_alignLeft="@+id/textView_city_distance"
         android:layout_alignStart="@+id/textView_city_distance" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editText_cityDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -35,16 +35,18 @@
         android:layout_marginRight="17dp"
         android:layout_marginTop="19dp"
         android:ems="10"
+        android:hint="@string/city_distance_km"
         android:inputType="numberSigned" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editText_hwyDistance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="numberSigned"
         android:layout_alignBaseline="@+id/textView_hwy_distance"
         android:layout_alignBottom="@+id/textView_hwy_distance"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        android:layout_alignLeft="@+id/editText_cityDistance"
+        android:layout_alignStart="@+id/editText_cityDistance"
+        android:ems="10"
+        android:hint="@string/highway_distance_km"
+        android:inputType="numberSigned" />
 </RelativeLayout>
