@@ -181,6 +181,23 @@ public class EditJourneyActivity extends AppCompatActivity {
         if(isSelectedTransportation){
             layout.addView(editTransportationChild);
             transportationChild.setBackgroundResource(R.drawable.background_border_blue);
+            Spinner spinner = (Spinner) findViewById(R.id.spinner_mode);
+            if(spinner.getSelectedItemPosition() != Transportation.TRANSPORTATION_TYPE.CAR.ordinal() &&
+                    transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
+                layout.addView(editRouteChild);
+                EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
+                TextView textViewHwy = (TextView) findViewById(R.id.textView_hwy_distance);
+                editTextHwy.setVisibility(View.GONE);
+                textViewHwy.setVisibility(View.GONE);
+            }
+            else if(spinner.getSelectedItemPosition() == Transportation.TRANSPORTATION_TYPE.CAR.ordinal() &&
+                    transportation.getType() != Transportation.TRANSPORTATION_TYPE.CAR) {
+                layout.addView(editRouteChild);
+                EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
+                TextView textViewHwy = (TextView) findViewById(R.id.textView_hwy_distance);
+                editTextHwy.setVisibility(View.VISIBLE);
+                textViewHwy.setVisibility(View.VISIBLE);
+            }
             if(setupMode) {
                 setupSpinners();
             }
@@ -282,9 +299,7 @@ public class EditJourneyActivity extends AppCompatActivity {
     private void refreshEditRoute() {
         if(isSelectedRoute) {
             layout.addView(editRouteChild);
-            EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
             EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
-            TextView textViewCity = (TextView) findViewById(R.id.textView_city_distance);
             TextView textViewHwy = (TextView) findViewById(R.id.textView_hwy_distance);
 
             if(transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
