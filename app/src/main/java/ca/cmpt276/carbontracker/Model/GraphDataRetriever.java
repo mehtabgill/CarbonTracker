@@ -81,9 +81,10 @@ public final class GraphDataRetriever {
                 emissionTypeList_Month.add("Electricity Bill");
                 emissionTypeList_Month.add("Gas Bill");
                 final int DAY_BACKWARD = 28;
-                Calendar currentDate = (Calendar) date.clone();
-                currentDate.add(Calendar.DATE, -DAY_BACKWARD);
                 Calendar endDate = (Calendar) date.clone();
+                endDate.add(Calendar.DATE, 1);
+                Calendar currentDate = (Calendar) endDate.clone();
+                currentDate.add(Calendar.DATE, -DAY_BACKWARD);
                 while(!currentDate.getTime().equals(endDate.getTime()) ){
                     float carValueByDay = 0;
                     float busValueByDay = 0;

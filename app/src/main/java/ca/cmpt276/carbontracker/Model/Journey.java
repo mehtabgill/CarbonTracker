@@ -5,6 +5,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
@@ -44,6 +45,10 @@ public class Journey extends Emission {
         this.route = new Route(route);
         calculateCarbonEmission();
         date = Calendar.getInstance();
+        //Testing with various date, remove when edit Journey is available
+        Random rand = new Random();
+        int dateDiffer = rand.nextInt(28);
+        date.add(Calendar.DATE, -dateDiffer);
     }
 
     @Override

@@ -26,39 +26,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/view_carbon_footprint_button"
-        android:layout_alignParentBottom="true"
+        android:layout_marginTop="42dp"
+        android:layout_below="@+id/edit_delete_utility_buitton"
         android:layout_alignRight="@+id/create_utility_bill_button"
-        android:layout_alignEnd="@+id/create_utility_bill_button"
-        android:layout_marginBottom="84dp" />
+        android:layout_alignEnd="@+id/create_utility_bill_button" />
 
     <Button
         android:id="@+id/create_utility_bill_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:text="@string/create_utilities_bill_button"
+        android:layout_marginTop="35dp"
         android:layout_below="@+id/createJourneyButton"
-        android:layout_marginTop="54dp"
-        android:text="@string/create_utilities_bill_button" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/edit_delete_utility_buitton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/create_utility_bill_button"
-        android:layout_marginTop="60dp"
-        android:text="@string/edit_delete_utilities_bill_button" />
+        android:text="@string/view_utilities_bill_button"
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/btn_View_Journey"
+        android:layout_alignLeft="@+id/viewCarbonFootprintButton"
+        android:layout_alignStart="@+id/viewCarbonFootprintButton" />
 
     <Button
         android:id="@+id/btn_View_Journey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/view_journey"
+        android:layout_marginTop="36dp"
+        android:layout_below="@+id/create_utility_bill_button"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="78dp"
-        android:text="@string/view_journey" />
+        android:layout_alignParentStart="true" />
     //comment in to be commit-able
 </RelativeLayout>
 

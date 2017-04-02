@@ -45,6 +45,7 @@ import static ca.cmpt276.carbontracker.Model.GraphDataRetriever.GRAPH_MODE.DAY;
 public class ViewCarbonFootprintActivity extends AppCompatActivity {
     private TableLayout tableLayout;
     private PieChart pieChart;
+    LineChart lineChart;
     private SingletonModel model = SingletonModel.getInstance();
 
     //Column for: Emission type, name of transportation/bill, carbon emission value
@@ -67,6 +68,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_carbon_footprint);
         getExtraFromIntent();
         GraphDataRetriever.setUpGraphData(graphMode, date);
+        pieChart = (PieChart) findViewById(R.id.pieChart);
 
         Intent tipsWindow = new Intent(ViewCarbonFootprintActivity.this, TipsActivity.class);
         tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_VIEW_FOOTPRINT);
@@ -81,6 +83,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                 setupLayout_Day();
                 break;
             case MONTH:
+                pieChart.setVisibility(View.INVISIBLE);
                 setupLayout_Month();
                 break;
             case YEAR:
@@ -140,7 +143,6 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
 
             final Button pieChartButton = (Button) findViewById(R.id.switch_button);
             pieChartButton.setVisibility(View.VISIBLE);
-            pieChart = (PieChart) findViewById(R.id.pieChart);
             pieChartButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -214,7 +216,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
 
     //Setup line chart for month
     private void setupLineChart(){
-        LineChart lineChart = (LineChart) findViewById(R.id.lineChart);
+        lineChart = (LineChart) findViewById(R.id.lineChart);
         lineChart.setVisibility(View.VISIBLE);
 
         ArrayList<Entry> carEntries = new ArrayList<>();
@@ -230,11 +232,11 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         ArrayList<Float> electricityBillEmissionList = GraphDataRetriever.getElectricityBillEmissionValueList_Month();
         ArrayList<Float> gasBillEmissionList = GraphDataRetriever.getGasBillEmissionValueList_Month();
         for(int i = 0; i < 28; i++){
-            carEntries.add(new Entry(carEmissionList.get(i), i));
-            busEntries.add(new Entry(busEmissionList.get(i), i));
-            skytrainEntries.add(new Entry(skytrainEmissionList.get(i), i));
-            electricityBillEntries.add(new Entry(electricityBillEmissionList.get(i), i));
-            gasBillEntries.add(new Entry(gasBillEmissionList.get(i), i));
+            carEntries.add(new Entry(i, carEmissionList.get(i)));
+            busEntries.add(new Entry(i, busEmissionList.get(i)));
+            skytrainEntries.add(new Entry(i, skytrainEmissionList.get(i)));
+            electricityBillEntries.add(new Entry(i, electricityBillEmissionList.get(i)));
+            gasBillEntries.add(new Entry(i, gasBillEmissionList.get(i)));
         }
 
         LineDataSet carLineDataSet = new LineDataSet(carEntries, getString(R.string.Car));
@@ -242,6 +244,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         LineDataSet skytrainLineDataSet = new LineDataSet(skytrainEntries, getString(R.string.Skytrain));
         LineDataSet electricityLineDataSet = new LineDataSet(electricityBillEntries, getString(R.string.electricity_bill));
         LineDataSet gasLineDataSet = new LineDataSet(gasBillEntries, getString(R.string.gas_bill));
+
 
         carLineDataSet.setDrawCircles(false);
         carLineDataSet.setColor(Color.RED);
@@ -264,17 +267,20 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         lineDataSets.add(skytrainLineDataSet);
         lineDataSets.add(electricityLineDataSet);
         lineDataSets.add(gasLineDataSet);
-        lineChart.setData(new LineData(lineDataSets));
+
+
+
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                return dateList.get((int)value/2000);
+                return dateList.get((int) value);
             }
         });
+
+        lineChart.setData(new LineData(lineDataSets));
         lineChart.invalidate();
     }
-
 }

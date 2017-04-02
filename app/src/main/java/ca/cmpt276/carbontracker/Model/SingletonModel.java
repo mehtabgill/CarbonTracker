@@ -471,7 +471,9 @@ public class SingletonModel {
         database.updateUtilities(id, editedUtilities);
     }
 
-
+    public Utilities getUtilities(int index){
+        return utilitiesCollection.getUtilities(index);
+    }
 
 
     public ArrayList<Emission> getEmissionListOnDay(Calendar date){
