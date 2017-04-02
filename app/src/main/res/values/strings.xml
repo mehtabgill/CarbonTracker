@@ -109,4 +109,5 @@
     <string name="distance_city">Distance (City):</string>
     <string name="city_distance_km">City Distance (Km)</string>
     <string name="highway_distance_km">Highway Distance (Km)</string>
+    <string name="journeys">Journeys:</string>
 </resources>

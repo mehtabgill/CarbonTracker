@@ -44,7 +44,14 @@ public class ViewJourneyActivity extends AppCompatActivity {
         registerClickCallback();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateJourneyList();
+    }
+
     private void populateJourneyList() {
+        journeyData = model.getJourneyData();
         ArrayAdapter<String[]> adapter = new MyListAdapter();
         ListView list = (ListView) findViewById(R.id.listView_journey);
         list.setAdapter(adapter);
@@ -63,6 +70,11 @@ public class ViewJourneyActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        populateJourneyList();
+    }
 
     private class MyListAdapter extends ArrayAdapter<String[]> {
         public MyListAdapter() {

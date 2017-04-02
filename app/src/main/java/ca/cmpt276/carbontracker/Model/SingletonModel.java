@@ -385,6 +385,24 @@ public class SingletonModel {
         addToJourneyDB(newJourney);
     }
 
+    public void removeJourney(int index) {
+        long id = database.findJourney(journeyCollection.get(index));
+        database.deleteJourneyRow(id);
+        journeyCollection.remove(index);
+    }
+
+    public void setRouteOfJourneyAt(int index, Route route) {
+        long id = database.findJourney(journeyCollection.get(index));
+        journeyCollection.setRouteAt(index, route);
+        database.updateJourney(id, journeyCollection.get(index));
+    }
+
+    public void setTransportationOfJourneyAt(int index, Transportation transportation) {
+        long id = database.findJourney(journeyCollection.get(index));
+        journeyCollection.setTransportationAt(index, transportation);
+        database.updateJourney(id, journeyCollection.get(index));
+    }
+
     public int getJourneyCollectionSize(){
         return journeyCollection.size();
     }

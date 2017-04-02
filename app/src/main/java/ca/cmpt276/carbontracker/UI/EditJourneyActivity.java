@@ -1,8 +1,11 @@
 package ca.cmpt276.carbontracker.UI;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,6 +39,9 @@ public class EditJourneyActivity extends AppCompatActivity {
     View editRouteChild;
     Transportation transportation;
     Route route;
+    int index;
+
+    Menu menu;
 
     Spinner spinnerMake;
     Spinner spinnerModel;
@@ -47,12 +53,68 @@ public class EditJourneyActivity extends AppCompatActivity {
     boolean setupCar = false;
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.delete) {
+            model.removeJourney(index);
+            finish();
+        }
+        else if(id == R.id.cancel) {
+            if(isSelectedRoute) {
+                routeClicked();
+            }
+            else if(isSelectedTransportation) {
+                transportationClicked();
+            }
+        }
+        else if(id == R.id.edit) {
+            if(isSelectedRoute) {
+                int cityDistance = 0;
+                int hwyDistance = 0;
+                EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
+                EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
+
+                String city = editTextCity.getText().toString();
+                String hwy = editTextHwy.getText().toString();
+
+                if(city.length() > 0) {
+                    cityDistance = Integer.parseInt(city);
+                }
+                if(hwy.length() > 0) {
+                    hwyDistance = Integer.parseInt(hwy);
+                }
+                if(cityDistance + hwyDistance == 0) {
+                    Toast.makeText(getApplicationContext(), "Please enter a value greater than 0", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Route route = new Route(this.route.getName(), cityDistance, hwyDistance);
+                    model.setRouteOfJourneyAt(index, route);
+                    refreshRoute();
+                    routeClicked();
+                    Toast.makeText(getApplicationContext(), "Route updated!", Toast.LENGTH_SHORT).show();
+                }
+            }
+            if(isSelectedTransportation) {
+
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_manage, menu);
+        this.menu = menu;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_journey);
 
         Intent intent = getIntent();
-        int index = intent.getIntExtra(ViewJourneyActivity.EXTRA_POSITION, -1);
+        index = intent.getIntExtra(ViewJourneyActivity.EXTRA_POSITION, -1);
 
         transportation = model.getTransportationOfJourneyAt(index);
         route = model.getRouteOfJourneyAt(index);
@@ -64,6 +126,8 @@ public class EditJourneyActivity extends AppCompatActivity {
         layout.addView(routeChild);
         editTransportationChild = getLayoutInflater().inflate(R.layout.activity_edit_transportation_journey, null);
         editRouteChild = getLayoutInflater().inflate(R.layout.activity_edit_route_journey, null);
+
+        ActionBar actionBar = getSupportActionBar();
 
         refreshTransportation();
         refreshRoute();
@@ -160,21 +224,35 @@ public class EditJourneyActivity extends AppCompatActivity {
         routeChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isSelectedRoute = !isSelectedRoute;
-                isSelectedTransportation = false;
-                refreshEditTransportation();
-                refreshEditRoute();
+                routeClicked();
             }
         });
         transportationChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isSelectedTransportation = !isSelectedTransportation;
-                isSelectedRoute = false;
-                refreshEditRoute();
-                refreshEditTransportation();
+                transportationClicked();
             }
         });
+    }
+
+    private void transportationClicked() {
+        isSelectedTransportation = !isSelectedTransportation;
+        isSelectedRoute = false;
+        refreshEditRoute();
+        refreshEditTransportation();
+    }
+
+    private void routeClicked() {
+        isSelectedRoute = !isSelectedRoute;
+        isSelectedTransportation = false;
+        refreshEditTransportation();
+        refreshEditRoute();
+    }
+
+    private void menuEditMode(boolean edit) {
+        menu.findItem(R.id.delete).setVisible(!edit);
+        menu.findItem(R.id.edit).setVisible(edit);
+        menu.findItem(R.id.cancel).setVisible(edit);
     }
 
     private void refreshEditTransportation() {
@@ -185,22 +263,17 @@ public class EditJourneyActivity extends AppCompatActivity {
             if(spinner.getSelectedItemPosition() != Transportation.TRANSPORTATION_TYPE.CAR.ordinal() &&
                     transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
                 layout.addView(editRouteChild);
-                EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
-                TextView textViewHwy = (TextView) findViewById(R.id.textView_hwy_distance);
-                editTextHwy.setVisibility(View.GONE);
-                textViewHwy.setVisibility(View.GONE);
+                setVisibilityOfHwyDistance(View.GONE);
             }
             else if(spinner.getSelectedItemPosition() == Transportation.TRANSPORTATION_TYPE.CAR.ordinal() &&
                     transportation.getType() != Transportation.TRANSPORTATION_TYPE.CAR) {
                 layout.addView(editRouteChild);
-                EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
-                TextView textViewHwy = (TextView) findViewById(R.id.textView_hwy_distance);
-                editTextHwy.setVisibility(View.VISIBLE);
-                textViewHwy.setVisibility(View.VISIBLE);
+                setVisibilityOfHwyDistance(View.VISIBLE);
             }
             if(setupMode) {
                 setupSpinners();
             }
+            menuEditMode(true);
         }
         else {
             layout.removeView(editTransportationChild);
@@ -208,7 +281,15 @@ public class EditJourneyActivity extends AppCompatActivity {
                 layout.removeView(layout.getChildAt(layout.getChildCount() - 1));
             }
             transportationChild.setBackgroundResource(R.drawable.background_border_green);
+            menuEditMode(false);
         }
+    }
+
+    private void setVisibilityOfHwyDistance(int visibility) {
+        EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
+        TextView textViewHwy = (TextView) findViewById(R.id.textView_hwy_distance);
+        editTextHwy.setVisibility(visibility);
+        textViewHwy.setVisibility(visibility);
     }
 
     private void setupSpinners() {
@@ -311,14 +392,17 @@ public class EditJourneyActivity extends AppCompatActivity {
                 textViewHwy.setVisibility(View.GONE);
             }
             routeChild.setBackgroundResource(R.drawable.background_border_blue);
+            menuEditMode(true);
         }
         else {
             layout.removeView(editRouteChild);
             routeChild.setBackgroundResource(R.drawable.background_border_green);
+            menuEditMode(false);
         }
     }
 
     private void refreshRoute() {
+        route = model.getRouteOfJourneyAt(index);
         TextView textViewDistance = (TextView) findViewById(R.id.textView_distance);
         textViewDistance.setText(String.valueOf(route.getTotalDistance()) + "KM");
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(routeChild.getLayoutParams());
@@ -327,6 +411,7 @@ public class EditJourneyActivity extends AppCompatActivity {
     }
 
     private void refreshTransportation() {
+        transportation = model.getTransportationOfJourneyAt(index);
         ImageView imageView = (ImageView) findViewById(R.id.imageView_list_transportation_icon);
         TextView textViewType = (TextView) findViewById(R.id.textView_type);
         textViewType.setText(Transportation.TYPE[transportation.getType().ordinal()]);
