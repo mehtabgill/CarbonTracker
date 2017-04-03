@@ -46,6 +46,10 @@ public class Journey extends Emission {
         date = Calendar.getInstance();
     }
 
+    public Journey() {
+
+    }
+
     @Override
     protected void calculateCarbonEmission(){
         switch (transportationType){

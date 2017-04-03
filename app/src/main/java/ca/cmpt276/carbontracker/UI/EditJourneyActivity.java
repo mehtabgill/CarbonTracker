@@ -1,7 +1,9 @@
 package ca.cmpt276.carbontracker.UI;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,11 +23,15 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import ca.cmpt276.carbontracker.Model.Bike;
+import ca.cmpt276.carbontracker.Model.Bus;
 import ca.cmpt276.carbontracker.Model.Car;
 import ca.cmpt276.carbontracker.Model.CarStorage;
 import ca.cmpt276.carbontracker.Model.Route;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
+import ca.cmpt276.carbontracker.Model.Skytrain;
 import ca.cmpt276.carbontracker.Model.Transportation;
+import ca.cmpt276.carbontracker.Model.Walk;
 
 
 public class EditJourneyActivity extends AppCompatActivity {
@@ -43,6 +49,7 @@ public class EditJourneyActivity extends AppCompatActivity {
 
     Menu menu;
 
+    Spinner spinnerMode;
     Spinner spinnerMake;
     Spinner spinnerModel;
     Spinner spinnerYear;
@@ -55,50 +62,173 @@ public class EditJourneyActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(id == R.id.delete) {
+        if (id == R.id.delete) {
             model.removeJourney(index);
+            Toast.makeText(getApplicationContext(), "Journey deleted!", Toast.LENGTH_SHORT).show();
             finish();
-        }
-        else if(id == R.id.cancel) {
-            if(isSelectedRoute) {
+        } else if (id == R.id.cancel) {
+            if (isSelectedRoute) {
                 routeClicked();
-            }
-            else if(isSelectedTransportation) {
+            } else if (isSelectedTransportation) {
                 transportationClicked();
             }
-        }
-        else if(id == R.id.edit) {
-            if(isSelectedRoute) {
-                int cityDistance = 0;
-                int hwyDistance = 0;
-                EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
-                EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
-
-                String city = editTextCity.getText().toString();
-                String hwy = editTextHwy.getText().toString();
-
-                if(city.length() > 0) {
-                    cityDistance = Integer.parseInt(city);
-                }
-                if(hwy.length() > 0) {
-                    hwyDistance = Integer.parseInt(hwy);
-                }
-                if(cityDistance + hwyDistance == 0) {
-                    Toast.makeText(getApplicationContext(), "Please enter a value greater than 0", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Route route = new Route(this.route.getName(), cityDistance, hwyDistance);
-                    model.setRouteOfJourneyAt(index, route);
-                    refreshRoute();
-                    routeClicked();
-                    Toast.makeText(getApplicationContext(), "Route updated!", Toast.LENGTH_SHORT).show();
-                }
+        } else if (id == R.id.edit) {
+            if (isSelectedRoute) {
+                updateRoute();
             }
-            if(isSelectedTransportation) {
+            if (isSelectedTransportation) {
+                if (spinnerMode.getSelectedItemPosition() == Transportation.TRANSPORTATION_TYPE.CAR.ordinal()) {
+                    EditText editTextCarName = (EditText) findViewById(R.id.editText_car_name);
+                    final String nicknameInput = editTextCarName.getText().toString();
+                    if (nicknameInput.length() == 0) {
+                        Toast.makeText(getApplicationContext(), "Please enter a valid car name!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String make = spinnerMake.getSelectedItem().toString();
+                        final String carModel = spinnerModel.getSelectedItem().toString();
+                        int year = Integer.parseInt(spinnerYear.getSelectedItem().toString());
+                        final CarStorage carStorage = CarStorage.getInstance();
 
+                        carStorage.resetCurrentSearchCollection();
+                        carStorage.getCarModelsOfMake(make);
+                        carStorage.getCarYearsOfModels(carModel);
+                        carStorage.updateCurrentSearchByYear(year);
+                        //Create a popup with list of current car entries matched search entries
+                        //and ask the user to select one
+                        AlertDialog.Builder builder1 = new AlertDialog.Builder(EditJourneyActivity.this);
+                        builder1.setTitle(getString(R.string.select_car_popup_title));
+
+                        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EditJourneyActivity.this, android.R.layout.select_dialog_singlechoice);
+
+                        for (String description : carStorage.getCarSearchList()) {
+                            arrayAdapter.add(description);
+                        }
+
+                        final SingletonModel sModel = SingletonModel.getInstance();
+                        final int journeyIndex = index;
+                        builder1.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                final String selection = arrayAdapter.getItem(which);
+                                AlertDialog.Builder builder2 = new AlertDialog.Builder(EditJourneyActivity.this);
+                                builder2.setMessage(getString(R.string.selected_entries_title, selection));
+                                builder2.setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener() {
+                                        @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                            if(updateRouteForTransportation()) {
+                                                int i = arrayAdapter.getPosition(selection);
+                                                String make = spinnerMake.getSelectedItem().toString();
+                                                String carModel = spinnerModel.getSelectedItem().toString();
+                                                int year = Integer.parseInt(spinnerYear.getSelectedItem().toString());
+                                                carStorage.resetCurrentSearchCollection();
+                                                carStorage.getCarModelsOfMake(make);
+                                                carStorage.getCarYearsOfModels(carModel);
+                                                carStorage.updateCurrentSearchByYear(year);
+                                                Car selectedCar = carStorage.getCarFromSearchList(i);
+                                                selectedCar.setNickname(nicknameInput);
+                                                Car car = new Car(selectedCar);
+                                                model.setTransportationOfJourneyAt(journeyIndex, car);
+                                                Toast.makeText(getApplicationContext(), "Transportation mode updated!", Toast.LENGTH_SHORT).show();
+                                                transportationClicked();
+                                                refreshTransportation();
+                                                carStorage.resetCurrentSearchCollection();
+                                            }
+                                    }
+                                });
+                                builder2.show();
+                            }
+                        });
+
+                        builder1.setNegativeButton(getString(R.string.cancel_text), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                carStorage.resetCurrentSearchCollection();
+                                dialog.dismiss();
+                            }
+                        });
+                        builder1.show();
+                    }
+                } else {
+                    Transportation.TRANSPORTATION_TYPE type = Transportation.TRANSPORTATION_TYPE.valueOf(spinnerMode.getSelectedItem().toString());
+                    if(updateRouteForTransportation()) {
+                        switch (type) {
+                            case BUS:
+                                model.setTransportationOfJourneyAt(index, new Bus());
+                                break;
+                            case SKYTRAIN:
+                                model.setTransportationOfJourneyAt(index, new Skytrain());
+                                break;
+                            case BIKE:
+                                model.setTransportationOfJourneyAt(index, new Bike());
+                                break;
+                            case WALK:
+                                model.setTransportationOfJourneyAt(index, new Walk());
+                                break;
+                        }
+                        Toast.makeText(getApplicationContext(), "Transportation mode updated!", Toast.LENGTH_SHORT).show();
+                        transportationClicked();
+                        refreshTransportation();
+                    }
+                }
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean updateRouteForTransportation() {
+        if (layout.getChildCount() > 3) {
+            int cityDistance = 0;
+            int hwyDistance = 0;
+            EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
+            EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
+
+            String city = editTextCity.getText().toString();
+            String hwy = editTextHwy.getText().toString();
+
+
+            if (city.length() > 0) {
+                cityDistance = Integer.parseInt(city);
+            }
+            if (hwy.length() > 0) {
+                hwyDistance = Integer.parseInt(hwy);
+            }
+            if (cityDistance + hwyDistance == 0) {
+                Toast.makeText(getApplicationContext(), "Please enter a value greater than 0", Toast.LENGTH_SHORT).show();
+                return false;
+            } else {
+                Route route = new Route(this.route.getName(), cityDistance, hwyDistance);
+                model.setRouteOfJourneyAt(index, route);
+                refreshRoute();
+                Toast.makeText(getApplicationContext(), "Route updated!", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        }
+        return true;
+    }
+
+    private void updateRoute() {
+        int cityDistance = 0;
+        int hwyDistance = 0;
+        EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
+        EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
+
+        String city = editTextCity.getText().toString();
+        String hwy = editTextHwy.getText().toString();
+
+        if (city.length() > 0) {
+            cityDistance = Integer.parseInt(city);
+        }
+        if (hwy.length() > 0) {
+            hwyDistance = Integer.parseInt(hwy);
+        }
+        if (cityDistance + hwyDistance == 0) {
+            Toast.makeText(getApplicationContext(), "Please enter a value greater than 0", Toast.LENGTH_SHORT).show();
+        } else {
+            Route route = new Route(this.route.getName(), cityDistance, hwyDistance);
+            model.setRouteOfJourneyAt(index, route);
+            refreshRoute();
+            routeClicked();
+            Toast.makeText(getApplicationContext(), "Route updated!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -119,7 +249,7 @@ public class EditJourneyActivity extends AppCompatActivity {
         transportation = model.getTransportationOfJourneyAt(index);
         route = model.getRouteOfJourneyAt(index);
 
-        layout = (LinearLayout)findViewById(R.id.layout_edit_journey);
+        layout = (LinearLayout) findViewById(R.id.layout_edit_journey);
         transportationChild = getLayoutInflater().inflate(R.layout.list_transportation, null);
         layout.addView(transportationChild);
         routeChild = getLayoutInflater().inflate(R.layout.list_route, null);
@@ -136,13 +266,13 @@ public class EditJourneyActivity extends AppCompatActivity {
 
     private void setupModeSpinner() {
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_mode);
+        spinnerMode = spinner;
         if (spinner != null && setupMode) {
             EditText editText = (EditText) findViewById(R.id.editText_car_name);
-            if(transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
+            if (transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
                 Car car = (Car) transportation;
                 editText.setText(car.getNickname());
-            }
-            else {
+            } else {
                 setVisibilityOfCarFields(View.GONE);
             }
             Transportation.TRANSPORTATION_TYPE[] temp = Transportation.TRANSPORTATION_TYPE.values();
@@ -157,13 +287,13 @@ public class EditJourneyActivity extends AppCompatActivity {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if(layout.getChildCount() > 3) {
+                    if (layout.getChildCount() > 3) {
                         layout.removeView(editRouteChild);
                     }
                     if (spinner.getSelectedItemPosition() != Transportation.TRANSPORTATION_TYPE.CAR.ordinal()) {
                         setVisibilityOfCarFields(View.GONE);
-                        if(transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
-                            if(layout.getChildCount() <= 3) {
+                        if (transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
+                            if (layout.getChildCount() <= 3) {
                                 layout.addView(editRouteChild);
                                 EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
                                 EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
@@ -177,8 +307,8 @@ public class EditJourneyActivity extends AppCompatActivity {
                         }
                     } else {
                         setVisibilityOfCarFields(View.VISIBLE);
-                        if(transportation.getType() != Transportation.TRANSPORTATION_TYPE.CAR) {
-                            if(layout.getChildCount() <= 3) {
+                        if (transportation.getType() != Transportation.TRANSPORTATION_TYPE.CAR) {
+                            if (layout.getChildCount() <= 3) {
                                 layout.addView(editRouteChild);
                                 EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
                                 EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
@@ -203,13 +333,17 @@ public class EditJourneyActivity extends AppCompatActivity {
 
     private void setVisibilityOfCarFields(int visibility) {
         EditText editText = (EditText) findViewById(R.id.editText_car_name);
-        editText.setVisibility(visibility);
+        if(editText != null) {
+            editText.setVisibility(visibility);
+        }
         Spinner temp = (Spinner) findViewById(R.id.spinner_make);
-        temp.setVisibility(visibility);
-        temp = (Spinner) findViewById(R.id.spinner_model);
-        temp.setVisibility(visibility);
-        temp = (Spinner) findViewById(R.id.spinner_year);
-        temp.setVisibility(visibility);
+        if(temp != null) {
+            temp.setVisibility(visibility);
+            temp = (Spinner) findViewById(R.id.spinner_model);
+            temp.setVisibility(visibility);
+            temp = (Spinner) findViewById(R.id.spinner_year);
+            temp.setVisibility(visibility);
+        }
     }
 
     private void populateSpinner(Spinner spinner, ArrayList<String> choices) {
@@ -256,28 +390,28 @@ public class EditJourneyActivity extends AppCompatActivity {
     }
 
     private void refreshEditTransportation() {
-        if(isSelectedTransportation){
+        if (isSelectedTransportation) {
             layout.addView(editTransportationChild);
             transportationChild.setBackgroundResource(R.drawable.background_border_blue);
             Spinner spinner = (Spinner) findViewById(R.id.spinner_mode);
-            if(spinner.getSelectedItemPosition() != Transportation.TRANSPORTATION_TYPE.CAR.ordinal() &&
+            if (spinner.getSelectedItemPosition() != Transportation.TRANSPORTATION_TYPE.CAR.ordinal() &&
                     transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
                 layout.addView(editRouteChild);
                 setVisibilityOfHwyDistance(View.GONE);
-            }
-            else if(spinner.getSelectedItemPosition() == Transportation.TRANSPORTATION_TYPE.CAR.ordinal() &&
+                setVisibilityOfCarFields(View.GONE);
+            } else if (spinner.getSelectedItemPosition() == Transportation.TRANSPORTATION_TYPE.CAR.ordinal() &&
                     transportation.getType() != Transportation.TRANSPORTATION_TYPE.CAR) {
                 layout.addView(editRouteChild);
                 setVisibilityOfHwyDistance(View.VISIBLE);
+                setVisibilityOfCarFields(View.VISIBLE);
             }
-            if(setupMode) {
+            if (setupMode) {
                 setupSpinners();
             }
             menuEditMode(true);
-        }
-        else {
+        } else {
             layout.removeView(editTransportationChild);
-            if(layout.getChildCount() > 2) {
+            if (layout.getChildCount() > 2) {
                 layout.removeView(layout.getChildAt(layout.getChildCount() - 1));
             }
             transportationChild.setBackgroundResource(R.drawable.background_border_green);
@@ -288,6 +422,7 @@ public class EditJourneyActivity extends AppCompatActivity {
     private void setVisibilityOfHwyDistance(int visibility) {
         EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
         TextView textViewHwy = (TextView) findViewById(R.id.textView_hwy_distance);
+        editTextHwy.setText("");
         editTextHwy.setVisibility(visibility);
         textViewHwy.setVisibility(visibility);
     }
@@ -303,7 +438,7 @@ public class EditJourneyActivity extends AppCompatActivity {
         spinnerModel = (Spinner) findViewById(R.id.spinner_model);
         spinnerYear = (Spinner) findViewById(R.id.spinner_year);
 
-        if(spinnerMake != null && spinnerModel != null && spinnerYear != null) {
+        if (spinnerMake != null && spinnerModel != null && spinnerYear != null) {
             CarStorage carStorage = CarStorage.getInstance();
             ArrayList<String> makeList = carStorage.getCarMakeList();
 
@@ -342,12 +477,11 @@ public class EditJourneyActivity extends AppCompatActivity {
         spinnerModel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!setupCar) {
+                if (!setupCar) {
                     String model = spinnerModel.getSelectedItem().toString();
                     ArrayList<String> yearList = CarStorage.getInstance().getCarYearsOfModels(model);
                     populateSpinner(spinnerYear, yearList);
-                }
-                else {
+                } else {
                     setupCar = false;
                 }
             }
@@ -363,7 +497,8 @@ public class EditJourneyActivity extends AppCompatActivity {
         spinnerMake.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!setupCar) {
+                if (!setupCar) {
+                    CarStorage.getInstance().resetCurrentSearchCollection();
                     String make = spinnerMake.getSelectedItem().toString();
                     ArrayList<String> modelList = CarStorage.getInstance().getCarModelsOfMake(make);
                     populateSpinner(spinnerModel, modelList);
@@ -378,23 +513,21 @@ public class EditJourneyActivity extends AppCompatActivity {
     }
 
     private void refreshEditRoute() {
-        if(isSelectedRoute) {
+        if (isSelectedRoute) {
             layout.addView(editRouteChild);
             EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
             TextView textViewHwy = (TextView) findViewById(R.id.textView_hwy_distance);
 
-            if(transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
+            if (transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
                 editTextHwy.setVisibility(View.VISIBLE);
                 textViewHwy.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 editTextHwy.setVisibility(View.GONE);
                 textViewHwy.setVisibility(View.GONE);
             }
             routeChild.setBackgroundResource(R.drawable.background_border_blue);
             menuEditMode(true);
-        }
-        else {
+        } else {
             layout.removeView(editRouteChild);
             routeChild.setBackgroundResource(R.drawable.background_border_green);
             menuEditMode(false);
@@ -420,17 +553,32 @@ public class EditJourneyActivity extends AppCompatActivity {
         TextView textViewMake = (TextView) findViewById(R.id.textView_make);
         TextView textViewModel = (TextView) findViewById(R.id.textView_model);
         TextView textViewYear = (TextView) findViewById(R.id.textView_year);
-        if(transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
+        if (transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
             Car car = (Car) transportation;
+            setVisibilityOfCarFields(View.VISIBLE);
             textViewName.setText(car.getNickname());
             textViewModel.setText(car.getModel());
             textViewMake.setText(car.getMake());
             textViewYear.setText(String.valueOf(car.getYear()));
+        }
+        else {
+            setVisibilityOnCarFields(View.INVISIBLE);
         }
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(transportationChild.getLayoutParams());
         params.setMargins(0, 10, 0, 10);
         transportationChild.setLayoutParams(params);
 
+    }
+
+    private void setVisibilityOnCarFields(int visibility) {
+        TextView textViewName = (TextView) findViewById(R.id.textView_name);
+        TextView textViewMake = (TextView) findViewById(R.id.textView_make);
+        TextView textViewModel = (TextView) findViewById(R.id.textView_model);
+        TextView textViewYear = (TextView) findViewById(R.id.textView_year);
+        textViewName.setVisibility(visibility);
+        textViewMake.setVisibility(visibility);
+        textViewModel.setVisibility(visibility);
+        textViewYear.setVisibility(visibility);
     }
 }
