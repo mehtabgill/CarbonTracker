@@ -2,9 +2,13 @@ package ca.cmpt276.carbontracker.Model;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import ca.cmpt276.carbontracker.UI.R;
+import ca.cmpt276.carbontracker.UI.ViewJourneyActivity;
 
 /**
  * Created by Elvin Laptop on 2017-03-06.
@@ -14,6 +18,8 @@ public class SingletonModel {
     //TODO: Move all code relating to car search to their own class
     //Singleton should only be the middle ground between logic and UI
 
+    Context context;
+
     private CarCollection currentCarCollection = new CarCollection();
     private RouteCollection routeCollection = new RouteCollection();
     private JourneyCollection journeyCollection = new JourneyCollection();
@@ -21,6 +27,8 @@ public class SingletonModel {
 
     private ArrayList<String> carMakeList;
     public enum RetrieveEntries {Current, Search, Total};
+
+    private final boolean TESTING_MODE = true;
 
     private static final SingletonModel instance = new SingletonModel();
 
@@ -48,6 +56,20 @@ public class SingletonModel {
         loadRoutesFromDB();
         loadJourneysFromDB();
         loadUtilitiesFromDB();
+    }
+
+    public boolean inTestingMode() {
+        return TESTING_MODE;
+    }
+
+    public void deleteAllDataFromDB() {
+        if(TESTING_MODE) {
+            //database.deleteAllCar();
+            database.deleteAllJourney();
+            //database.deleteAllRoute();
+            database.deleteAllUtilities();
+            database.deleteAllTotal();
+        }
     }
 
     private void addToCarDB(Car car) {
@@ -112,20 +134,21 @@ public class SingletonModel {
         Transportation transportation = new Car();
         if(cursor.moveToFirst()) {
             do {
+                Car car = new Car();
                 String type = cursor.getString(DBAdapter.COL_JOURNEY_TYPE);
                 switch (type) {
                     case "CAR":
                         String name = cursor.getString(DBAdapter.COL_JOURNEY_NAME);
                         String model = cursor.getString(DBAdapter.COL_JOURNEY_MODEL);
                         String make = cursor.getString(DBAdapter.COL_JOURNEY_MAKE);
-                        int year = cursor.getInt(DBAdapter.COL_JOURNEY_YEAR);
+                        int carYear = cursor.getInt(DBAdapter.COL_JOURNEY_CAR_YEAR);
                         String displacement = cursor.getString(DBAdapter.COL_JOURNEY_DISPLACEMENT_VOL);
                         String transmission = cursor.getString(DBAdapter.COL_JOURNEY_TRANSMISSION_TYPE);
                         String fuelType = cursor.getString(DBAdapter.COL_JOURNEY_FUEL_TYPE);
                         float cityMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_CITYMPG);
                         float hwyMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_HWYMPG);
 
-                        Car car = new Car(make, model, year, displacement, transmission);
+                        car = new Car(make, model, carYear, displacement, transmission);
                         car.setNickname(name);
                         car.setFuelType(fuelType);
                         car.setMilesPerGallonCity(cityMPG);
@@ -152,7 +175,21 @@ public class SingletonModel {
 
                 Route route = new Route(name, cityDistance, hwyDistance);
 
-                Journey journey = new Journey(transportation, route);
+                int year = cursor.getInt(DBAdapter.COL_JOURNEY_YEAR);
+                int month = cursor.getInt(DBAdapter.COL_JOURNEY_MONTH);
+                int day = cursor.getInt(DBAdapter.COL_JOURNEY_DAY);
+
+                Calendar date = Calendar.getInstance();
+                date.set(year, month, day);
+
+                Journey journey = new Journey();
+                if(type == Transportation.TRANSPORTATION_TYPE.CAR.toString()) {
+                    journey = new Journey(car, route);
+                }
+                else {
+                    journey = new Journey(transportation, route);
+                }
+                journey.setDate(date);
                 journeyCollection.add(journey);
 
             } while(cursor.moveToNext());
@@ -371,6 +408,42 @@ public class SingletonModel {
         addToJourneyDB(newJourney);
     }
 
+    public void removeJourney(int index) {
+        long id = database.findJourney(journeyCollection.get(index));
+        database.deleteJourneyRow(id);
+        journeyCollection.remove(index);
+    }
+
+    public void setRouteOfJourneyAt(int index, Route route) {
+        long id = database.findJourney(journeyCollection.get(index));
+        journeyCollection.setRouteAt(index, route);
+        database.updateJourney(id, journeyCollection.get(index));
+    }
+
+    public void setTransportationOfJourneyAt(int index, Transportation transportation) {
+        Journey oldJourney = journeyCollection.get(index);
+        long id = database.findJourney(oldJourney);
+        journeyCollection.setTransportationAt(index, transportation);
+        Journey newJourney = journeyCollection.get(index);
+        database.updateJourney(id, newJourney);
+    }
+
+    public Calendar getDateOfJourneyAt(int index) {
+        return journeyCollection.get(index).getDate();
+    }
+
+    public String getDateStringOfJourneyAt(int index) {
+        return journeyCollection.get(index).getStringDate();
+    }
+
+    public void setDateOfJourneyAt(int index, Calendar date) {
+        Journey oldJourney = journeyCollection.get(index);
+        long id = database.findJourney(oldJourney);
+        journeyCollection.get(index).setDate(date);
+        Journey newJourney = journeyCollection.get(index);
+        database.updateJourney(id, newJourney);
+    }
+
     public int getJourneyCollectionSize(){
         return journeyCollection.size();
     }
@@ -517,4 +590,41 @@ public class SingletonModel {
         return journeyCollection.getNumSkytrain();
     }
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public ArrayList<String[]> getJourneyData() {
+        ArrayList<String[]> list = new ArrayList<>();
+        for(Journey journey : journeyCollection) {
+            String[] temp = new String[ViewJourneyActivity.NUM_COLUMNS];
+            Transportation transportation = journey.getTransportation();
+            Transportation.TRANSPORTATION_TYPE type = transportation.getType();
+            String transportationType = Transportation.getStringOfType(type);
+            if(transportationType.equals(Transportation.TYPE[Transportation.TRANSPORTATION_TYPE.CAR.ordinal()])){
+                Car car = (Car) transportation;
+                String name = car.getNickname();
+                transportationType += " - " + name;
+            }
+            //TODO: Implement image icon for vehicles
+            //temp[ViewJourneyActivity.COL_IMAGE] = journey.getImageIcon();
+            temp[ViewJourneyActivity.COL_TRANSPORTATION] = transportationType;
+            temp[ViewJourneyActivity.COL_DISTANCE] = String.valueOf(journey.getDistance()) + context.getString(R.string.KM);
+            temp[ViewJourneyActivity.COL_DATE] = journey.getStringDate();
+            temp[ViewJourneyActivity.COL_CO2] = String.valueOf(journey.getCarbonEmissionValue()) + context.getString(R.string.KG);
+            list.add(temp);
+        }
+        return list;
+    }
+
+    public Transportation getTransportationOfJourneyAt(int index) {
+        return journeyCollection.get(index).getTransportation();
+    }
+    public Route getRouteOfJourneyAt(int index) {
+        return journeyCollection.get(index).getRoute();
+    }
 }

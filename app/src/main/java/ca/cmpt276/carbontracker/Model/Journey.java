@@ -15,6 +15,9 @@ import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
 public class Journey extends Emission {
 
+    private String[] MONTH = new String[] {"January", "February", "March", "April", "May", "June",
+                                            "July", "August", "September", "October", "November", "December"};
+
     private Transportation transportation; // Car object, use getter methods to get required info if needed
     private Route route; //route object, use getter methods to get required info
     private float carbonEmissionValue;
@@ -43,6 +46,10 @@ public class Journey extends Emission {
         date = Calendar.getInstance();
     }
 
+    public Journey() {
+
+    }
+
     @Override
     protected void calculateCarbonEmission(){
         switch (transportationType){
@@ -63,10 +70,10 @@ public class Journey extends Emission {
                 else if(fuelType.equals(DIESEL)){
                     fuelConstant = CAR_DIESEL_CO2_CONSTANT;
                 }
-
-                this.carbonEmissionValue = (cityMilesPerGallon * cityDistanceInMiles
-                        + hwyMilesPerGallon * hwyDistanceInMiles)
+                this.carbonEmissionValue = (cityDistanceInMiles / cityMilesPerGallon
+                        + hwyDistanceInMiles / hwyMilesPerGallon)
                         * fuelConstant;
+
                 break;
             case SKYTRAIN:
                 this.carbonEmissionValue = route.getTotalDistance() * SKYTRAIN_CARBON_EMISSIONS_PER_KM_CONSTANT;
@@ -80,17 +87,16 @@ public class Journey extends Emission {
             case BIKE:
                 this.carbonEmissionValue = 0;
         }
-
     }
 
     public void setTransportation(Transportation transportation){
         this.transportation = transportation;
+        this.transportationType = transportation.getType();
         calculateCarbonEmission();
     }
 
     public void setRoute(Route route){
         this.route = new Route(route);
-        this.route = (Route) route;
         calculateCarbonEmission();
     }
 
@@ -124,6 +130,9 @@ public class Journey extends Emission {
         return carbonEmissionValue;
     }
 
+    public float getDistance() {
+        return route.getTotalDistance();
+    }
 
     public void setDate(Calendar newDate){
         date = newDate;
@@ -131,5 +140,13 @@ public class Journey extends Emission {
 
     public Calendar getDate(){
         return date;
+    }
+
+    public String getStringDate() {
+
+        String temp = MONTH[date.get(Calendar.MONTH)] + " "
+                    + date.get(Calendar.DAY_OF_MONTH) + ", "
+                    + date.get(Calendar.YEAR);
+        return temp;
     }
 }

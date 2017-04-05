@@ -133,7 +133,13 @@ public class JourneyCollection implements Iterable<Journey>{
         return output;
     }
 
+    public void setRouteAt(int index, Route route) {
+        journeys.get(index).setRoute(route);
+    }
 
+    public void setTransportationAt(int index, Transportation transportation){
+        journeys.get(index).setTransportation(transportation);
+    }
 
     @Override
     public Iterator<Journey> iterator() {

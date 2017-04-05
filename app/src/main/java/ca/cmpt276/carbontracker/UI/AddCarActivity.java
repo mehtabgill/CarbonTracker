@@ -37,6 +37,7 @@ public class AddCarActivity extends AppCompatActivity {
     private String selectedModel;
     private String selectedYear;
     private Button searchButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

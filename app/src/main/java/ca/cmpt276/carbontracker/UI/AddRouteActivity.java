@@ -24,23 +24,23 @@ public class AddRouteActivity extends AppCompatActivity {
     String NEW_ADDED_CITY = "NewAddedCity";
     String NEW_ADDED_HIGHWAY = "NewAddedHighway";
 
-    EditText editName ;
-    EditText editCityDistance ;
-    EditText editHighDistance ;
-    float cityDis = 0 ;
-    float highwayDis = 0 ;
-    String name ;
+    EditText editName;
+    EditText editCityDistance;
+    EditText editHighDistance;
+    float cityDis = 0;
+    float highwayDis = 0;
+    String name;
     String cityDistance;
     String highwayDistance;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_route);
 
-        editName  = (EditText) findViewById(R.id.editText_RouteName) ;
-        editCityDistance = ( EditText) findViewById(R.id.editText_cityDistance);
-        editHighDistance = (EditText) findViewById(R.id.editText_highwayDistance) ;
-
+        editName = (EditText) findViewById(R.id.editText_RouteName);
+        editCityDistance = (EditText) findViewById(R.id.editText_cityDistance);
+        editHighDistance = (EditText) findViewById(R.id.editText_highwayDistance);
 
 
         editName.addTextChangedListener(new TextWatcher() {
@@ -57,7 +57,7 @@ public class AddRouteActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
 
-                 name = editName.getText().toString() ;
+                name = editName.getText().toString();
 
             }
         });
@@ -75,8 +75,8 @@ public class AddRouteActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                cityDistance = editCityDistance.getText().toString() ;
-                cityDis = ParseFloat(cityDistance) ;
+                cityDistance = editCityDistance.getText().toString();
+                cityDis = ParseFloat(cityDistance);
             }
         });
 
@@ -93,14 +93,14 @@ public class AddRouteActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                highwayDistance = editHighDistance.getText().toString() ;
-                highwayDis = ParseFloat(highwayDistance) ;
+                highwayDistance = editHighDistance.getText().toString();
+                highwayDis = ParseFloat(highwayDistance);
 
 
             }
         });
 
-        Button btnAddRoute = (Button)findViewById(R.id.ButtonAddRoute) ;
+        Button btnAddRoute = (Button) findViewById(R.id.ButtonAddRoute);
         btnAddRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +114,7 @@ public class AddRouteActivity extends AppCompatActivity {
             }
         });
 
-        Button btnCancel = (Button) findViewById(R.id.buttonCancel) ;
+        Button btnCancel = (Button) findViewById(R.id.buttonCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,14 +123,14 @@ public class AddRouteActivity extends AppCompatActivity {
         });
 
     }
-        float ParseFloat(String str ) {
+
+    float ParseFloat(String str) {
         if (str != null && str.length() > 0) {
-        try {
-        return Float.parseFloat(str);
-        } catch(Exception e) {
-        return -1;
-        }
-        }
-        else return 0;
-        }
+            try {
+                return Float.parseFloat(str);
+            } catch (Exception e) {
+                return -1;
+            }
+        } else return 0;
+    }
 }
