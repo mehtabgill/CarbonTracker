@@ -46,6 +46,7 @@ public class Journey extends Emission {
         calculateCarbonEmission();
         date = Calendar.getInstance();
         //Testing with various date, remove when edit Journey is available
+        //TODO: Delete this
         Random rand = new Random();
         int dateDiffer = rand.nextInt(28);
         date.add(Calendar.DATE, -dateDiffer);

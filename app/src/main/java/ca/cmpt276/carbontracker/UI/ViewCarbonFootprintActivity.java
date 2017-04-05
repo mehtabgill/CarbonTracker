@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -23,20 +22,19 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.renderer.XAxisRenderer;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.GraphDataRetriever;
+
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
-import static ca.cmpt276.carbontracker.Model.GraphDataRetriever.GRAPH_MODE.DAY;
+
 
 /*
  * UI Class for displaying carbon footprint activity, either by table or by pie pieChart
@@ -60,6 +58,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
     ArrayList<String> emissionNameList;
     ArrayList<Float> carbonEmissionList;
     Calendar date = Calendar.getInstance();
+    GraphDataRetriever graphData = GraphDataRetriever.getInstance();
     GraphDataRetriever.GRAPH_MODE graphMode;
 
     @Override
@@ -67,7 +66,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_carbon_footprint);
         getExtraFromIntent();
-        GraphDataRetriever.setUpGraphData(graphMode, date);
+        graphData.setUpGraphData(graphMode, date);
         pieChart = (PieChart) findViewById(R.id.pieChart);
 
         Intent tipsWindow = new Intent(ViewCarbonFootprintActivity.this, TipsActivity.class);
@@ -75,11 +74,11 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         startActivity(tipsWindow);
         switch (graphMode){
             case DAY:
-                ROW_NUM = GraphDataRetriever.getEmissionArrayListSize() + 1;
-                ARRAY_SIZE = GraphDataRetriever.getEmissionArrayListSize();
-                emissionTypeList = GraphDataRetriever.getEmissionTypeList_Day();
-                emissionNameList = GraphDataRetriever.getEmissionNameList_Day();
-                carbonEmissionList = GraphDataRetriever.getEmissionValueList_Day();
+                ROW_NUM = graphData.getEmissionArrayListSize() + 1;
+                ARRAY_SIZE = graphData.getEmissionArrayListSize();
+                emissionTypeList = graphData.getEmissionTypeList_Day();
+                emissionNameList = graphData.getEmissionNameList_Day();
+                carbonEmissionList = graphData.getEmissionValueList_Day();
                 setupLayout_Day();
                 break;
             case MONTH:
@@ -87,6 +86,8 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                 setupLayout_Month();
                 break;
             case YEAR:
+                pieChart.setVisibility(View.INVISIBLE);
+                setupLayout_Month();
                 break;
         }
 
@@ -169,7 +170,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         if(extra != null){
             String selected_mode = extra.getString(MainMenuActivity.MODE_KEY);
             if (selected_mode.equals("1 DAY")){
-                graphMode = DAY;
+                graphMode = GraphDataRetriever.GRAPH_MODE.DAY;;
             }
             else if(selected_mode.equals("LAST 28 DAY")){
                 graphMode = GraphDataRetriever.GRAPH_MODE.MONTH;
@@ -225,13 +226,13 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         ArrayList<Entry> electricityBillEntries = new ArrayList<>();
         ArrayList<Entry> gasBillEntries = new ArrayList<>();
 
-        final ArrayList<String> dateList = GraphDataRetriever.getDateList_Month();
-        ArrayList<Float> carEmissionList = GraphDataRetriever.getCarEmissionValueList_Month();
-        ArrayList<Float> busEmissionList = GraphDataRetriever.getBusEmissionValueList_Month();
-        ArrayList<Float> skytrainEmissionList = GraphDataRetriever.getSkytrainEmissionValueList_Month();
-        ArrayList<Float> electricityBillEmissionList = GraphDataRetriever.getElectricityBillEmissionValueList_Month();
-        ArrayList<Float> gasBillEmissionList = GraphDataRetriever.getGasBillEmissionValueList_Month();
-        for(int i = 0; i < 28; i++){
+        final ArrayList<String> dateList = graphData.getDateList();
+        ArrayList<Float> carEmissionList = graphData.getCarEmissionValue();
+        ArrayList<Float> busEmissionList = graphData.getBusEmissionValue();
+        ArrayList<Float> skytrainEmissionList = graphData.getSkytrainEmissionValue();
+        ArrayList<Float> electricityBillEmissionList = graphData.getElectricityBillEmissionValue();
+        ArrayList<Float> gasBillEmissionList = graphData.getGasBillEmissionValue();
+        for(int i = 0; i < graphData.getNumberOfEntries(); i++){
             carEntries.add(new Entry(i, carEmissionList.get(i)));
             busEntries.add(new Entry(i, busEmissionList.get(i)));
             skytrainEntries.add(new Entry(i, skytrainEmissionList.get(i)));
@@ -267,8 +268,6 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         lineDataSets.add(skytrainLineDataSet);
         lineDataSets.add(electricityLineDataSet);
         lineDataSets.add(gasLineDataSet);
-
-
 
         XAxis xAxis = lineChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
