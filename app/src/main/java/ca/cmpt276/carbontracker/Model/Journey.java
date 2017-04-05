@@ -91,6 +91,7 @@ public class Journey extends Emission {
 
     public void setTransportation(Transportation transportation){
         this.transportation = transportation;
+        this.transportationType = transportation.getType();
         calculateCarbonEmission();
     }
 
