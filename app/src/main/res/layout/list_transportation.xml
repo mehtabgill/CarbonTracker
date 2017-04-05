@@ -20,51 +20,56 @@
         android:id="@+id/textView_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="41dp"
-        android:layout_marginStart="41dp"
-        android:text="TextView"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imageView_list_transportation_icon"
-        android:layout_toEndOf="@+id/imageView_list_transportation_icon"
-        android:layout_marginTop="11dp" />
+        android:layout_alignTop="@+id/imageView_list_transportation_icon"
+        android:layout_marginLeft="39dp"
+        android:layout_marginStart="39dp"
+        android:layout_toEndOf="@+id/space"
+        android:layout_toRightOf="@+id/space"
+        android:text="Type"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView_type"
-        android:layout_alignStart="@+id/textView_type"
+        android:text="Name"
         android:layout_below="@+id/textView_type"
-        android:layout_marginLeft="27dp"
-        android:layout_marginStart="27dp" />
+        android:layout_alignLeft="@+id/textView_type"
+        android:layout_alignStart="@+id/textView_type" />
 
     <TextView
         android:id="@+id/textView_make"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_type"
-        android:layout_marginLeft="78dp"
-        android:layout_marginStart="78dp"
-        android:layout_toEndOf="@+id/textView_type"
-        android:layout_toRightOf="@+id/textView_type" />
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:text="Make"
+        android:layout_alignBaseline="@+id/textView_name"
+        android:layout_alignBottom="@+id/textView_name"
+        android:layout_toRightOf="@+id/textView_name"
+        android:layout_toEndOf="@+id/textView_name" />
 
     <TextView
         android:id="@+id/textView_model"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView_make"
-        android:layout_toEndOf="@+id/textView_make"
-        android:layout_toRightOf="@+id/textView_make" />
+        android:text="Model"
+        android:layout_marginLeft="46dp"
+        android:layout_marginStart="46dp"
+        android:layout_above="@+id/textView_year"
+        android:layout_toRightOf="@+id/textView_make"
+        android:layout_toEndOf="@+id/textView_make" />
 
     <TextView
         android:id="@+id/textView_year"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView_model"
         android:layout_marginEnd="14dp"
-        android:layout_marginRight="14dp" />
+        android:layout_marginRight="14dp"
+        android:text="Year"
+        android:layout_below="@+id/imageView_list_transportation_icon"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Space
         android:layout_width="wrap_content"
@@ -72,5 +77,6 @@
         android:layout_below="@+id/textView_year"
         android:layout_marginTop="13dp"
         android:layout_toEndOf="@+id/imageView_list_transportation_icon"
-        android:layout_toRightOf="@+id/imageView_list_transportation_icon" />
+        android:layout_toRightOf="@+id/imageView_list_transportation_icon"
+        android:id="@+id/space" />
 </RelativeLayout>

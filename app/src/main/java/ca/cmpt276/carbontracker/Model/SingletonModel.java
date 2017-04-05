@@ -28,6 +28,8 @@ public class SingletonModel {
     private ArrayList<String> carMakeList;
     public enum RetrieveEntries {Current, Search, Total};
 
+    private final boolean TESTING_MODE = true;
+
     private static final SingletonModel instance = new SingletonModel();
 
     private DBAdapter database;
@@ -54,6 +56,20 @@ public class SingletonModel {
         loadRoutesFromDB();
         loadJourneysFromDB();
         loadUtilitiesFromDB();
+    }
+
+    public boolean inTestingMode() {
+        return TESTING_MODE;
+    }
+
+    public void deleteAllDataFromDB() {
+        if(TESTING_MODE) {
+            //database.deleteAllCar();
+            database.deleteAllJourney();
+            //database.deleteAllRoute();
+            database.deleteAllUtilities();
+            database.deleteAllTotal();
+        }
     }
 
     private void addToCarDB(Car car) {
@@ -118,6 +134,7 @@ public class SingletonModel {
         Transportation transportation = new Car();
         if(cursor.moveToFirst()) {
             do {
+                Car car = new Car();
                 String type = cursor.getString(DBAdapter.COL_JOURNEY_TYPE);
                 switch (type) {
                     case "CAR":
@@ -131,7 +148,7 @@ public class SingletonModel {
                         float cityMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_CITYMPG);
                         float hwyMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_HWYMPG);
 
-                        Car car = new Car(make, model, carYear, displacement, transmission);
+                        car = new Car(make, model, carYear, displacement, transmission);
                         car.setNickname(name);
                         car.setFuelType(fuelType);
                         car.setMilesPerGallonCity(cityMPG);
@@ -165,7 +182,13 @@ public class SingletonModel {
                 Calendar date = Calendar.getInstance();
                 date.set(year, month, day);
 
-                Journey journey = new Journey(transportation, route);
+                Journey journey = new Journey();
+                if(type == Transportation.TRANSPORTATION_TYPE.CAR.toString()) {
+                    journey = new Journey(car, route);
+                }
+                else {
+                    journey = new Journey(transportation, route);
+                }
                 journey.setDate(date);
                 journeyCollection.add(journey);
 
@@ -383,6 +406,42 @@ public class SingletonModel {
         Journey newJourney = new Journey(newTransportation, newRoute);
         journeyCollection.add(newJourney);
         addToJourneyDB(newJourney);
+    }
+
+    public void removeJourney(int index) {
+        long id = database.findJourney(journeyCollection.get(index));
+        database.deleteJourneyRow(id);
+        journeyCollection.remove(index);
+    }
+
+    public void setRouteOfJourneyAt(int index, Route route) {
+        long id = database.findJourney(journeyCollection.get(index));
+        journeyCollection.setRouteAt(index, route);
+        database.updateJourney(id, journeyCollection.get(index));
+    }
+
+    public void setTransportationOfJourneyAt(int index, Transportation transportation) {
+        Journey oldJourney = journeyCollection.get(index);
+        long id = database.findJourney(oldJourney);
+        journeyCollection.setTransportationAt(index, transportation);
+        Journey newJourney = journeyCollection.get(index);
+        database.updateJourney(id, newJourney);
+    }
+
+    public Calendar getDateOfJourneyAt(int index) {
+        return journeyCollection.get(index).getDate();
+    }
+
+    public String getDateStringOfJourneyAt(int index) {
+        return journeyCollection.get(index).getStringDate();
+    }
+
+    public void setDateOfJourneyAt(int index, Calendar date) {
+        Journey oldJourney = journeyCollection.get(index);
+        long id = database.findJourney(oldJourney);
+        journeyCollection.get(index).setDate(date);
+        Journey newJourney = journeyCollection.get(index);
+        database.updateJourney(id, newJourney);
     }
 
     public int getJourneyCollectionSize(){

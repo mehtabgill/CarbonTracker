@@ -79,6 +79,17 @@ public class MainMenuActivity extends AppCompatActivity {
                 clickMainMenuButton(BUTTONS.VIEW_JOURNEY);
             }
         });
+        if(SingletonModel.getInstance().inTestingMode()){
+            Button btnDeleteAll = (Button) findViewById(R.id.btn_delete_all);
+            btnDeleteAll.setVisibility(View.VISIBLE);
+            btnDeleteAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SingletonModel.getInstance().deleteAllDataFromDB();
+                    Toast.makeText(MainMenuActivity.this, "All data deleted", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void clickMainMenuButton(BUTTONS function) {

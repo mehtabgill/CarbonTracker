@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -122,7 +123,7 @@ public class DBAdapter {
     public static final String[] ROUTE_ALL_KEYS = new String[] {KEY_ROWID, KEY_ROUTE_NAME, KEY_CITYDISTANCE, KEY_HWYDISTANCE};
 
     public static final String[] JOURNEY_ALL_KEYS = new String[] {KEY_ROWID, KEY_TYPE, KEY_NAME, KEY_MODEL, KEY_MAKE,
-            KEY_YEAR, KEY_DISPLACEMENT_VOL, KEY_TRANSMISSION_TYPE, KEY_FUEL_TYPE, KEY_CITYMPG, KEY_HWYMPG, KEY_ROUTE_NAME,
+            KEY_CAR_YEAR, KEY_DISPLACEMENT_VOL, KEY_TRANSMISSION_TYPE, KEY_FUEL_TYPE, KEY_CITYMPG, KEY_HWYMPG, KEY_ROUTE_NAME,
             KEY_CITYDISTANCE, KEY_HWYDISTANCE, KEY_YEAR, KEY_MONTH, KEY_DAY};
 
     public static final String[] UTILITIES_ALL_KEYS = new String[] {KEY_ROWID, KEY_BILL_TYPE, KEY_AMOUNT, KEY_START_YEAR,
@@ -139,7 +140,7 @@ public class DBAdapter {
     public static final String DATABASE_JOURNEY_TABLE = "JourneyTable";
     public static final String DATABASE_UTILITIES_TABLE = "UtilitiesTable";
     // Track DB version if a new version of your app changes the format.
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 14;
 
     private static final String CAR_DATABASE_CREATE_SQL =
             "create table " + DATABASE_CAR_TABLE
@@ -674,9 +675,10 @@ public class DBAdapter {
 
         Transportation.TRANSPORTATION_TYPE type = transportation.getType();
         String transportationType = "";
+
         switch (type) {
             case CAR:
-                transportationType = "CAR";
+                transportationType = Transportation.getStringOfType(Transportation.TRANSPORTATION_TYPE.CAR);
                 Car car = (Car) transportation;
                 String name = car.getNickname();
                 String model = car.getModel();
@@ -687,7 +689,6 @@ public class DBAdapter {
                 String fuelType = car.getFuelType();
                 float cityMPG = car.getMilesPerGallonCity();
                 float hwyMPG = car.getMilesPerGallonHway();
-
 
                 values = new String[]{transportationType, name, model, make, String.valueOf(carYear), displacementVol, transmissionType, fuelType,
                         String.valueOf(cityMPG), String.valueOf(hwyMPG), routeName, String.valueOf(cityDistance), String.valueOf(hwyDistance),
@@ -700,16 +701,16 @@ public class DBAdapter {
                         + KEY_HWYDISTANCE + "=? and " + KEY_YEAR + "=? and " + KEY_MONTH + "=? and " + KEY_DAY + "=?";
                 break;
             case BUS:
-                transportationType = "BUS";
+                transportationType = Transportation.getStringOfType(Transportation.TRANSPORTATION_TYPE.BUS);
                 break;
             case SKYTRAIN:
-                transportationType = "SKYTRAIN";
+                transportationType = Transportation.getStringOfType(Transportation.TRANSPORTATION_TYPE.SKYTRAIN);
                 break;
             case BIKE:
-                transportationType = "BIKE";
+                transportationType = Transportation.getStringOfType(Transportation.TRANSPORTATION_TYPE.BIKE);
                 break;
             case WALK:
-                transportationType = "WALK";
+                transportationType = Transportation.getStringOfType(Transportation.TRANSPORTATION_TYPE.WALK);
                 break;
         }
 
@@ -719,6 +720,7 @@ public class DBAdapter {
             where = KEY_TYPE + "=? and " + KEY_ROUTE_NAME + "=? and " + KEY_CITYDISTANCE + "=? and " + KEY_HWYDISTANCE + "=? and "
                     + KEY_YEAR + "=? and " + KEY_MONTH + "=? and " + KEY_DAY + "=?";
         }
+
         Cursor c = 	db.query(true, DATABASE_JOURNEY_TABLE, JOURNEY_ALL_KEYS,
                 where, values, null, null, null, null);
         long id = -1;
@@ -865,6 +867,18 @@ public class DBAdapter {
         String routeName = route.getName();
         float cityDistance = route.getCityDriveDistance();
         float hwyDistance = route.getHighwayDriveDistance();
+
+        if(type != Transportation.TRANSPORTATION_TYPE.CAR) {
+            newValues.put(KEY_NAME, "");
+            newValues.put(KEY_MODEL, "");
+            newValues.put(KEY_MAKE, "");
+            newValues.put(KEY_CAR_YEAR, "");
+            newValues.put(KEY_DISPLACEMENT_VOL, "");
+            newValues.put(KEY_TRANSMISSION_TYPE, "");
+            newValues.put(KEY_FUEL_TYPE, "");
+            newValues.put(KEY_CITYMPG, "");
+            newValues.put(KEY_HWYMPG, "");
+        }
 
         newValues.put(KEY_ROUTE_NAME, routeName);
         newValues.put(KEY_CITYDISTANCE, cityDistance);
