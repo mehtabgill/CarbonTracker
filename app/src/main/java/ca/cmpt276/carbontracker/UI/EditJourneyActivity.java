@@ -267,6 +267,7 @@ public class EditJourneyActivity extends AppCompatActivity {
         textViewDate = (TextView) findViewById(R.id.textView_date);
 
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(R.string.edit_journey_title);
 
         refreshDate();
         refreshTransportation();

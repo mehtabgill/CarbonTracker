@@ -110,4 +110,5 @@
     <string name="city_distance_km">City Distance (Km)</string>
     <string name="highway_distance_km">Highway Distance (Km)</string>
     <string name="journeys">Journeys:</string>
+    <string name="edit_journey_title">Edit Journey</string>
 </resources>
