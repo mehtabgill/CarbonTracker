@@ -70,16 +70,16 @@ public class Journey extends Emission {
                 else if(fuelType.equals(DIESEL)){
                     fuelConstant = CAR_DIESEL_CO2_CONSTANT;
                 }
-
-                this.carbonEmissionValue = (cityMilesPerGallon * cityDistanceInMiles
-                        + hwyMilesPerGallon * hwyDistanceInMiles)
+                this.carbonEmissionValue = (cityDistanceInMiles / cityMilesPerGallon
+                        + hwyDistanceInMiles / hwyMilesPerGallon)
                         * fuelConstant;
+
                 break;
             case SKYTRAIN:
-                this.carbonEmissionValue = route.getTotalDistance() * SKYTRAIN_CARBON_EMISSIONS_PER_KM_CONSTANT;
+                this.carbonEmissionValue = route.getTotalDistance() / SKYTRAIN_CARBON_EMISSIONS_PER_KM_CONSTANT;
                 break;
             case BUS:
-                this.carbonEmissionValue = route.getTotalDistance() * BUS_CARBON_EMISSIONS_PER_KM_CONSTANT;
+                this.carbonEmissionValue = route.getTotalDistance() / BUS_CARBON_EMISSIONS_PER_KM_CONSTANT;
                 break;
             case WALK:
                 this.carbonEmissionValue = 0;

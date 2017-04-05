@@ -1,7 +1,10 @@
 package ca.cmpt276.carbontracker.UI;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -9,19 +12,18 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Space;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import ca.cmpt276.carbontracker.Model.Bike;
 import ca.cmpt276.carbontracker.Model.Bus;
@@ -36,16 +38,19 @@ import ca.cmpt276.carbontracker.Model.Walk;
 
 public class EditJourneyActivity extends AppCompatActivity {
 
-    SingletonModel model = SingletonModel.getInstance();
+    public static final String DATE_KEY = "date";
+    static SingletonModel model = SingletonModel.getInstance();
 
     LinearLayout layout;
     View transportationChild;
     View routeChild;
     View editTransportationChild;
     View editRouteChild;
+    static View dateChild;
+    static TextView textViewDate;
     Transportation transportation;
     Route route;
-    int index;
+    static int index;
 
     Menu menu;
 
@@ -175,9 +180,9 @@ public class EditJourneyActivity extends AppCompatActivity {
     }
 
     private boolean updateRouteForTransportation() {
-        if (layout.getChildCount() > 3) {
-            int cityDistance = 0;
-            int hwyDistance = 0;
+        if (layout.getChildCount() > 4) {
+            float cityDistance = 0f;
+            float hwyDistance = 0f;
             EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
             EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
 
@@ -186,10 +191,10 @@ public class EditJourneyActivity extends AppCompatActivity {
 
 
             if (city.length() > 0) {
-                cityDistance = Integer.parseInt(city);
+                cityDistance = Float.parseFloat(city);
             }
             if (hwy.length() > 0) {
-                hwyDistance = Integer.parseInt(hwy);
+                hwyDistance = Float.parseFloat(hwy);
             }
             if (cityDistance + hwyDistance == 0) {
                 Toast.makeText(getApplicationContext(), "Please enter a value greater than 0", Toast.LENGTH_SHORT).show();
@@ -206,8 +211,8 @@ public class EditJourneyActivity extends AppCompatActivity {
     }
 
     private void updateRoute() {
-        int cityDistance = 0;
-        int hwyDistance = 0;
+        float cityDistance = 0;
+        float hwyDistance = 0;
         EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
         EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
 
@@ -215,10 +220,10 @@ public class EditJourneyActivity extends AppCompatActivity {
         String hwy = editTextHwy.getText().toString();
 
         if (city.length() > 0) {
-            cityDistance = Integer.parseInt(city);
+            cityDistance = Float.parseFloat(city);
         }
         if (hwy.length() > 0) {
-            hwyDistance = Integer.parseInt(hwy);
+            hwyDistance = Float.parseFloat(hwy);
         }
         if (cityDistance + hwyDistance == 0) {
             Toast.makeText(getApplicationContext(), "Please enter a value greater than 0", Toast.LENGTH_SHORT).show();
@@ -250,6 +255,8 @@ public class EditJourneyActivity extends AppCompatActivity {
         route = model.getRouteOfJourneyAt(index);
 
         layout = (LinearLayout) findViewById(R.id.layout_edit_journey);
+        dateChild = getLayoutInflater().inflate(R.layout.activity_edit_journey_date, null);
+        layout.addView(dateChild);
         transportationChild = getLayoutInflater().inflate(R.layout.list_transportation, null);
         layout.addView(transportationChild);
         routeChild = getLayoutInflater().inflate(R.layout.list_route, null);
@@ -257,11 +264,21 @@ public class EditJourneyActivity extends AppCompatActivity {
         editTransportationChild = getLayoutInflater().inflate(R.layout.activity_edit_transportation_journey, null);
         editRouteChild = getLayoutInflater().inflate(R.layout.activity_edit_route_journey, null);
 
+        textViewDate = (TextView) findViewById(R.id.textView_date);
+
         ActionBar actionBar = getSupportActionBar();
 
+        refreshDate();
         refreshTransportation();
         refreshRoute();
         registerClickCallback();
+    }
+
+    private static void refreshDate() {
+        textViewDate.setText(model.getDateStringOfJourneyAt(index));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dateChild.getLayoutParams());
+        params.setMargins(0, 10, 0, 10);
+        dateChild.setLayoutParams(params);
     }
 
     private void setupModeSpinner() {
@@ -272,8 +289,9 @@ public class EditJourneyActivity extends AppCompatActivity {
             if (transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
                 Car car = (Car) transportation;
                 editText.setText(car.getNickname());
+                setVisibilityOfCarSpinners(View.VISIBLE);
             } else {
-                setVisibilityOfCarFields(View.GONE);
+                setVisibilityOfCarSpinners(View.GONE);
             }
             Transportation.TRANSPORTATION_TYPE[] temp = Transportation.TRANSPORTATION_TYPE.values();
             ArrayList<String> modes = new ArrayList<>();
@@ -287,13 +305,13 @@ public class EditJourneyActivity extends AppCompatActivity {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (layout.getChildCount() > 3) {
+                    if (layout.getChildCount() > 4) {
                         layout.removeView(editRouteChild);
                     }
                     if (spinner.getSelectedItemPosition() != Transportation.TRANSPORTATION_TYPE.CAR.ordinal()) {
-                        setVisibilityOfCarFields(View.GONE);
+                        setVisibilityOfCarSpinners(View.GONE);
                         if (transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
-                            if (layout.getChildCount() <= 3) {
+                            if (layout.getChildCount() <= 4) {
                                 layout.addView(editRouteChild);
                                 EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
                                 EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
@@ -302,13 +320,12 @@ public class EditJourneyActivity extends AppCompatActivity {
 
                                 editTextHwy.setVisibility(View.GONE);
                                 textViewHwy.setVisibility(View.GONE);
-
                             }
                         }
                     } else {
-                        setVisibilityOfCarFields(View.VISIBLE);
+                        setVisibilityOfCarSpinners(View.VISIBLE);
                         if (transportation.getType() != Transportation.TRANSPORTATION_TYPE.CAR) {
-                            if (layout.getChildCount() <= 3) {
+                            if (layout.getChildCount() <= 4) {
                                 layout.addView(editRouteChild);
                                 EditText editTextCity = (EditText) findViewById(R.id.editText_cityDistance);
                                 EditText editTextHwy = (EditText) findViewById(R.id.editText_hwyDistance);
@@ -331,7 +348,7 @@ public class EditJourneyActivity extends AppCompatActivity {
         }
     }
 
-    private void setVisibilityOfCarFields(int visibility) {
+    private void setVisibilityOfCarSpinners(int visibility) {
         EditText editText = (EditText) findViewById(R.id.editText_car_name);
         if(editText != null) {
             editText.setVisibility(visibility);
@@ -367,6 +384,17 @@ public class EditJourneyActivity extends AppCompatActivity {
                 transportationClicked();
             }
         });
+        dateChild.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dateClicked();
+            }
+        });
+    }
+
+    private void dateClicked() {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), DATE_KEY);
     }
 
     private void transportationClicked() {
@@ -398,12 +426,12 @@ public class EditJourneyActivity extends AppCompatActivity {
                     transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
                 layout.addView(editRouteChild);
                 setVisibilityOfHwyDistance(View.GONE);
-                setVisibilityOfCarFields(View.GONE);
+                setVisibilityOfCarSpinners(View.GONE);
             } else if (spinner.getSelectedItemPosition() == Transportation.TRANSPORTATION_TYPE.CAR.ordinal() &&
                     transportation.getType() != Transportation.TRANSPORTATION_TYPE.CAR) {
                 layout.addView(editRouteChild);
                 setVisibilityOfHwyDistance(View.VISIBLE);
-                setVisibilityOfCarFields(View.VISIBLE);
+                setVisibilityOfCarSpinners(View.VISIBLE);
             }
             if (setupMode) {
                 setupSpinners();
@@ -411,7 +439,7 @@ public class EditJourneyActivity extends AppCompatActivity {
             menuEditMode(true);
         } else {
             layout.removeView(editTransportationChild);
-            if (layout.getChildCount() > 2) {
+            if (layout.getChildCount() > 3) {
                 layout.removeView(layout.getChildAt(layout.getChildCount() - 1));
             }
             transportationChild.setBackgroundResource(R.drawable.background_border_green);
@@ -555,7 +583,7 @@ public class EditJourneyActivity extends AppCompatActivity {
         TextView textViewYear = (TextView) findViewById(R.id.textView_year);
         if (transportation.getType() == Transportation.TRANSPORTATION_TYPE.CAR) {
             Car car = (Car) transportation;
-            setVisibilityOfCarFields(View.VISIBLE);
+            setVisibilityOnCarFields(View.VISIBLE);
             textViewName.setText(car.getNickname());
             textViewModel.setText(car.getModel());
             textViewMake.setText(car.getMake());
@@ -580,5 +608,29 @@ public class EditJourneyActivity extends AppCompatActivity {
         textViewMake.setVisibility(visibility);
         textViewModel.setVisibility(visibility);
         textViewYear.setVisibility(visibility);
+    }
+
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = model.getDateOfJourneyAt(index);
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            Calendar date = Calendar.getInstance();
+            Calendar today = Calendar.getInstance();
+            date.set(year, month, day);
+            if(date.before(today) || !date.after(today)) {
+                model.setDateOfJourneyAt(index, date);
+                refreshDate();
+            }
+            else {
+                Toast.makeText(getContext(), "The future is still a mystery. Please enter a valid day!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

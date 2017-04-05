@@ -428,6 +428,22 @@ public class SingletonModel {
         database.updateJourney(id, newJourney);
     }
 
+    public Calendar getDateOfJourneyAt(int index) {
+        return journeyCollection.get(index).getDate();
+    }
+
+    public String getDateStringOfJourneyAt(int index) {
+        return journeyCollection.get(index).getStringDate();
+    }
+
+    public void setDateOfJourneyAt(int index, Calendar date) {
+        Journey oldJourney = journeyCollection.get(index);
+        long id = database.findJourney(oldJourney);
+        journeyCollection.get(index).setDate(date);
+        Journey newJourney = journeyCollection.get(index);
+        database.updateJourney(id, newJourney);
+    }
+
     public int getJourneyCollectionSize(){
         return journeyCollection.size();
     }
