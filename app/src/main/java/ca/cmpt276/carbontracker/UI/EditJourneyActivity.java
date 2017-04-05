@@ -197,6 +197,7 @@ public class EditJourneyActivity extends AppCompatActivity {
                 hwyDistance = Float.parseFloat(hwy);
             }
             if (cityDistance + hwyDistance == 0) {
+                editTextCity.requestFocus();
                 Toast.makeText(getApplicationContext(), "Please enter a value greater than 0", Toast.LENGTH_SHORT).show();
                 return false;
             } else {
