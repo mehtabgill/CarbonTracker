@@ -1,0 +1,101 @@
+<resources>
+    <string name="app_name">"Carbón Rastreador"</string>
+    <string name="create_journey_button">"CREAR NUEVO VIAJE"</string>
+    <string name="create_utilities_bill_button">"CREAR NUEVA CUENTA DE UTILIDAD"</string>
+    <string name="edit_delete_utilities_bill_button">"Editar / Eliminar cuenta de servicios públicos"</string>
+    <string name="view_carbon_footprint_button">"VISTA LA HUELLA DE CARBONO"</string>\
+    <string name="Additional_Info">"Desplazamiento vol: %1$f Tipo de transmisión: %2$s"</string>
+    <string name="Car_Description">"%1$s $ 2 $ s %3$d %4$s"</string>
+    <string name="select_car_description">"Seleccione su coche en este viaje desde la lista desplegable. \ NPresione Editar / Eliminar coches para editar / borrar vehículo seleccionado. \ NPresione coche nuevo para agregar nuevo coche a la lista "</string>
+    <string name="select_car_button_text">"CAR SELECT"</string>
+    <string name="add_car_button_text">"Nuevo coche"</string>
+    <string name="edit_delete_car_button_text">"EDITAR / BORRAR CAR"</string>
+    <string name="error_no_car">"Error: No se auto disponibles en la actualidad"</string>
+    <string name="enter_nickname_textView">"Introduzca Apodo: "</string>
+    <string name="nickname_hint">"Apodo"</string>
+    <string name="nickname_input_error">"Error: Nombre de usuario debe contener al menos 1 carácter"</string>
+    <string name="deleted_car_message">"Coche ha sido borrado"</string>
+    <string name="confirm_saving_data_message">"Guarde el siguiente cambio: %1$s ?"</string>
+    <string name="saved_data_message">"información editada Guardado"</string>
+    <string name="make_spinner_header">"Seleccione Marca:"</string>
+    <string name="model_spinner_header">"Seleccionar modelo
+"</string>
+    <string name="year_spinner_header">"Seleccionar año"</string>
+    <string name="search_button_text">"Buscar"</string>
+    <string name="select_car_popup_title">"Seleccione su modelo de coche: "</string>
+    <string name="ok_text">"De acuerdo"</string>
+    <string name="cancel_text">"CANCELAR"</string>
+    <string name="car_existed_message">"Coche ya existía"</string>
+    <string name="select_route_description">"Seleccionar su ruta para este viaje desde la lista desplegable. \ NPresione Editar / Eliminar ruta para editar / borrar la ruta seleccionada. \ NPresione Nueva ruta para añadir nueva ruta a la lista."</string>
+    <string name="select_route_button_text">"RUTA SELECT"</string>
+    <string name="new_route_button_text">"NUEVA RUTA"</string>
+    <string name="edit_route_button_text">"Editar ruta"</string>
+    <string name="delete_route_button_text">"Borrar ruta"</string>
+    <string name="error_no_route_selected">"Error: No hay ruta disponible para seleccione"</string>
+    <string name="route_name_text">"Nombre Ruta"</string>
+    <string name="route_city_distance_text">"Ciudad Distancia (km):"</string>
+    <string name="route_highway_distance_text">"Carretera Distancia (km)"</string>
+    <string name="add_route_button_text">"Añadir ruta"</string>
+    <string name="load_car_completed">"carga completa"</string>
+    <string name="load_make_completed">"Hacer una carga completada"</string>
+    <string name="selected_entries_title">"Su entrada seleccionada es:% 1s "</string>
+    <string name="edit_nickname_text">"Apodo Editar Coche: "</string>
+    <string name="edit_car_entries_text">"Editar las entradas de coches (marca, modelo, año): "</string>
+    <string name="confirm_delete_route_text">"¿Desea eliminar este pedido?"</string>
+    <string name="delete_text">"Borrar"</string>
+    <string name="save_car_info_button_text">"Guardar información de coches"</string>
+    <string name="welcomeMessage1">"¿Quieres salvar a la Tierra?"</string>
+    <string name="welcomeMessage2">"Haga clic en la imagen!"</string>
+    <string name="skip">"Saltar"</string>
+    <string name="table_header">"Resumen de la huella CARBON"</string>
+    <string name="journey_date_header">"Fecha"</string>
+    <string name="journey_distance_header">"Distancia \ n (km) "</string>
+    <string name="journey_car_name_header">"@nombre de coche "</string>
+    <string name="emission_type_header">"Tipo de emisión"</string>
+    <string name="emission_name_header">"Nombre de emisiones"</string>
+    <string name="emission_value_header">"Valor de emisión (kg)"</string>
+    <string name="emission_value_formatted_string">"f. "</string>
+    <string name="journey_carbon_emission_header">"Las emisiones de carbono \ n (kg)"</string>
+    <string name="switch_button">"CAMBIAR A GRÁFICO / TABLE"</string>
+    <string name="existing_car_text">"Las rutas existentes"</string>
+    <string name="no_existing_car_text">"No hay rutas existentes"</string>
+    <string name="select_bill_text">"Seleccione el proyecto de ley: "</string>
+    <string name="enter_bill_amount_text">"Monto \ n (kWh o GJ): "</string>
+    <string name="enter_bill_amount_hint">"&lt;Font size = \"15\"&gt; Cantidad de gas o electricidad &lt;/ font&gt;"</string>
+    <string name="select_start_date_text">"A partir \ fecha nbilling"</string>
+    <string name="select_end_date_text">"Última \ nbilling fecha: "</string>
+    <string name="select_start_date_hint">"&lt;Font size = \"15\"&gt; Seleccione primero la fecha de su factura &lt;/ font&gt;"</string>
+    <string name="select_end_date_hint">" &lt;Font size = \"15\"&gt; Seleccionar la última fecha de su factura &lt;/ font&gt;"</string>
+    <string name="amount_people_text">"Número de Personas "</string>
+    <string name="amount_people_hint">"&lt;Font size = \"15\"&gt; personas en el hogar &lt;/ font&gt;"</string>
+    <string name="add_bill_button_text">"AÑADIR BILL"</string>
+    <string name="electricity_bill">"Electricidad"</string>
+    <string name="gas_bill">"Combustible"</string>
+    <string name="bill_amount_error">"Error: Cantidad de consumo debe ser mayor que 0"</string>
+    <string name="number_of_people_error">"Error: Cantidad de personas debe ser mayor que 0"</string>
+    <string name="add_bill_button_error">"Error: No todas las entradas necesarias están llenos"</string>
+    <string name="edit_delete_bill_description">"Seleccione la cuenta que desea recuperar desde el menú desplegable. Haga clic en Seleccionar Bill y elegir la acción que desee en el menú emergente "</string>
+    <string name="select_bill_error">"No hay proyecto de ley para seleccionar"</string>
+    <string name="select_utilities_bill_popup_title">"Seleccionar este proyecto de ley para: "</string>
+    <string name="deleted_bill_confirmed">"Bill eliminados"</string>
+    <string name="ok">"De acuerdo"</string>
+    <string name="cancel">"Cancelar"</string>
+    <string name="distance">"Distancia: "</string>
+    <string name="save">"Guardar"</string>
+    <string name="select">"Seleccionar"</string>
+    <string name="edit">"Editar"</string>
+    <string name="delete">"Borrar"</string>
+    <string name="nextTip">"Sugerencia siguiente"</string>
+    <string name="Car">"Coche"</string>
+    <string name="Bus">"Locomoción"</string>
+    <string name="Skytrain">"Tren Aereo"</string>
+    <string name="Bike">"Ciclismo"</string>
+    <string name="Walk">"Caminar"</string>
+    <string name="Journey">"Viaje"</string>
+    <string name="Utilities">"Utilidades"</string>
+    <string name="select_time_range_popup">"Seleccione el rango de tiempo:"</string>
+    <string name="mode_1_day">"1 Día"</string>
+    <string name="mode_28_day">"10152=Último Día"</string>
+    <string name="mode_365_day">"10152=Último Día"</string>
+    <string name="calendar_header">"Seleccione la fecha: "</string>
+</resources>
