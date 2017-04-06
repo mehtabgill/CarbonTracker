@@ -88,7 +88,8 @@ public final class GraphDataRetriever {
                 }
                 emissionTypeList_Day.add(emission.getClass().getSimpleName());
             }
-            if(!dateInBill){
+            boolean emissionEmpty = (model.getUtilitiesCollectionSize() == 0);
+            if(!emissionEmpty && !dateInBill){
                 Utilities electricityBill = model.getRelativeUtilitiesValue(date, Utilities.BILL.ELECTRICITY);
                 emissionArrayList.add(electricityBill);
                 emissionTypeList_Day.add(Utilities.class.getSimpleName());

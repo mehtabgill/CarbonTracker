@@ -643,6 +643,10 @@ public class SingletonModel {
         return relativeUtilities;
     }
 
+    public int getUtilitiesCollectionSize(){
+        return utilitiesCollection.size();
+    }
+
     public int getWalks(){
         return journeyCollection.getNumWalk();
     }
