@@ -73,34 +73,37 @@ public final class GraphDataRetriever {
     private void setupData_Day() {
         resetCurrentCollection();
         emissionArrayList = model.getEmissionListOnDay(date);
-        for(Emission emission : emissionArrayList){
-            if(emission instanceof Journey){
-                emissionNameList_Day.add( ((Journey) emission).getTransportationName());
-                emissionValueList_Day.add(emission.getCarbonEmissionValue());
-            }
-            else{
-                if(emission instanceof Utilities){
-                    dateInBill = true;
-                    emissionNameList_Day.add(((Utilities) emission).getBill().toString());
-                    emissionValueList_Day.add(((Utilities) emission).getDailyAverageEmission());
+        if(emissionArrayList.size() > 0){
+            for(Emission emission : emissionArrayList){
+                if(emission instanceof Journey){
+                    emissionNameList_Day.add( ((Journey) emission).getTransportationName());
+                    emissionValueList_Day.add(emission.getCarbonEmissionValue());
                 }
+                else{
+                    if(emission instanceof Utilities){
+                        dateInBill = true;
+                        emissionNameList_Day.add(((Utilities) emission).getBill().toString());
+                        emissionValueList_Day.add(((Utilities) emission).getDailyAverageEmission());
+                    }
+                }
+                emissionTypeList_Day.add(emission.getClass().getSimpleName());
             }
-            emissionTypeList_Day.add(emission.getClass().getSimpleName());
-        }
-        if(!dateInBill){
-            Utilities electricityBill = model.getRelativeUtilitiesValue(date, Utilities.BILL.ELECTRICITY);
-            emissionArrayList.add(electricityBill);
-            emissionTypeList_Day.add(Utilities.class.getSimpleName());
-            emissionNameList_Day.add(Utilities.BILL.ELECTRICITY.toString());
-            emissionValueList_Day.add(electricityBill.getDailyAverageEmission());
+            if(!dateInBill){
+                Utilities electricityBill = model.getRelativeUtilitiesValue(date, Utilities.BILL.ELECTRICITY);
+                emissionArrayList.add(electricityBill);
+                emissionTypeList_Day.add(Utilities.class.getSimpleName());
+                emissionNameList_Day.add(Utilities.BILL.ELECTRICITY.toString());
+                emissionValueList_Day.add(electricityBill.getDailyAverageEmission());
 
-            Utilities gasBill = model.getRelativeUtilitiesValue(date, Utilities.BILL.GAS);
-            emissionArrayList.add(gasBill);
-            emissionTypeList_Day.add(Utilities.class.getSimpleName());
-            emissionNameList_Day.add(Utilities.BILL.GAS.toString());
-            emissionValueList_Day.add(gasBill.getDailyAverageEmission());
+                Utilities gasBill = model.getRelativeUtilitiesValue(date, Utilities.BILL.GAS);
+                emissionArrayList.add(gasBill);
+                emissionTypeList_Day.add(Utilities.class.getSimpleName());
+                emissionNameList_Day.add(Utilities.BILL.GAS.toString());
+                emissionValueList_Day.add(gasBill.getDailyAverageEmission());
+            }
+            populateRouteEmissionList();
         }
-        populateRouteEmissionList();
+
     }
 
     private void setupData_MultipleDays() {
@@ -356,17 +359,19 @@ public final class GraphDataRetriever {
             if(emissionArrayList.size() == 0){
                 emissionArrayList = model.getEmissionListOnDay(date);
             }
-            for(Emission emission : emissionArrayList){
-                if(emission instanceof Journey){
-                    journeyCollection.add((Journey) emission);
-                }
-
-                else if(emission instanceof Utilities){
-                    if(((Utilities) emission).getBill().equals(Utilities.BILL.ELECTRICITY)){
-                        electricityValue += ((Utilities) emission).getDailyAverageEmission();
+            if(emissionArrayList.size() > 0){
+                for(Emission emission : emissionArrayList){
+                    if(emission instanceof Journey){
+                        journeyCollection.add((Journey) emission);
                     }
-                    else{
-                        gasValue += ((Utilities) emission).getDailyAverageEmission();
+
+                    else if(emission instanceof Utilities){
+                        if(((Utilities) emission).getBill().equals(Utilities.BILL.ELECTRICITY)){
+                            electricityValue += ((Utilities) emission).getDailyAverageEmission();
+                        }
+                        else{
+                            gasValue += ((Utilities) emission).getDailyAverageEmission();
+                        }
                     }
                 }
             }
