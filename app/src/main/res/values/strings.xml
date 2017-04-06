@@ -72,8 +72,8 @@
     <string name="amount_people_text">Number of people: </string>
     <string name="amount_people_hint"><font size="15">People in household</font></string>
     <string name="add_bill_button_text">ADD BILL</string>
-    <string name="electricity_bill">Electricity</string>
-    <string name="gas_bill">Gas</string>
+    <string name="electricity_bill">ELECTRICITY</string>
+    <string name="gas_bill">GAS</string>
     <string name="bill_amount_error">Error: Amount of consumption must be greater than 0</string>
     <string name="number_of_people_error">Error: Amount of people must be greater than 0</string>
     <string name="add_bill_button_error">Error: Not all entries required are filled</string>
@@ -99,6 +99,12 @@
     <string name="Skytrain">Skytrain</string>
     <string name="Bike">Bike</string>
     <string name="Walk">Walk</string>
+    <string name="Total_Value">Your Emission </string>
+    <string name="Actual_Value">Individual Emission</string>
+    <string name="Target_Value">Target Emission</string>
+    <string name="pie_chart_title">Pie Chart</string>
+    <string name="line_chart_title">Line Chart</string>
+    <string name="table_title">Table</string>
     <string name="Journey">Journey</string>
     <string name="Utilities">Utilities</string>
     <string name="select_time_range_popup">Select your time range:</string>

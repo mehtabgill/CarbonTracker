@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import ca.cmpt276.carbontracker.UI.ViewCarbonFootprintActivity;
+
 /**
  * Static class that read data from Model and return data accordingly
  * For one day: Entry is activity - Journey or Utilities(electricity/gas)
@@ -32,8 +34,7 @@ public final class GraphDataRetriever {
     private ArrayList<Float> emissionValueList_Day = new ArrayList<>();
     private boolean dateInBill = false;
 
-    //These are used for Month
-    //TODO: Add arraylist for Walk/Bike later
+    //These are used for Month / Year
     private ArrayList<String> dateList = new ArrayList<>();
     private ArrayList<Float> carEmissionValue = new ArrayList<>();
     private ArrayList<Float> skytrainEmissionValue = new ArrayList<>();
@@ -42,6 +43,10 @@ public final class GraphDataRetriever {
     private ArrayList<Float> gasBillEmissionValue = new ArrayList<>();
     private ArrayList<Float> totalEmissionValue = new ArrayList<>();
 
+
+    //These are used for pie chart by route
+    private ArrayList<Float> routeEmissionValue = new ArrayList<>();
+    private ArrayList<String> emissionNameList_Route = new ArrayList<>();
 
     private JourneyCollection journeyCollection = new JourneyCollection();
     private UtilitiesCollection utilitiesCollection = new UtilitiesCollection();
@@ -59,39 +64,57 @@ public final class GraphDataRetriever {
             case DAY:
                 setupData_Day();
                 break;
-            case MONTH:
-                setupData_Month();
+            default:
+                setupData_MultipleDays();
                 break;
-            case YEAR:
-                setupData_Year();
-
         }
     }
 
-    private void setupData_Month() {
+    private void setupData_Day() {
         resetCurrentCollection();
-        NUMBER_OF_DAYS = 28;
-        NUMBER_OF_ENTRIES = 29;
-        Calendar endDate = (Calendar) date.clone();
-        Calendar endClone = (Calendar) endDate.clone();
-        endClone.add(Calendar.DATE, 1);
-        Calendar startDate = (Calendar) endDate.clone();
-        startDate.add(Calendar.DATE, -NUMBER_OF_DAYS);
+        emissionArrayList = model.getEmissionListOnDay(date);
+        for(Emission emission : emissionArrayList){
+            if(emission instanceof Journey){
+                emissionNameList_Day.add( ((Journey) emission).getTransportationName());
+                emissionValueList_Day.add(emission.getCarbonEmissionValue());
+            }
+            else{
+                if(emission instanceof Utilities){
+                    dateInBill = true;
+                    emissionNameList_Day.add(((Utilities) emission).getBill().toString());
+                    emissionValueList_Day.add(((Utilities) emission).getDailyAverageEmission());
+                }
+            }
+            emissionTypeList_Day.add(emission.getClass().getSimpleName());
+        }
+        if(!dateInBill){
+            Utilities electricityBill = model.getRelativeUtilitiesValue(date, Utilities.BILL.ELECTRICITY);
+            emissionArrayList.add(electricityBill);
+            emissionTypeList_Day.add(Utilities.class.getSimpleName());
+            emissionNameList_Day.add(Utilities.BILL.ELECTRICITY.toString());
+            emissionValueList_Day.add(electricityBill.getDailyAverageEmission());
 
-        journeyCollection = model.getJourneyInRange(startDate, endDate);
-        utilitiesCollection = model.getUtilitiesInRange(startDate, endDate);
-
-        populateDateList(startDate, endClone);
-        populateJourneyList(startDate);
-        populateUtilitiesList();
-        populateTotalArrayList();
+            Utilities gasBill = model.getRelativeUtilitiesValue(date, Utilities.BILL.GAS);
+            emissionArrayList.add(gasBill);
+            emissionTypeList_Day.add(Utilities.class.getSimpleName());
+            emissionNameList_Day.add(Utilities.BILL.GAS.toString());
+            emissionValueList_Day.add(gasBill.getDailyAverageEmission());
+        }
+        populateRouteEmissionList();
     }
 
-
-    private void setupData_Year() {
+    private void setupData_MultipleDays() {
         resetCurrentCollection();
-        NUMBER_OF_DAYS = 365;
-        NUMBER_OF_ENTRIES = 13;
+        if(mode.equals(GRAPH_MODE.MONTH)){
+            NUMBER_OF_DAYS = 28;
+            NUMBER_OF_ENTRIES = 29;
+        }
+        else{
+            if(mode.equals(GRAPH_MODE.YEAR)){
+                NUMBER_OF_DAYS = 365;
+                NUMBER_OF_ENTRIES = 13;
+            }
+        }
         Calendar endDate = (Calendar) date.clone();
         Calendar endClone = (Calendar) endDate.clone();
         endClone.add(Calendar.DATE, 1);
@@ -105,6 +128,7 @@ public final class GraphDataRetriever {
         populateJourneyList(startDate);
         populateUtilitiesList();
         populateTotalArrayList();
+        populateRouteEmissionList();
     }
 
     private void populateDateList(Calendar startDate, Calendar endClone) {
@@ -325,6 +349,58 @@ public final class GraphDataRetriever {
         }
     }
 
+    private void populateRouteEmissionList(){
+        float electricityValue = 0f;
+        float gasValue = 0f;
+        if(mode.equals(GRAPH_MODE.DAY)){
+            if(emissionArrayList.size() == 0){
+                emissionArrayList = model.getEmissionListOnDay(date);
+            }
+            for(Emission emission : emissionArrayList){
+                if(emission instanceof Journey){
+                    journeyCollection.add((Journey) emission);
+                }
+
+                else if(emission instanceof Utilities){
+                    if(((Utilities) emission).getBill().equals(Utilities.BILL.ELECTRICITY)){
+                        electricityValue += ((Utilities) emission).getDailyAverageEmission();
+                    }
+                    else{
+                        gasValue += ((Utilities) emission).getDailyAverageEmission();
+                    }
+                }
+            }
+        }
+        if(journeyCollection.size() > 0) {
+            emissionNameList_Route = journeyCollection.getUniqueRouteNames();
+            for (String routeName : emissionNameList_Route) {
+                if (routeName.equals("name")) {
+                    int index = emissionNameList_Route.indexOf(routeName);
+                    emissionNameList_Route.set(index, "unnamed");
+                }
+            }
+            for (int i = 0; i < emissionNameList_Route.size(); i++) {
+                Float routeValue = 0f;
+                for (Journey journey : journeyCollection) {
+                    if (journey.getRoute().getName().equals(emissionNameList_Route.get(i))) {
+                        routeValue += journey.getCarbonEmissionValue();
+                    }
+                }
+                routeEmissionValue.add(routeValue);
+            }
+        }
+        if(!mode.equals(GRAPH_MODE.DAY)) {
+            for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
+                electricityValue += electricityBillEmissionValue.get(i);
+                gasValue += gasBillEmissionValue.get(i);
+            }
+        }
+        routeEmissionValue.add(electricityValue);
+        routeEmissionValue.add(gasValue);
+        emissionNameList_Route.add(ViewCarbonFootprintActivity.ELECTRICITY);
+        emissionNameList_Route.add(ViewCarbonFootprintActivity.GAS);
+    }
+
     private int getDateIndex(Calendar date, ArrayList<Calendar> currentCalendar){
         for(int i = 0; i < currentCalendar.size(); i++){
             if(equalDate(currentCalendar.get(i), date)){
@@ -372,7 +448,7 @@ public final class GraphDataRetriever {
     }
 
     private boolean dateInRange(Calendar startDate, Calendar endDate, Calendar checkingDate){
-        Calendar currentCheckingDate = (Calendar) startDate.clone();
+        /*Calendar currentCheckingDate = (Calendar) startDate.clone();
         Calendar endDateClone = (Calendar) endDate.clone();
         endDateClone.add(Calendar.DATE, 1);
         boolean equal = false;
@@ -385,41 +461,17 @@ public final class GraphDataRetriever {
                 currentCheckingDate.add(Calendar.DAY_OF_YEAR, 1);
             }
         }
-        return equal;
-    }
-
-    private void setupData_Day() {
-        resetCurrentCollection();
-        emissionArrayList = model.getEmissionListOnDay(date);
-        for(Emission emission : emissionArrayList){
-            if(emission instanceof Journey){
-                emissionNameList_Day.add( ((Journey) emission).getTransportationName());
-                emissionValueList_Day.add(emission.getCarbonEmissionValue());
-            }
-            else{
-                if(emission instanceof Utilities){
-                    dateInBill = true;
-                    emissionNameList_Day.add(((Utilities) emission).getBill().toString());
-                    emissionValueList_Day.add(((Utilities) emission).getDailyAverageEmission());
-                }
-            }
-            emissionTypeList_Day.add(emission.getClass().getSimpleName());
+        return equal;*/
+        boolean inRange;
+        if(model.firstDateBeforeSecondDate(startDate, checkingDate) &&
+            (model.firstDateBeforeSecondDate(checkingDate, endDate))){
+            inRange = true;
         }
-        if(!dateInBill){
-            Utilities electricityBill = model.getRelativeUtilitiesValue(date, Utilities.BILL.ELECTRICITY);
-            emissionArrayList.add(electricityBill);
-            emissionTypeList_Day.add(Utilities.class.getSimpleName());
-            emissionNameList_Day.add(Utilities.BILL.ELECTRICITY.toString());
-            emissionValueList_Day.add(electricityBill.getDailyAverageEmission());
-
-            Utilities gasBill = model.getRelativeUtilitiesValue(date, Utilities.BILL.GAS);
-            emissionArrayList.add(gasBill);
-            emissionTypeList_Day.add(Utilities.class.getSimpleName());
-            emissionNameList_Day.add(Utilities.BILL.GAS.toString());
-            emissionValueList_Day.add(gasBill.getDailyAverageEmission());
+        else{
+            inRange = false;
         }
+        return inRange;
     }
-
 
     public ArrayList<String> getEmissionTypeList_Day(){
         return emissionTypeList_Day;
@@ -453,9 +505,46 @@ public final class GraphDataRetriever {
         return gasBillEmissionValue;
     }
 
+    public ArrayList<Float> getEmissionValueByMode(){
+        ArrayList<Float> emissionValueByMode = new ArrayList<>();
+        Float carValue = 0f;
+        Float busValue = 0f;
+        Float skytrainValue = 0f;
+        Float electricityValue = 0f;
+        Float gasValue = 0f;
+
+        for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
+            carValue += carEmissionValue.get(i);
+            busValue += busEmissionValue.get(i);
+            skytrainValue += skytrainEmissionValue.get(i);
+            electricityValue += electricityBillEmissionValue.get(i);
+            gasValue += gasBillEmissionValue.get(i);
+        }
+        emissionValueByMode.add(carValue);
+        emissionValueByMode.add(busValue);
+        emissionValueByMode.add(skytrainValue);
+        emissionValueByMode.add(electricityValue);
+        emissionValueByMode.add(gasValue);
+        return emissionValueByMode;
+    }
+
+    public ArrayList<Float> getTotalEmissionValue(){
+        return totalEmissionValue;
+
+    }
+
+    public ArrayList<Float> getEmissionValueByRoute(){
+        return routeEmissionValue;
+    }
+
+    public ArrayList<String> getEmissionNameList_Route(){
+        return emissionNameList_Route;
+    }
+
     public int getEmissionArrayListSize(){
         return emissionArrayList.size();
     }
+
 
     public void resetCurrentCollection(){
         switch (mode){
@@ -476,6 +565,8 @@ public final class GraphDataRetriever {
                 gasBillEmissionValue = new ArrayList<>();
                 totalEmissionValue = new ArrayList<>();
         }
+        routeEmissionValue = new ArrayList<>();
+        emissionNameList_Route = new ArrayList<>();
     }
     public int getNumberOfEntries(){
         return NUMBER_OF_ENTRIES;
