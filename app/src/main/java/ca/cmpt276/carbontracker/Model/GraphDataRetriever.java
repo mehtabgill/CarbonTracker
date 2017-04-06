@@ -1,7 +1,5 @@
 package ca.cmpt276.carbontracker.Model;
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +22,9 @@ public final class GraphDataRetriever {
     private Calendar date;
     private int NUMBER_OF_DAYS;
     private int NUMBER_OF_ENTRIES;
+    public final float INDIVIDUAL_TARGET_DAILY = 53f;
+    public final float INDIVIDUAL_ACTUAL_DAILY = 56f;
+
 
     private ArrayList<Emission> emissionArrayList = new ArrayList<>();
     private ArrayList<String> emissionTypeList_Day = new ArrayList<>();
@@ -39,6 +40,8 @@ public final class GraphDataRetriever {
     private ArrayList<Float> busEmissionValue = new ArrayList<>();
     private ArrayList<Float> electricityBillEmissionValue = new ArrayList<>();
     private ArrayList<Float> gasBillEmissionValue = new ArrayList<>();
+    private ArrayList<Float> totalEmissionValue = new ArrayList<>();
+
 
     private JourneyCollection journeyCollection = new JourneyCollection();
     private UtilitiesCollection utilitiesCollection = new UtilitiesCollection();
@@ -81,13 +84,14 @@ public final class GraphDataRetriever {
         populateDateList(startDate, endClone);
         populateJourneyList(startDate);
         populateUtilitiesList();
+        populateTotalArrayList();
     }
 
 
     private void setupData_Year() {
         resetCurrentCollection();
         NUMBER_OF_DAYS = 365;
-        NUMBER_OF_ENTRIES = 12;
+        NUMBER_OF_ENTRIES = 13;
         Calendar endDate = (Calendar) date.clone();
         Calendar endClone = (Calendar) endDate.clone();
         endClone.add(Calendar.DATE, 1);
@@ -100,6 +104,7 @@ public final class GraphDataRetriever {
         populateDateList(startDate, endClone);
         populateJourneyList(startDate);
         populateUtilitiesList();
+        populateTotalArrayList();
     }
 
     private void populateDateList(Calendar startDate, Calendar endClone) {
@@ -114,7 +119,7 @@ public final class GraphDataRetriever {
                 }
                 break;
             case YEAR:
-                for(int i = 0; i < NUMBER_OF_ENTRIES + 1; i++){
+                for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
                     if(i == 11){
                         Calendar date = (Calendar) startClone.clone();
                         dateList.add(sdf.format(date.getTime()));
@@ -127,6 +132,7 @@ public final class GraphDataRetriever {
                         calendarArrayList.add(date);
                         startClone.add(Calendar.DATE, 30);
                     }
+
                 }
                 break;
         }
@@ -157,15 +163,12 @@ public final class GraphDataRetriever {
                 }
                 break;
             case YEAR:
-                for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
+                for(int i = 0; i < NUMBER_OF_ENTRIES - 1; i++){
                     Calendar startOfMonth = (Calendar) calendarArrayList.get(i).clone();
                     Calendar endOfMonth = (Calendar) calendarArrayList.get(i+1).clone();
                     float carValueMonth = 0.0f;
                     float busValueMonth = 0.0f;
                     float skytrainValueMonth = 0.0f;
-                    if(i == 11){
-                        Log.i("wtf", "why didnt it stop" );
-                    }
                     for(Journey journey : journeyCollection){
                         if (dateInRange(startOfMonth, endOfMonth, journey.getDate())){
                             switch (journey.getTransportation().getType()){
@@ -185,34 +188,34 @@ public final class GraphDataRetriever {
                     busEmissionValue.add(busValueMonth);
                     skytrainEmissionValue.add(skytrainValueMonth);
                 }
+                int lastIndex = NUMBER_OF_ENTRIES - 1;
+                carEmissionValue.add(carEmissionValue.get(lastIndex - 1));
+                busEmissionValue.add(busEmissionValue.get(lastIndex - 1));
+                skytrainEmissionValue.add(skytrainEmissionValue.get(lastIndex - 1));
                 break;
         }
     }
-
 
     private void populateUtilitiesList() {
         switch (mode){
             case MONTH:
                 Calendar startCheckingDate = calendarArrayList.get(0);
                 Calendar endCheckingDate = calendarArrayList.get(NUMBER_OF_ENTRIES-1);
-                getUtilitiesValueByMonth(startCheckingDate, endCheckingDate, NUMBER_OF_ENTRIES);
+                getUtilitiesValueByMonth(startCheckingDate, endCheckingDate);
                 break;
             case YEAR:
-                for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
-                    int numberOfDays = 30;
-                    if(i == 10){
-                        numberOfDays = 35;
-                    }
-                    if(i == 2){
-                        Log.i("Please", "send help");
-                    }
-                    getUtilitiesValueByMonth(calendarArrayList.get(i), calendarArrayList.get(i+1), numberOfDays);
+                for(int i = 0; i < NUMBER_OF_ENTRIES - 1; i++){
+                    getUtilitiesValueByMonth(calendarArrayList.get(i), calendarArrayList.get(i+1));
                 }
+                int lastIndex = NUMBER_OF_ENTRIES - 1;
+                electricityBillEmissionValue.add(electricityBillEmissionValue.get(lastIndex - 1));
+                gasBillEmissionValue.add(gasBillEmissionValue.get(lastIndex - 1));
                 break;
         }
     }
 
-    private void getUtilitiesValueByMonth(Calendar startMonthDate, Calendar endMonthDate, int numberOfDays) {
+    private void getUtilitiesValueByMonth(Calendar startMonthDate, Calendar endMonthDate) {
+        int numberOfDays = calculateDistanceBetweenDate(startMonthDate, endMonthDate) + 1;
         Calendar start;
         Calendar end;
 
@@ -221,6 +224,7 @@ public final class GraphDataRetriever {
         ArrayList<Calendar> currentCalendarList = new ArrayList<>();
 
         //Range of date for checking
+        SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yy");
         if(mode.equals(GRAPH_MODE.MONTH)){
             currentCalendarList = calendarArrayList;
         }
@@ -254,29 +258,16 @@ public final class GraphDataRetriever {
                 }
                 end.add(Calendar.DATE, 1);
                 while(!equalDate(start, end)){
-                    int index = getIndex(start, currentCalendarList);
-                    if(index == -1){
-                        Log.i("You", "sucks");
-                    }
+                    int index = getDateIndex(start, currentCalendarList);
                     switch (utilities.getBill()){
                         case ELECTRICITY:
-                            if(mode.equals(GRAPH_MODE.MONTH)){
-                                if(electricValueArrayByMonth.get(index) == 0.0f){
-                                    electricValueArrayByMonth.set(index, utilities.getDailyAverageEmission());
-                                }
-                            }
-                            else{
-                                electricityValueForYearEntries += utilities.getDailyAverageEmission();
+                            if(electricValueArrayByMonth.get(index) == 0.0f){
+                                electricValueArrayByMonth.set(index, utilities.getDailyAverageEmission());
                             }
                             break;
                         case GAS:
-                            if(mode.equals(GRAPH_MODE.MONTH)){
-                                if(gasValueArrayByMonth.get(index) == 0.0f){
-                                    gasValueArrayByMonth.set(index, utilities.getDailyAverageEmission());
-                                }
-                            }
-                            else{
-                                gasValueForYearEntries += utilities.getDailyAverageEmission();
+                            if(gasValueArrayByMonth.get(index) == 0.0f){
+                                gasValueArrayByMonth.set(index, utilities.getDailyAverageEmission());
                             }
                             break;
                     }
@@ -306,13 +297,18 @@ public final class GraphDataRetriever {
             float electricityRelativeValue = model.getRelativeUtilitiesValue(middleDate, Utilities.BILL.ELECTRICITY).getDailyAverageEmission();
             float gasRelativeValue = model.getRelativeUtilitiesValue(middleDate, Utilities.BILL.GAS).getDailyAverageEmission();
 
-            for(int i = 0; i < electricValueArrayByMonth.size(); i++){
+            for(int i = 0; i < numberOfDays; i++){
                 if(electricValueArrayByMonth.get(i) == 0){
                     electricityValueForYearEntries += electricityRelativeValue;
-                    gasValueForYearEntries += gasRelativeValue;
                 }
                 else{
                     electricityValueForYearEntries += electricValueArrayByMonth.get(i);
+                }
+
+                if(gasValueArrayByMonth.get(i) == 0){
+                    gasValueForYearEntries += gasRelativeValue;
+                }
+                else{
                     gasValueForYearEntries += gasValueArrayByMonth.get(i);
                 }
             }
@@ -321,7 +317,15 @@ public final class GraphDataRetriever {
         }
     }
 
-    private int getIndex(Calendar date, ArrayList<Calendar> currentCalendar){
+    private void populateTotalArrayList(){
+        for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
+            float totalValue = carEmissionValue.get(i) + busEmissionValue.get(i) + skytrainEmissionValue.get(i)
+                        + electricityBillEmissionValue.get(i) + gasBillEmissionValue.get(i);
+            totalEmissionValue.add(totalValue);
+        }
+    }
+
+    private int getDateIndex(Calendar date, ArrayList<Calendar> currentCalendar){
         for(int i = 0; i < currentCalendar.size(); i++){
             if(equalDate(currentCalendar.get(i), date)){
                 return i;
@@ -347,7 +351,7 @@ public final class GraphDataRetriever {
             int daysLeftInStartYear = Math.abs(startDate.getActualMaximum(Calendar.DAY_OF_YEAR) - startDate.get(Calendar.DAY_OF_YEAR));
             int daysPassedInEndYear = endDate.get(Calendar.DAY_OF_YEAR);
             int daysInBetweenYears = 0;
-            while(start.get(Calendar.YEAR) < end.get(Calendar.YEAR)){
+            while(end.get(Calendar.YEAR) - start.get(Calendar.YEAR) > 1){
                 start.add(Calendar.YEAR, 1);
                 daysInBetweenYears += start.getActualMaximum(Calendar.DAY_OF_YEAR);
             }
@@ -470,10 +474,16 @@ public final class GraphDataRetriever {
                 busEmissionValue = new ArrayList<>();
                 electricityBillEmissionValue = new ArrayList<>();
                 gasBillEmissionValue = new ArrayList<>();
+                totalEmissionValue = new ArrayList<>();
         }
     }
-
     public int getNumberOfEntries(){
         return NUMBER_OF_ENTRIES;
+    }
+    public float getIndividualTarget(){
+        return INDIVIDUAL_TARGET_DAILY;
+    }
+    public float getIndividualActual(){
+        return INDIVIDUAL_ACTUAL_DAILY;
     }
 }

@@ -656,13 +656,14 @@ public class SingletonModel {
         int dayDistance = 1;
 
         while (dayDistance <= maxDayDistance){
-            dateForward.add(Calendar.DATE, dayDistance);
-            dateBackward.add(Calendar.DATE, -dayDistance);
+            dateForward.add(Calendar.DATE, 1);
+            dateBackward.add(Calendar.DATE, -1);
             for(Utilities utilities : utilitiesCollection){
                 if ((utilities.dateIsInBillingPeriod(dateForward)) ||
                         (utilities.dateIsInBillingPeriod(dateBackward)) ){
                     if (utilities.getBill().equals(billType)){
                         relativeUtilities = utilities;
+                        break;
                     }
                 }
             }
