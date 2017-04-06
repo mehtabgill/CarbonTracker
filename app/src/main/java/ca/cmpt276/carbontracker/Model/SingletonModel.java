@@ -228,6 +228,42 @@ public class SingletonModel {
         cursor.close();
     }
 
+    public float getUnitConversionFactor() {
+        Cursor cursor = database.getAllSettingsRows();
+        if(cursor != null && cursor.moveToFirst()) {
+            float CF = cursor.getFloat(DBAdapter.COL_SETTINGS_CF);
+            cursor.close();
+            return CF;
+        }
+        if(cursor!= null) {
+            cursor.close();
+        }
+        return 1;
+    }
+
+    public String getUnit() {
+        Cursor cursor = database.getAllSettingsRows();
+        if(cursor != null && cursor.moveToFirst()) {
+            return cursor.getString(DBAdapter.COL_SETTINGS_NAME);
+        }
+        if(cursor!= null) {
+            cursor.close();
+        }
+        return context.getResources().getString(R.string.KG);
+    }
+
+    public void setUnitsSettings(String name, float CF) {
+        Cursor cursor = database.getAllSettingsRows();
+        if(cursor != null && cursor.moveToFirst()) {
+            long id = cursor.getLong(DBAdapter.COL_ROWID);
+            database.updateSettings(id, name, CF);
+        }
+        else {
+            database.insertSettings(name, CF);
+        }
+        cursor.close();
+    }
+
     public boolean isCurrentCarAdded(String nickname, String description){
         for(Car car : currentCarCollection){
             if (car.getDescriptionNoNickname().equals(description)){

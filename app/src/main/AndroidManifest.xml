@@ -31,7 +31,8 @@
             android:name=".TipsActivity"
             android:theme="@style/AppTheme.popUpWindowTheme" />
         <activity android:name=".ViewJourneyActivity" />
-        <activity android:name=".EditJourneyActivity"></activity>
+        <activity android:name=".EditJourneyActivity" />
+        <activity android:name=".OptionsActivity"></activity>
     </application>
 
 </manifest>

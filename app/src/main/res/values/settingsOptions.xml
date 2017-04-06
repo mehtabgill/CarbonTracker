@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="units">
+        <item>Tree Years</item>
+        <item>Coal (Lb)</item>
+        <item>KG</item>
+    </string-array>
+
+    <string-array name="unit_conversion">
+        <item>21.772416</item>
+        <item>1.297274</item>
+        <item>1</item>
+    </string-array>
+</resources>

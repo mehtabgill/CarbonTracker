@@ -87,6 +87,11 @@ public class Journey extends Emission {
             case BIKE:
                 this.carbonEmissionValue = 0;
         }
+        this.carbonEmissionValue /= SingletonModel.getInstance().getUnitConversionFactor();
+    }
+
+    public String getUnit() {
+        return SingletonModel.getInstance().getUnit();
     }
 
     public void setTransportation(Transportation transportation){
@@ -127,6 +132,7 @@ public class Journey extends Emission {
     }
 
     public float getCarbonEmissionValue() {
+        calculateCarbonEmission();
         return carbonEmissionValue;
     }
 
