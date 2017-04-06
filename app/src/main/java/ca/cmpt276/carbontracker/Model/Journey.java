@@ -82,10 +82,10 @@ public class Journey extends Emission {
 
                 break;
             case SKYTRAIN:
-                this.carbonEmissionValue = route.getTotalDistance() / SKYTRAIN_CARBON_EMISSIONS_PER_KM_CONSTANT;
+                this.carbonEmissionValue = route.getTotalDistance() * SKYTRAIN_CARBON_EMISSIONS_PER_KM_CONSTANT;
                 break;
             case BUS:
-                this.carbonEmissionValue = route.getTotalDistance() / BUS_CARBON_EMISSIONS_PER_KM_CONSTANT;
+                this.carbonEmissionValue = route.getTotalDistance() * BUS_CARBON_EMISSIONS_PER_KM_CONSTANT;
                 break;
             case WALK:
                 this.carbonEmissionValue = 0;
@@ -93,11 +93,11 @@ public class Journey extends Emission {
             case BIKE:
                 this.carbonEmissionValue = 0;
         }
-
     }
 
     public void setTransportation(Transportation transportation){
         this.transportation = transportation;
+        this.transportationType = transportation.getType();
         calculateCarbonEmission();
     }
 
