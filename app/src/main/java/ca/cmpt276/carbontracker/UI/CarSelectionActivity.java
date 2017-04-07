@@ -85,7 +85,7 @@ public class CarSelectionActivity extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        currentCarListDescription = model.getCarEntriesDescription();
+         currentCarListDescription = model.getCarEntriesDescription();
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, currentCarListDescription
         );

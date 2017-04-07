@@ -72,7 +72,7 @@ public class Utilities extends Emission {
              int daysLeftInStartYear = Math.abs(startDate.getActualMaximum(Calendar.DAY_OF_YEAR) - startDate.get(Calendar.DAY_OF_YEAR));
              int daysPassedInEndYear = endDate.get(Calendar.DAY_OF_YEAR);
              int daysInBetweenYears = 0;
-             while(start.get(Calendar.YEAR) < end.get(Calendar.YEAR)){
+             while(end.get(Calendar.YEAR) - start.get(Calendar.YEAR) > 1){
                  start.add(Calendar.YEAR, 1);
                  daysInBetweenYears += start.getActualMaximum(Calendar.DAY_OF_YEAR);
              }

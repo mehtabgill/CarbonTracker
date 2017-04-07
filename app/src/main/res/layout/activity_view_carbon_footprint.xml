@@ -31,13 +31,13 @@
 
     <Button
         android:id="@+id/switch_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/switch_icon"
+        android:visibility="visible"
+        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:text="@string/switch_button"
-        android:visibility="invisible"/>
+        android:layout_alignParentEnd="true" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChart"
@@ -51,4 +51,5 @@
         android:layout_width="match_parent"
         android:layout_below="@+id/table_header_textView"
         android:visibility="invisible"/>
+
 </RelativeLayout>

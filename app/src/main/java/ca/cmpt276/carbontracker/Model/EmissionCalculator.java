@@ -8,6 +8,7 @@ public class EmissionCalculator {
     public static final float GAS_CO2_CONSTANT = 8.89f;
     public static final float DIESEL_CO2_CONSTANT = 10.16f;
     public static final float MILES_TO_KILOMETERS_CONSTANT = 0.621371f;
+
     private static String GASOLINE = "Gasoline";
     private static String DIESEL = "Diesel";
 

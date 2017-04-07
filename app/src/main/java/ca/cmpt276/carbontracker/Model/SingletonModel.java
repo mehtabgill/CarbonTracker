@@ -566,7 +566,9 @@ public class SingletonModel {
         database.updateUtilities(id, editedUtilities);
     }
 
-
+    public Utilities getUtilities(int index){
+        return utilitiesCollection.getUtilities(index);
+    }
 
 
     public ArrayList<Emission> getEmissionListOnDay(Calendar date){
@@ -587,6 +589,72 @@ public class SingletonModel {
         return emissionArrayList;
     }
 
+    public JourneyCollection getJourneyInRange(Calendar startDate, Calendar endDate){
+        JourneyCollection returnJourneys = new JourneyCollection();
+        Calendar start;
+        Calendar end;
+        if(firstDateBeforeSecondDate(startDate, endDate)){
+            start =(Calendar) startDate.clone();
+            end =(Calendar) endDate.clone();
+        }
+        else{
+            start =(Calendar) endDate.clone();
+            end =(Calendar) startDate.clone();
+        }
+        for(Journey journey : journeyCollection){
+            Calendar journeyDate = journey.getDate();
+            if(firstDateBeforeSecondDate(start, journeyDate) &&
+                    (firstDateBeforeSecondDate(journeyDate, end))){
+                returnJourneys.add(journey);
+            }
+        }
+        return returnJourneys;
+    }
+
+    public UtilitiesCollection getUtilitiesInRange(Calendar startDate, Calendar endDate){
+        UtilitiesCollection returnUtilities = new UtilitiesCollection();
+        Calendar start;
+        Calendar end;
+        if(firstDateBeforeSecondDate(startDate, endDate)){
+            start =(Calendar) startDate.clone();
+            end =(Calendar) endDate.clone();
+        }
+        else{
+            start =(Calendar) endDate.clone();
+            end =(Calendar) startDate.clone();
+        }
+
+        for(Utilities utilities : utilitiesCollection){
+            if(
+                (firstDateBeforeSecondDate(start, utilities.getStartDate()) &&
+                (firstDateBeforeSecondDate(utilities.getStartDate(), end)))
+                ||
+                (firstDateBeforeSecondDate(start, utilities.getEndDate()) &&
+                firstDateBeforeSecondDate(utilities.getEndDate(), end))
+                ){
+                returnUtilities.add(utilities);
+            }
+        }
+
+        return returnUtilities;
+    }
+
+
+    public boolean firstDateBeforeSecondDate(Calendar startDate, Calendar endDate){
+        boolean order = false;
+        if(startDate.get(Calendar.YEAR) == endDate.get(Calendar.YEAR)){
+            if(startDate.get(Calendar.DAY_OF_YEAR) <= endDate.get(Calendar.DAY_OF_YEAR)){
+                order = true;
+            }
+        }
+        else{
+            if(startDate.get(Calendar.YEAR) < endDate.get(Calendar.YEAR)){
+                order = true;
+            }
+        }
+        return order;
+    }
+
     public Utilities getRelativeUtilitiesValue(Calendar date, Utilities.BILL billType){
         Utilities relativeUtilities = new Utilities();
         Calendar dateForward = (Calendar) date.clone();
@@ -595,19 +663,24 @@ public class SingletonModel {
         int dayDistance = 1;
 
         while (dayDistance <= maxDayDistance){
-            dateForward.add(Calendar.DATE, dayDistance);
-            dateBackward.add(Calendar.DATE, -dayDistance);
+            dateForward.add(Calendar.DATE, 1);
+            dateBackward.add(Calendar.DATE, -1);
             for(Utilities utilities : utilitiesCollection){
                 if ((utilities.dateIsInBillingPeriod(dateForward)) ||
                         (utilities.dateIsInBillingPeriod(dateBackward)) ){
                     if (utilities.getBill().equals(billType)){
                         relativeUtilities = utilities;
+                        break;
                     }
                 }
             }
             dayDistance++;
         }
         return relativeUtilities;
+    }
+
+    public int getUtilitiesCollectionSize(){
+        return utilitiesCollection.size();
     }
 
     public int getWalks(){
