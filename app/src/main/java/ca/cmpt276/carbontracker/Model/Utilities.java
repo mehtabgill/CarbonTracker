@@ -19,6 +19,7 @@ public class Utilities extends Emission {
     private float dailyAverageEmission;
     private static final float C02_KG_PER_KWH = 0.009f;
     private static final float C02_KG_PER_GJ = 56.1f;
+    private final int NUM_DECIMAL_PLACES = 3;
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -54,6 +55,8 @@ public class Utilities extends Emission {
                 break;
         }
         this.dailyAverageEmission = this.carbonEmissionValue / billingDays;
+        this.dailyAverageEmission /= SingletonModel.getInstance().getUnitConversionFactor();
+        this.dailyAverageEmission = (float) (Math.round(this.dailyAverageEmission * Math.pow(10, NUM_DECIMAL_PLACES)) / Math.pow(10, NUM_DECIMAL_PLACES));
     }
 
     private void calculateBillingDays(){
@@ -146,6 +149,7 @@ public class Utilities extends Emission {
 
     @Override
     public float getCarbonEmissionValue() {
+        calculateCarbonEmission();
         return carbonEmissionValue;
     }
 

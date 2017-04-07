@@ -118,4 +118,6 @@
     <string name="highway_distance_km">Highway Distance (Km)</string>
     <string name="journeys">Journeys:</string>
     <string name="edit_journey_title">Edit Journey</string>
+    <string name="delete_all_data">Delete All Data</string>
+    <string name="settings">Settings</string>
 </resources>

@@ -16,6 +16,7 @@ import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
 public class Journey extends Emission {
 
+    private static final int NUM_DECIMAL_PLACES = 3;
     private String[] MONTH = new String[] {"January", "February", "March", "April", "May", "June",
                                             "July", "August", "September", "October", "November", "December"};
 
@@ -88,6 +89,12 @@ public class Journey extends Emission {
             case BIKE:
                 this.carbonEmissionValue = 0;
         }
+        this.carbonEmissionValue /= SingletonModel.getInstance().getUnitConversionFactor();
+        this.carbonEmissionValue = (float) (Math.round(this.carbonEmissionValue * Math.pow(10, NUM_DECIMAL_PLACES)) / Math.pow(10, NUM_DECIMAL_PLACES));
+    }
+
+    public String getUnit() {
+        return SingletonModel.getInstance().getUnit();
     }
 
     public void setTransportation(Transportation transportation){
@@ -128,6 +135,7 @@ public class Journey extends Emission {
     }
 
     public float getCarbonEmissionValue() {
+        calculateCarbonEmission();
         return carbonEmissionValue;
     }
 
