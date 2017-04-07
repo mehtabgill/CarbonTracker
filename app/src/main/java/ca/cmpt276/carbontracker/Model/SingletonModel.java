@@ -651,7 +651,7 @@ public class SingletonModel {
             temp[ViewJourneyActivity.COL_TRANSPORTATION] = transportationType;
             temp[ViewJourneyActivity.COL_DISTANCE] = String.valueOf(journey.getDistance()) + context.getString(R.string.KM);
             temp[ViewJourneyActivity.COL_DATE] = journey.getStringDate();
-            temp[ViewJourneyActivity.COL_CO2] = String.valueOf(journey.getCarbonEmissionValue()) + context.getString(R.string.KG);
+            temp[ViewJourneyActivity.COL_CO2] = String.valueOf(journey.getCarbonEmissionValue()) + getUnit();
             list.add(temp);
         }
         return list;
