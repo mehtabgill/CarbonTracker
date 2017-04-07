@@ -1,5 +1,7 @@
 package ca.cmpt276.carbontracker.Model;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -138,9 +140,19 @@ public final class GraphDataRetriever {
     private void populateDateList(Calendar startDate, Calendar endClone) {
         Calendar startClone = (Calendar) startDate.clone();
         switch (mode){
-            case MONTH:
+            case MONTH:/*
                 while(!equalDate(startClone, endClone)){
                     Calendar date = (Calendar) startClone.clone();
+                    dateList.add(sdf.format(date.getTime()));
+                    calendarArrayList.add(date);
+                    Log.d("Date added", sdf.format(date.getTime()));
+                    startClone.add(Calendar.DATE, 1);
+                }*/
+                for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
+                    Calendar date = (Calendar) startClone.clone();
+                    int year = date.get(Calendar.YEAR);
+                    int month = date.get(Calendar.MONTH);
+                    int day = date.get(Calendar.DATE);
                     dateList.add(sdf.format(date.getTime()));
                     calendarArrayList.add(date);
                     startClone.add(Calendar.DATE, 1);
@@ -160,7 +172,6 @@ public final class GraphDataRetriever {
                         calendarArrayList.add(date);
                         startClone.add(Calendar.DATE, 30);
                     }
-
                 }
                 break;
         }
@@ -276,8 +287,8 @@ public final class GraphDataRetriever {
             boolean startDateInRange = dateInRange(startMonthDate, endMonthDate, utilities.getStartDate());
             boolean endDateInRange = dateInRange(startMonthDate, endMonthDate, utilities.getEndDate());
             if( startDateInRange || endDateInRange) {
-                start = startMonthDate;
-                end = endMonthDate;
+                start = (Calendar) startMonthDate.clone();
+                end = (Calendar) endMonthDate.clone();
                 if(startDateInRange){
                     start = (Calendar) utilities.getStartDate().clone();
                 }
@@ -287,6 +298,13 @@ public final class GraphDataRetriever {
                 end.add(Calendar.DATE, 1);
                 while(!equalDate(start, end)){
                     int index = getDateIndex(start, currentCalendarList);
+                    if(index == -1){
+                        Log.d("Start", sdf2.format(currentCalendarList.get(0).getTime()));
+                        String endString = sdf2.format(currentCalendarList.get(28).getTime());
+                        Log.d("End", endString);
+                        String currentDate = sdf2.format(start.getTime());
+                        Log.d("Current", currentDate);
+                    }
                     switch (utilities.getBill()){
                         case ELECTRICITY:
                             if(electricValueArrayByMonth.get(index) == 0.0f){
@@ -308,6 +326,7 @@ public final class GraphDataRetriever {
                 if(electricValueArrayByMonth.get(i) == 0.0f){
                     Utilities relativeUtilities = model.getRelativeUtilitiesValue(currentCalendarList.get(i), Utilities.BILL.ELECTRICITY);
                     float value = relativeUtilities.getDailyAverageEmission();
+
                     electricValueArrayByMonth.set(i, value);
                 }
                 if(gasValueArrayByMonth.get(i) == 0.0f){
