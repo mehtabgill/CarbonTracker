@@ -955,7 +955,6 @@ public class DBAdapter {
             _db.execSQL(ROUTE_DATABASE_CREATE_SQL);
             _db.execSQL(JOURNEY_DATABASE_CREATE_SQL);
             _db.execSQL(UTILITIES_DATABASE_CREATE_SQL);
-
         }
 
         @Override
