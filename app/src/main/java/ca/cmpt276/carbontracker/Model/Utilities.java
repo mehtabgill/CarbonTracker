@@ -54,6 +54,7 @@ public class Utilities extends Emission {
                 break;
         }
         this.dailyAverageEmission = this.carbonEmissionValue / billingDays;
+        this.dailyAverageEmission /= SingletonModel.getInstance().getUnitConversionFactor();
     }
 
     private void calculateBillingDays(){
@@ -146,6 +147,7 @@ public class Utilities extends Emission {
 
     @Override
     public float getCarbonEmissionValue() {
+        calculateCarbonEmission();
         return carbonEmissionValue;
     }
 
