@@ -55,8 +55,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0 KG"
+        android:textAlignment="textEnd"
         android:layout_alignBaseline="@+id/text_distance"
         android:layout_alignBottom="@+id/text_distance"
-        android:layout_alignLeft="@+id/text_date"
-        android:layout_alignStart="@+id/text_date" />
+        android:layout_alignRight="@+id/text_date"
+        android:layout_alignEnd="@+id/text_date" />
 </RelativeLayout>
