@@ -1,16 +1,20 @@
 package ca.cmpt276.carbontracker.UI;
 
 import android.animation.Animator;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,7 +24,10 @@ import java.util.ArrayList;
 import ca.cmpt276.carbontracker.Model.CarCollection;
 import ca.cmpt276.carbontracker.Model.CarStorage;
 import ca.cmpt276.carbontracker.Model.DataReader;
+import ca.cmpt276.carbontracker.Model.Emission;
+import ca.cmpt276.carbontracker.Model.Journey;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
+import ca.cmpt276.carbontracker.Model.Utilities;
 /*
  * UI class for the welcome screen. It is the first screen that will appear. Some image
  * animations will play with the optino for the user to skip them. Either when the skip button is
@@ -142,8 +149,12 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
         recycle.setTranslationY(-2000f);
         model.setContext(context);
-        model.openDB(context);
-        model.loadDataFromDB();
+
+        model.loadDataFromDB(getApplicationContext());
+
+
+        //notifications
+        notificationAlarm();
     }
 
     public static Context getContext(){
@@ -181,5 +192,59 @@ public class WelcomeScreenActivity extends AppCompatActivity {
             DataReader.setFullDataLoaded();
 
         }
+    }
+
+    public void notificationAlarm(){
+        SingletonModel model = SingletonModel.getInstance();
+        //notifications
+        String s = "";
+
+        int journeys=0;
+        int utilities=0;
+
+        if(model.getEmissionListOnDay(Calendar.getInstance()).size()!=0) {
+            for (Emission e : model.getEmissionListOnDay(Calendar.getInstance())) {
+                if (e instanceof Journey)
+                    journeys++;
+                else
+                    utilities++;
+            }
+        }
+
+        if(journeys == 0)
+        {
+            s = "You haven't entered any Journeys today, Would you like to enter some?";
+        }
+        else if (utilities == 0)
+        {
+            s = "You haven't entered any Utilities in a while. Would you like to enter some?";
+        }
+        else
+        {
+            s = "You have entered " + journeys + " Journeys today. Would you like to enter more?";
+        }
+
+
+        AlarmManager alarmMgr;
+        PendingIntent alarmIntent;
+
+        alarmMgr = (AlarmManager)this.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, Notifications.class);
+        intent.putExtra("msg", s);
+        alarmIntent = PendingIntent.getService(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        // Set the alarm to start at set time
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.MINUTE, 34);
+        calendar.set(Calendar.SECOND, 00);
+
+        // With setInexactRepeating(), you have to use one of the AlarmManager interval
+        // constants--in this case, AlarmManager.INTERVAL_DAY.
+        alarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                24 * 60 *60 * 1000, alarmIntent);
+
     }
 }
