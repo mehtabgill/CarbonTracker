@@ -44,6 +44,8 @@ public class SelectTransportationMode extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_transportation_mode);
+        SingletonModel model = SingletonModel.getInstance();
+        model.openDB(this);
         CAR = getString(R.string.Car);
         BUS = getString(R.string.Bus);
         BIKE = getString(R.string.Bike);
