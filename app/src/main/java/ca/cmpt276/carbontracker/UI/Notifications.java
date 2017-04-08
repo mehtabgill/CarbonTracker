@@ -49,8 +49,8 @@ private void showText(String text) {
         Intent intent = new Intent(this, SelectTransportationMode.class);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
 
-        stackBuilder.addParentStack(SelectTransportationMode.class);
-        stackBuilder.addNextIntent(intent);
+        //stackBuilder.addParentStack(SelectTransportationMode.class);
+        stackBuilder.addNextIntentWithParentStack(intent);
 
         pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
     }

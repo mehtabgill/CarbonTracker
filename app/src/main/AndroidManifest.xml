@@ -35,24 +35,84 @@
                 android:value=".SelectTransportationMode"/>
         </activity>
 
-        <activity android:name=".ViewCarbonFootprintActivity" />
-        <activity android:name=".SelectRouteActivity" />
-        <activity android:name=".AddRouteActivity" />
-        <activity android:name=".EditRouteActivity" />
-        <activity android:name=".DeleteRouteActivity" />
-        <activity android:name=".AddCarActivity" />
-        <activity android:name=".EditDeleteCarActivity" />
-        <activity android:name=".AddUtilitiesBillActivity" />
-        <activity android:name=".EditDeleteUtilitiesActivity" />
+        <activity android:name=".ViewCarbonFootprintActivity" android:parentActivityName=".MainMenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainMenuActivity"/>
+        </activity>
+
+        <activity android:name=".SelectRouteActivity" android:parentActivityName=".CarSelectionActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CarSelectionActivity"/>
+        </activity>
+
+        <activity android:name=".AddRouteActivity" android:parentActivityName=".SelectRouteActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SelectRouteActivity"/>
+        </activity>
+
+        <activity android:name=".EditRouteActivity" android:parentActivityName=".SelectRouteActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SelectRouteActivity"/>
+        </activity>
+
+        <activity android:name=".DeleteRouteActivity" android:parentActivityName=".SelectRouteActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SelectRouteActivity"/>
+        </activity>
+
+        <activity android:name=".AddCarActivity" android:parentActivityName=".CarSelectionActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CarSelectionActivity"/>
+        </activity>
+
+        <activity android:name=".EditDeleteCarActivity" android:parentActivityName=".CarSelectionActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".CarSelectionActivity"/>
+        </activity>
+
+        <activity android:name=".AddUtilitiesBillActivity" android:parentActivityName=".MainMenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainMenuActivity"/>
+        </activity>
+
+        <activity android:name=".EditDeleteUtilitiesActivity" android:parentActivityName=".MainMenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainMenuActivity"/>
+        </activity>
+
         <activity
             android:name=".TipsActivity"
             android:theme="@style/AppTheme.popUpWindowTheme" />
-        <activity android:name=".ViewJourneyActivity" />
-        <activity android:name=".EditJourneyActivity" />
-        <activity android:name=".OptionsActivity"></activity>
+
+        <activity android:name=".ViewJourneyActivity" android:parentActivityName=".MainMenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainMenuActivity"/>
+        </activity>
+
+        <activity android:name=".EditJourneyActivity" android:parentActivityName=".ViewJourneyActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ViewJourneyActivity"/>
+        </activity>
+
+        <activity android:name=".OptionsActivity" android:parentActivityName=".MainMenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainMenuActivity"/>
+        </activity>
         <service
             android:name=".Notifications"
-            android:exported="false">
+            android:exported="true">
         </service>
     </application>
 

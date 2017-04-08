@@ -59,7 +59,6 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_utilities_bill);
-        SingletonModel model = SingletonModel.getInstance();
         model.openDB(this);
         selectBillTypeSpinner = (Spinner) findViewById(R.id.select_bill_type_spinner);
         billAmountEditText = (EditText) findViewById(R.id.bill_amount_editText);
