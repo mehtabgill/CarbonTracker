@@ -3,6 +3,8 @@ package ca.cmpt276.carbontracker.UI;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,17 +25,44 @@ public class CarSelectionActivity extends AppCompatActivity {
     Spinner selectCarSpinner;
     int selectedCarIndex;
     Button selectCarButton;
-    Button addCarButton;
-    Button editDeleteCarButton;
+    Menu menu;
     ArrayAdapter<String> adapter;
     ArrayList<String> currentCarListDescription;
     public static final String DESCRIPTION_KEY = "description";
     private static String ERROR_NO_CAR;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_plus, menu);
+        this.menu = menu;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == R.id.plus_item){
+            startActivity(new Intent(CarSelectionActivity.this, AddCarActivity.class));
+        }
+        else if(id == R.id.edit_delete_item){
+            if(currentCarListDescription.isEmpty()){
+                Toast.makeText(CarSelectionActivity.this,
+                        ERROR_NO_CAR,
+                        Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Intent intent = new Intent(CarSelectionActivity.this, EditDeleteCarActivity.class);
+                intent.putExtra(DESCRIPTION_KEY, selectedCarIndex);
+                startActivity(intent);
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_car_selectioon);
+        setContentView(R.layout.activity_car_selection);
         ERROR_NO_CAR = getString(R.string.error_no_car);
 
         selectCarButton = (Button) findViewById(R.id.select_car_button);
@@ -52,40 +81,18 @@ public class CarSelectionActivity extends AppCompatActivity {
                 }
             }
         });
-
-        addCarButton = (Button) findViewById(R.id.add_car_button);
-        addCarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(CarSelectionActivity.this, AddCarActivity.class));
-            }
-        });
-
-
-        editDeleteCarButton = (Button)findViewById(R.id.edit_delete_car_button);
-        editDeleteCarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(currentCarListDescription.isEmpty()){
-                    Toast.makeText(CarSelectionActivity.this,
-                            ERROR_NO_CAR,
-                            Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Intent intent = new Intent(CarSelectionActivity.this, EditDeleteCarActivity.class);
-                    intent.putExtra(DESCRIPTION_KEY, selectedCarIndex);
-                    startActivity(intent);
-                }
-            }
-        });
-        selectCarSpinner = (Spinner)findViewById(R.id.select_car_spinner);
-
+        setupSpinnner();
     }
 
     @Override
     protected void onResume(){
         super.onResume();
-         currentCarListDescription = model.getCarEntriesDescription();
+        setupSpinnner();
+    }
+
+    private void setupSpinnner() {
+        selectCarSpinner = (Spinner)findViewById(R.id.select_car_spinner);
+        currentCarListDescription = model.getCarEntriesDescription();
         adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, currentCarListDescription
         );

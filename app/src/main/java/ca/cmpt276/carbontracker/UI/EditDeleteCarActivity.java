@@ -1,10 +1,13 @@
 package ca.cmpt276.carbontracker.UI;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -33,6 +36,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
     private Spinner editYearSpinner;
     private Button deleteCarButton;
     private Button saveEditedButton;
+    private Menu menu;
     private String editedNickname;
     private String editedMake;
     private String editedModel;
@@ -41,6 +45,57 @@ public class EditDeleteCarActivity extends AppCompatActivity {
     private String DELETED_MESSAGE;
     private String SAVE_EDITED_MESSAGE;
     private Car car;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_edit_delete_save, menu);
+        this.menu = menu;
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == R.id.save_item){
+            carStorage.updateCurrentSearchByYear(Integer.parseInt(editedYear));
+            android.support.v7.app.AlertDialog.Builder builder1 = new android.support.v7.app.AlertDialog.Builder(EditDeleteCarActivity.this);
+            builder1.setTitle(getString(R.string.select_car_popup_title));
+            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(EditDeleteCarActivity.this, android.R.layout.select_dialog_singlechoice);
+            for(String description : carStorage.getCarSearchList()){
+                arrayAdapter.add(description);
+            }
+            builder1.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    final String selection = arrayAdapter.getItem(which);
+                    android.support.v7.app.AlertDialog.Builder builder2 = new android.support.v7.app.AlertDialog.Builder(EditDeleteCarActivity.this);
+                    builder2.setMessage(getString(R.string.confirm_saving_data_message, editedNickname + " " + selection));
+                    builder2.setPositiveButton(getString(R.string.ok_text), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            int index = arrayAdapter.getPosition(selection);
+                            Car editedCar = carStorage.getCarFromSearchList(index);
+                            editedCar.setNickname(editedNickname);
+                            model.editCar(selectedIndex, editedCar);
+                            carStorage.resetCurrentSearchCollection();
+                            Toast.makeText(EditDeleteCarActivity.this, SAVE_EDITED_MESSAGE, Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
+                    builder2.show();
+                }
+            });
+            builder1.show();
+        }
+        else if(id == R.id.delete_item){
+            model.removeCar(selectedIndex);
+            Toast.makeText(EditDeleteCarActivity.this,
+                    DELETED_MESSAGE, Toast.LENGTH_SHORT).show();
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +116,6 @@ public class EditDeleteCarActivity extends AppCompatActivity {
         AddCarActivity.populateSpinner(EditDeleteCarActivity.this, editMakeSpinner, carMakeList);
         updateOnClickSpinner(AddCarActivity.Spinner.Model);
         updateOnClickSpinner(AddCarActivity.Spinner.Year);
-        setOnClick(ButtonClicked.Delete);
-        setOnClick(ButtonClicked.Save_Edited);
         updateOnClickEditText();
     }
 
@@ -144,6 +197,7 @@ public class EditDeleteCarActivity extends AppCompatActivity {
                                         editedCar.setNickname(editedNickname);
                                         model.editCar(selectedIndex, editedCar);
                                         carStorage.resetCurrentSearchCollection();
+                                        Toast.makeText(EditDeleteCarActivity.this, SAVE_EDITED_MESSAGE, Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
                                 });

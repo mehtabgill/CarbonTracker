@@ -13,4 +13,7 @@
     <color name="darkgreen" >#FF669900</color>
     <color name="darkorange" >#FFFF8800</color>
     <color name="darkred" >#FFCC0000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="emerald">#3EB489</color>
+    <color name="red_orange">#FF4500</color>
 </resources>

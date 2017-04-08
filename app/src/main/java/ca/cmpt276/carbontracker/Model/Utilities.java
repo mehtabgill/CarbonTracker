@@ -1,5 +1,7 @@
 package ca.cmpt276.carbontracker.Model;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +25,10 @@ public class Utilities extends Emission {
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-    public Utilities(){}
+    public Utilities(){
+        this.billMode = BILL.ELECTRICITY;
+
+    }
 
     public Utilities(BILL bill, float amount, Calendar startDate, Calendar endDate, int numbOfPeople){
         this.billMode = bill;
@@ -153,7 +158,9 @@ public class Utilities extends Emission {
         return carbonEmissionValue;
     }
 
-    public float getDailyAverageEmission() {
+    public float getDailyAverageEmission()
+    {
+        calculateCarbonEmission();
         return dailyAverageEmission;
     }
 

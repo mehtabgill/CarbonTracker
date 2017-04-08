@@ -85,43 +85,12 @@ public class SelectRouteActivity extends AppCompatActivity {
                     Car car = model.getCar(selectedCarIndex);
                     int selectedRouteIndex = spinner.getSelectedItemPosition();
                     Route route = model.getRoute(selectedRouteIndex);
-                    /*
-                    selectedRouteName = spinner.getSelectedItem().toString();
-                    model.addNewJourney(selectedCarDescription, selectedRouteName);*/
+
                     model.addNewJourney(car, route);
                     Toast.makeText(getApplicationContext(), "Journey added", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(SelectRouteActivity.this, MainMenuActivity.class);
+                    Intent intent = new Intent(SelectRouteActivity.this, ViewJourneyActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                    //TODO delete later
-
-                    //*************************************************************************************
-                    //show tip------------------------------------------------------------------------------
-
-                    //**layoutInflater= (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                    //**ViewGroup container = (ViewGroup) layoutInflater.inflate(R.layout.tips_layout, null);
-                    //**final PopupWindow window = new PopupWindow(container, 400, 400, true);
-                    //window.showAtLocation(parent, Gravity.BOTTOM, 500, 500);
-
-                    /*new Handler().postDelayed(new Runnable(){
-
-                        public void run() {
-                            window.showAtLocation(parent, Gravity.CENTER, 0, 0);
-                        }
-
-                    }, 100L);*/
-                    /*
-                    int latest = model.getJourneysCarbonEmissionList().size() - 1;
-                    String s = model.getJourneysCarbonEmissionList().get(latest);
-
-                    Toast.makeText(SelectRouteActivity.this, carTips[counter]+s, Toast.LENGTH_LONG).show();
-                    counter++;
-                    if(counter == 8)
-                        counter = 0;
-                    */
-                    //show tip-----------------------------------------------------------------------------
-                    //**************************************************************************************
-                    //end TODO
                     startActivity(intent);
                     Intent tipsWindow = new Intent(SelectRouteActivity.this, TipsActivity.class);
                     tipsWindow.putExtra("callingActivity", ActivityConstants.ACTIVITY_SELECT_ROUTE);

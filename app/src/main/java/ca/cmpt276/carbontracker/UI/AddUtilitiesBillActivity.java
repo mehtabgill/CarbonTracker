@@ -1,12 +1,17 @@
 package ca.cmpt276.carbontracker.UI;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -42,7 +47,7 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
     private static TextView endDateTextView;
     private String START_DATE_KEY = "startDatePicker";
     private String END_DATE_KEY = "endDatePicker";
-    private Button addBillButton;
+    private Menu menu;
 
     private String selectedBillTypeString;
     public enum CURRENT_PICKER{START_DATE, END_DATE};
@@ -55,6 +60,37 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_edit_delete_save, menu);
+        this.menu = menu;
+        menu.findItem(R.id.delete_item).setVisible(false);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if (id == R.id.save_item){
+            if((selectedBillType == null) || (billAmount == null) || (numberOfPeople <= 0) ||
+                    (startDate == null) || (endDate == null)){
+                Toast.makeText(AddUtilitiesBillActivity.this, getString(R.string.add_bill_button_error), Toast.LENGTH_SHORT).show();
+            }
+            else{
+                if(dateOrderCorrect()){
+                    Utilities utilities = new Utilities(selectedBillType, billAmount, startDate, endDate, numberOfPeople);
+                    model.addNewUtilities(utilities);
+                    finish();
+                }
+                else{
+                    Toast.makeText(AddUtilitiesBillActivity.this, getString(R.string.date_order_error), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -64,7 +100,6 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
         numberOfPeopleEditText = (EditText) findViewById(R.id.number_of_people_editText);
         startDateTextView = (TextView) findViewById(R.id.select_start_date_trigger);
         endDateTextView = (TextView) findViewById(R.id.select_end_date_trigger);
-        addBillButton = (Button) findViewById(R.id.add_bill_button);
         ELECTRICITY = getResources().getString(R.string.electricity_bill);
         GAS = getResources().getString(R.string.gas_bill);
         BILL_ERROR = getResources().getString(R.string.bill_amount_error);
@@ -74,7 +109,6 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
         setUpSpinner();
         setupEditText();
         setupSelectDate();
-        setupButton();
     }
 
     private void setUpSpinner() {
@@ -170,30 +204,6 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
                 current_picker = CURRENT_PICKER.END_DATE;
             }
         });
-    }
-    private void setupButton() {
-        addBillButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: Handle Error of start date set after end date
-                if((selectedBillType == null) || (billAmount == null) || (numberOfPeople <= 0) ||
-                        (startDate == null) || (endDate == null)){
-                    Toast.makeText(AddUtilitiesBillActivity.this, getString(R.string.add_bill_button_error), Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    if(dateOrderCorrect()){
-                        Utilities utilities = new Utilities(selectedBillType, billAmount, startDate, endDate, numberOfPeople);
-                        model.addNewUtilities(utilities);
-                        finish();
-                    }
-                    else{
-                        Toast.makeText(AddUtilitiesBillActivity.this, getString(R.string.date_order_error), Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            }
-        });
-
     }
 
     private boolean dateOrderCorrect() {

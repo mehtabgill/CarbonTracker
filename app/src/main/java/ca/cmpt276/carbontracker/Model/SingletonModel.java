@@ -28,7 +28,7 @@ public class SingletonModel {
     private ArrayList<String> carMakeList;
     public enum RetrieveEntries {Current, Search, Total};
 
-    private final boolean TESTING_MODE = true;
+    private final boolean TESTING_MODE = false;
 
     private static final SingletonModel instance = new SingletonModel();
 
@@ -64,9 +64,8 @@ public class SingletonModel {
 
     public void deleteAllDataFromDB() {
         if(TESTING_MODE) {
-            //database.deleteAllCar();
+            database.deleteAllCar();
             database.deleteAllJourney();
-            //database.deleteAllRoute();
             database.deleteAllUtilities();
             database.deleteAllTotal();
         }
@@ -280,28 +279,6 @@ public class SingletonModel {
         return currentCarCollection.getDescriptionList();
     }
 
-    /*public void addNewCarWithNickname(String nickname, String description){
-        for(Car car: currentSearchCollection){
-            if (car.getDescriptionNoNickname().equals(description)){
-                car.setNickname(nickname);
-                currentCarCollection.add(car);
-                addToCarDB(car);
-            }
-        }
-    }*/
-    /*
-    public void updateCurrentCarCollectionDescription(){
-        ArrayList<String> updatedDescription = new ArrayList<>();
-        ArrayList<String> updatedDescriptionNoNickname = new ArrayList<>();
-        for(Car car: currentCarCollection){
-            updatedDescription.add(car.getDescription());
-            updatedDescriptionNoNickname.add(car.getDescriptionNoNickname());
-        }
-        currentCarCollection.setDescriptionList(updatedDescription);
-        currentCarCollection.setDescriptionNoNicknameList(updatedDescriptionNoNickname);
-    }
-*/
-
     public Car getCar(String description){
         Car returnCar = new Car();
         String current;
@@ -336,35 +313,12 @@ public class SingletonModel {
         currentCarCollection.add(car);
     }
 
-    /*public void editCar(String description, Car newCar){
-        int index;
-        for(Car car: currentCarCollection){
-            if(car.getDescription().equals(description)){
-                index = currentCarCollection.getIndex(car);
-                currentCarCollection.set(index, newCar);
-                long id = database.findCar(car);
-                database.updateCar(id, newCar);
-            }
-        }
-    }*/
-
     public void editCar(int index, Car newCar){
+        Car car = getCar(index);
+        long id = database.findCar(car);
         currentCarCollection.set(index, newCar);
-        database.updateCar(index, newCar);
+        database.updateCar(id, newCar);
     }
-
-   /* public void removeCar(String description){
-        int index = 0;
-        for(Car car: currentCarCollection){
-            if(car.getDescription().equals(description)){
-                index = currentCarCollection.getIndex(car);
-                long id = database.findCar(car);
-                database.deleteCarRow(id);
-                break;
-            }
-        }
-        currentCarCollection.remove(index);
-    }*/
 
     public void removeCar(int index){
         Car car = currentCarCollection.getCar(index);
@@ -426,17 +380,6 @@ public class SingletonModel {
         }
         return routeNames;
     }
-
-/*
-    public void addNewJourney(String carDescription, String routeName){
-        Car newCar = getCar(carDescription);
-        Car car = new Car(newCar);
-        Route newRoute = getRoute(routeName);
-        Route route = new Route(newRoute);
-        Journey newJourney = new Journey(car, route);
-        journeyCollection.add(newJourney);
-        addToJourneyDB(newJourney);
-    }*/
 
     public void addNewJourney(Transportation newTransportation, Route newRoute){
         Journey newJourney = new Journey(newTransportation, newRoute);
@@ -611,6 +554,7 @@ public class SingletonModel {
         return returnJourneys;
     }
 
+
     public UtilitiesCollection getUtilitiesInRange(Calendar startDate, Calendar endDate){
         UtilitiesCollection returnUtilities = new UtilitiesCollection();
         Calendar start;
@@ -638,7 +582,6 @@ public class SingletonModel {
 
         return returnUtilities;
     }
-
 
     public boolean firstDateBeforeSecondDate(Calendar startDate, Calendar endDate){
         boolean order = false;
@@ -679,6 +622,16 @@ public class SingletonModel {
         return relativeUtilities;
     }
 
+    public boolean billWithTypeExist(Utilities.BILL bill){
+        boolean exist = false;
+        for(Utilities utilities : utilitiesCollection){
+            if(utilities.getBill().equals(bill)){
+                exist = true;
+                break;
+            }
+        }
+        return exist;
+    }
     public int getUtilitiesCollectionSize(){
         return utilitiesCollection.size();
     }
