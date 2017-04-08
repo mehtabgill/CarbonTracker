@@ -143,6 +143,11 @@ public class WelcomeScreenActivity extends AppCompatActivity {
         recycle.setTranslationY(-2000f);
         model.openDB(context);
         model.loadDataFromDB();
+
+        //notifications
+        Intent intent = new Intent(this, Notifications.class);
+        intent.putExtra(Notifications.EXTRA_MESSAGE, "Joke");
+        startService(intent);
     }
 
     public static Context getContext(){

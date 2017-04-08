@@ -26,9 +26,15 @@
         <activity android:name=".AddCarActivity" />
         <activity android:name=".EditDeleteCarActivity" />
         <activity android:name=".AddUtilitiesBillActivity" />
-        <activity android:name=".EditDeleteUtilitiesActivity"></activity>
-        <activity android:name=".TipsActivity"
-            android:theme="@style/AppTheme.popUpWindowTheme"></activity>
+        <activity android:name=".EditDeleteUtilitiesActivity" />
+        <activity
+            android:name=".TipsActivity"
+            android:theme="@style/AppTheme.popUpWindowTheme" />
+
+        <service
+            android:name=".Notifications"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>
