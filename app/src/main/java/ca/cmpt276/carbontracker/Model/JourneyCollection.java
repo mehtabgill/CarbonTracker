@@ -51,6 +51,25 @@ public class JourneyCollection implements Iterable<Journey>{
         return dateList;
     }
 
+    public ArrayList<String> getUniqueRouteNames(){
+        ArrayList<String> uniqueRouteNames = new ArrayList<>();
+        if(journeys.size() > 0) {
+            uniqueRouteNames.add(journeys.get(0).getRoute().getName());
+            for (Journey journey : journeys) {
+                boolean unique = true;
+                for (String routeName : uniqueRouteNames) {
+                    if (journey.getRoute().getName().equals(routeName)) {
+                        unique = false;
+                    }
+                }
+                if (unique) {
+                    uniqueRouteNames.add(journey.getRoute().getName());
+                }
+            }
+        }
+        return uniqueRouteNames;
+    }
+
     public ArrayList<Float> getJourneyCarbonEmissionList(){
         ArrayList<Float> carbonEmissionList = new ArrayList<>();
         for(Journey journey : journeys){
@@ -133,7 +152,13 @@ public class JourneyCollection implements Iterable<Journey>{
         return output;
     }
 
+    public void setRouteAt(int index, Route route) {
+        journeys.get(index).setRoute(route);
+    }
 
+    public void setTransportationAt(int index, Transportation transportation){
+        journeys.get(index).setTransportation(transportation);
+    }
 
     @Override
     public Iterator<Journey> iterator() {

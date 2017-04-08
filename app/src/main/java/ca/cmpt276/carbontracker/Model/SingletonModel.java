@@ -2,9 +2,13 @@ package ca.cmpt276.carbontracker.Model;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import ca.cmpt276.carbontracker.UI.R;
+import ca.cmpt276.carbontracker.UI.ViewJourneyActivity;
 
 /**
  * Created by Elvin Laptop on 2017-03-06.
@@ -14,6 +18,8 @@ public class SingletonModel {
     //TODO: Move all code relating to car search to their own class
     //Singleton should only be the middle ground between logic and UI
 
+    Context context;
+
     private CarCollection currentCarCollection = new CarCollection();
     private RouteCollection routeCollection = new RouteCollection();
     private JourneyCollection journeyCollection = new JourneyCollection();
@@ -21,6 +27,8 @@ public class SingletonModel {
 
     private ArrayList<String> carMakeList;
     public enum RetrieveEntries {Current, Search, Total};
+
+    private final boolean TESTING_MODE = true;
 
     private static final SingletonModel instance = new SingletonModel();
 
@@ -48,6 +56,20 @@ public class SingletonModel {
         loadRoutesFromDB();
         loadJourneysFromDB();
         loadUtilitiesFromDB();
+    }
+
+    public boolean inTestingMode() {
+        return TESTING_MODE;
+    }
+
+    public void deleteAllDataFromDB() {
+        if(TESTING_MODE) {
+            //database.deleteAllCar();
+            database.deleteAllJourney();
+            //database.deleteAllRoute();
+            database.deleteAllUtilities();
+            database.deleteAllTotal();
+        }
     }
 
     private void addToCarDB(Car car) {
@@ -112,20 +134,21 @@ public class SingletonModel {
         Transportation transportation = new Car();
         if(cursor.moveToFirst()) {
             do {
+                Car car = new Car();
                 String type = cursor.getString(DBAdapter.COL_JOURNEY_TYPE);
                 switch (type) {
                     case "CAR":
                         String name = cursor.getString(DBAdapter.COL_JOURNEY_NAME);
                         String model = cursor.getString(DBAdapter.COL_JOURNEY_MODEL);
                         String make = cursor.getString(DBAdapter.COL_JOURNEY_MAKE);
-                        int year = cursor.getInt(DBAdapter.COL_JOURNEY_YEAR);
+                        int carYear = cursor.getInt(DBAdapter.COL_JOURNEY_CAR_YEAR);
                         String displacement = cursor.getString(DBAdapter.COL_JOURNEY_DISPLACEMENT_VOL);
                         String transmission = cursor.getString(DBAdapter.COL_JOURNEY_TRANSMISSION_TYPE);
                         String fuelType = cursor.getString(DBAdapter.COL_JOURNEY_FUEL_TYPE);
                         float cityMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_CITYMPG);
                         float hwyMPG = cursor.getFloat(DBAdapter.COL_JOURNEY_HWYMPG);
 
-                        Car car = new Car(make, model, year, displacement, transmission);
+                        car = new Car(make, model, carYear, displacement, transmission);
                         car.setNickname(name);
                         car.setFuelType(fuelType);
                         car.setMilesPerGallonCity(cityMPG);
@@ -152,7 +175,21 @@ public class SingletonModel {
 
                 Route route = new Route(name, cityDistance, hwyDistance);
 
-                Journey journey = new Journey(transportation, route);
+                int year = cursor.getInt(DBAdapter.COL_JOURNEY_YEAR);
+                int month = cursor.getInt(DBAdapter.COL_JOURNEY_MONTH);
+                int day = cursor.getInt(DBAdapter.COL_JOURNEY_DAY);
+
+                Calendar date = Calendar.getInstance();
+                date.set(year, month, day);
+
+                Journey journey = new Journey();
+                if(type == Transportation.TRANSPORTATION_TYPE.CAR.toString()) {
+                    journey = new Journey(car, route);
+                }
+                else {
+                    journey = new Journey(transportation, route);
+                }
+                journey.setDate(date);
                 journeyCollection.add(journey);
 
             } while(cursor.moveToNext());
@@ -187,6 +224,42 @@ public class SingletonModel {
                 utilitiesCollection.add(utilities);
 
             } while(cursor.moveToNext());
+        }
+        cursor.close();
+    }
+
+    public float getUnitConversionFactor() {
+        Cursor cursor = database.getAllSettingsRows();
+        if(cursor != null && cursor.moveToFirst()) {
+            float CF = cursor.getFloat(DBAdapter.COL_SETTINGS_CF);
+            cursor.close();
+            return CF;
+        }
+        if(cursor!= null) {
+            cursor.close();
+        }
+        return 1;
+    }
+
+    public String getUnit() {
+        Cursor cursor = database.getAllSettingsRows();
+        if(cursor != null && cursor.moveToFirst()) {
+            return cursor.getString(DBAdapter.COL_SETTINGS_NAME);
+        }
+        if(cursor!= null) {
+            cursor.close();
+        }
+        return context.getResources().getString(R.string.KG);
+    }
+
+    public void setUnitsSettings(String name, float CF) {
+        Cursor cursor = database.getAllSettingsRows();
+        if(cursor != null && cursor.moveToFirst()) {
+            long id = cursor.getLong(DBAdapter.COL_ROWID);
+            database.updateSettings(id, name, CF);
+        }
+        else {
+            database.insertSettings(name, CF);
         }
         cursor.close();
     }
@@ -371,6 +444,42 @@ public class SingletonModel {
         addToJourneyDB(newJourney);
     }
 
+    public void removeJourney(int index) {
+        long id = database.findJourney(journeyCollection.get(index));
+        database.deleteJourneyRow(id);
+        journeyCollection.remove(index);
+    }
+
+    public void setRouteOfJourneyAt(int index, Route route) {
+        long id = database.findJourney(journeyCollection.get(index));
+        journeyCollection.setRouteAt(index, route);
+        database.updateJourney(id, journeyCollection.get(index));
+    }
+
+    public void setTransportationOfJourneyAt(int index, Transportation transportation) {
+        Journey oldJourney = journeyCollection.get(index);
+        long id = database.findJourney(oldJourney);
+        journeyCollection.setTransportationAt(index, transportation);
+        Journey newJourney = journeyCollection.get(index);
+        database.updateJourney(id, newJourney);
+    }
+
+    public Calendar getDateOfJourneyAt(int index) {
+        return journeyCollection.get(index).getDate();
+    }
+
+    public String getDateStringOfJourneyAt(int index) {
+        return journeyCollection.get(index).getStringDate();
+    }
+
+    public void setDateOfJourneyAt(int index, Calendar date) {
+        Journey oldJourney = journeyCollection.get(index);
+        long id = database.findJourney(oldJourney);
+        journeyCollection.get(index).setDate(date);
+        Journey newJourney = journeyCollection.get(index);
+        database.updateJourney(id, newJourney);
+    }
+
     public int getJourneyCollectionSize(){
         return journeyCollection.size();
     }
@@ -457,7 +566,9 @@ public class SingletonModel {
         database.updateUtilities(id, editedUtilities);
     }
 
-
+    public Utilities getUtilities(int index){
+        return utilitiesCollection.getUtilities(index);
+    }
 
 
     public ArrayList<Emission> getEmissionListOnDay(Calendar date){
@@ -478,6 +589,72 @@ public class SingletonModel {
         return emissionArrayList;
     }
 
+    public JourneyCollection getJourneyInRange(Calendar startDate, Calendar endDate){
+        JourneyCollection returnJourneys = new JourneyCollection();
+        Calendar start;
+        Calendar end;
+        if(firstDateBeforeSecondDate(startDate, endDate)){
+            start =(Calendar) startDate.clone();
+            end =(Calendar) endDate.clone();
+        }
+        else{
+            start =(Calendar) endDate.clone();
+            end =(Calendar) startDate.clone();
+        }
+        for(Journey journey : journeyCollection){
+            Calendar journeyDate = journey.getDate();
+            if(firstDateBeforeSecondDate(start, journeyDate) &&
+                    (firstDateBeforeSecondDate(journeyDate, end))){
+                returnJourneys.add(journey);
+            }
+        }
+        return returnJourneys;
+    }
+
+    public UtilitiesCollection getUtilitiesInRange(Calendar startDate, Calendar endDate){
+        UtilitiesCollection returnUtilities = new UtilitiesCollection();
+        Calendar start;
+        Calendar end;
+        if(firstDateBeforeSecondDate(startDate, endDate)){
+            start =(Calendar) startDate.clone();
+            end =(Calendar) endDate.clone();
+        }
+        else{
+            start =(Calendar) endDate.clone();
+            end =(Calendar) startDate.clone();
+        }
+
+        for(Utilities utilities : utilitiesCollection){
+            if(
+                (firstDateBeforeSecondDate(start, utilities.getStartDate()) &&
+                (firstDateBeforeSecondDate(utilities.getStartDate(), end)))
+                ||
+                (firstDateBeforeSecondDate(start, utilities.getEndDate()) &&
+                firstDateBeforeSecondDate(utilities.getEndDate(), end))
+                ){
+                returnUtilities.add(utilities);
+            }
+        }
+
+        return returnUtilities;
+    }
+
+
+    public boolean firstDateBeforeSecondDate(Calendar startDate, Calendar endDate){
+        boolean order = false;
+        if(startDate.get(Calendar.YEAR) == endDate.get(Calendar.YEAR)){
+            if(startDate.get(Calendar.DAY_OF_YEAR) <= endDate.get(Calendar.DAY_OF_YEAR)){
+                order = true;
+            }
+        }
+        else{
+            if(startDate.get(Calendar.YEAR) < endDate.get(Calendar.YEAR)){
+                order = true;
+            }
+        }
+        return order;
+    }
+
     public Utilities getRelativeUtilitiesValue(Calendar date, Utilities.BILL billType){
         Utilities relativeUtilities = new Utilities();
         Calendar dateForward = (Calendar) date.clone();
@@ -486,19 +663,24 @@ public class SingletonModel {
         int dayDistance = 1;
 
         while (dayDistance <= maxDayDistance){
-            dateForward.add(Calendar.DATE, dayDistance);
-            dateBackward.add(Calendar.DATE, -dayDistance);
+            dateForward.add(Calendar.DATE, 1);
+            dateBackward.add(Calendar.DATE, -1);
             for(Utilities utilities : utilitiesCollection){
                 if ((utilities.dateIsInBillingPeriod(dateForward)) ||
                         (utilities.dateIsInBillingPeriod(dateBackward)) ){
                     if (utilities.getBill().equals(billType)){
                         relativeUtilities = utilities;
+                        break;
                     }
                 }
             }
             dayDistance++;
         }
         return relativeUtilities;
+    }
+
+    public int getUtilitiesCollectionSize(){
+        return utilitiesCollection.size();
     }
 
     public int getWalks(){
@@ -517,4 +699,41 @@ public class SingletonModel {
         return journeyCollection.getNumSkytrain();
     }
 
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public ArrayList<String[]> getJourneyData() {
+        ArrayList<String[]> list = new ArrayList<>();
+        for(Journey journey : journeyCollection) {
+            String[] temp = new String[ViewJourneyActivity.NUM_COLUMNS];
+            Transportation transportation = journey.getTransportation();
+            Transportation.TRANSPORTATION_TYPE type = transportation.getType();
+            String transportationType = Transportation.getStringOfType(type);
+            if(transportationType.equals(Transportation.TYPE[Transportation.TRANSPORTATION_TYPE.CAR.ordinal()])){
+                Car car = (Car) transportation;
+                String name = car.getNickname();
+                transportationType += " - " + name;
+            }
+            //TODO: Implement image icon for vehicles
+            //temp[ViewJourneyActivity.COL_IMAGE] = journey.getImageIcon();
+            temp[ViewJourneyActivity.COL_TRANSPORTATION] = transportationType;
+            temp[ViewJourneyActivity.COL_DISTANCE] = String.valueOf(journey.getDistance()) + context.getString(R.string.KM);
+            temp[ViewJourneyActivity.COL_DATE] = journey.getStringDate();
+            temp[ViewJourneyActivity.COL_CO2] = String.valueOf(journey.getCarbonEmissionValue()) + getUnit();
+            list.add(temp);
+        }
+        return list;
+    }
+
+    public Transportation getTransportationOfJourneyAt(int index) {
+        return journeyCollection.get(index).getTransportation();
+    }
+    public Route getRouteOfJourneyAt(int index) {
+        return journeyCollection.get(index).getRoute();
+    }
 }

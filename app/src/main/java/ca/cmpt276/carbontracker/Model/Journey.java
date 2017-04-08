@@ -5,6 +5,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Random;
 
 import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
 
@@ -14,6 +15,10 @@ import ca.cmpt276.carbontracker.UI.WelcomeScreenActivity;
  */
 
 public class Journey extends Emission {
+
+    private static final int NUM_DECIMAL_PLACES = 3;
+    private String[] MONTH = new String[] {"January", "February", "March", "April", "May", "June",
+                                            "July", "August", "September", "October", "November", "December"};
 
     private Transportation transportation; // Car object, use getter methods to get required info if needed
     private Route route; //route object, use getter methods to get required info
@@ -43,6 +48,10 @@ public class Journey extends Emission {
         date = Calendar.getInstance();
     }
 
+    public Journey() {
+
+    }
+
     @Override
     protected void calculateCarbonEmission(){
         switch (transportationType){
@@ -63,10 +72,10 @@ public class Journey extends Emission {
                 else if(fuelType.equals(DIESEL)){
                     fuelConstant = CAR_DIESEL_CO2_CONSTANT;
                 }
-
-                this.carbonEmissionValue = (cityMilesPerGallon * cityDistanceInMiles
-                        + hwyMilesPerGallon * hwyDistanceInMiles)
+                this.carbonEmissionValue = (cityDistanceInMiles / cityMilesPerGallon
+                        + hwyDistanceInMiles / hwyMilesPerGallon)
                         * fuelConstant;
+
                 break;
             case SKYTRAIN:
                 this.carbonEmissionValue = route.getTotalDistance() * SKYTRAIN_CARBON_EMISSIONS_PER_KM_CONSTANT;
@@ -80,17 +89,22 @@ public class Journey extends Emission {
             case BIKE:
                 this.carbonEmissionValue = 0;
         }
+        this.carbonEmissionValue /= SingletonModel.getInstance().getUnitConversionFactor();
+        this.carbonEmissionValue = (float) (Math.round(this.carbonEmissionValue * Math.pow(10, NUM_DECIMAL_PLACES)) / Math.pow(10, NUM_DECIMAL_PLACES));
+    }
 
+    public String getUnit() {
+        return SingletonModel.getInstance().getUnit();
     }
 
     public void setTransportation(Transportation transportation){
         this.transportation = transportation;
+        this.transportationType = transportation.getType();
         calculateCarbonEmission();
     }
 
     public void setRoute(Route route){
         this.route = new Route(route);
-        this.route = (Route) route;
         calculateCarbonEmission();
     }
 
@@ -121,9 +135,13 @@ public class Journey extends Emission {
     }
 
     public float getCarbonEmissionValue() {
+        calculateCarbonEmission();
         return carbonEmissionValue;
     }
 
+    public float getDistance() {
+        return route.getTotalDistance();
+    }
 
     public void setDate(Calendar newDate){
         date = newDate;
@@ -131,5 +149,13 @@ public class Journey extends Emission {
 
     public Calendar getDate(){
         return date;
+    }
+
+    public String getStringDate() {
+
+        String temp = MONTH[date.get(Calendar.MONTH)] + " "
+                    + date.get(Calendar.DAY_OF_MONTH) + ", "
+                    + date.get(Calendar.YEAR);
+        return temp;
     }
 }

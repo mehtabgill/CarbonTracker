@@ -181,14 +181,38 @@ public class AddUtilitiesBillActivity extends AppCompatActivity {
                     Toast.makeText(AddUtilitiesBillActivity.this, getString(R.string.add_bill_button_error), Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Utilities utilities = new Utilities(selectedBillType, billAmount, startDate, endDate, numberOfPeople);
-                    model.addNewUtilities(utilities);
-                    finish();
+                    if(dateOrderCorrect()){
+                        Utilities utilities = new Utilities(selectedBillType, billAmount, startDate, endDate, numberOfPeople);
+                        model.addNewUtilities(utilities);
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(AddUtilitiesBillActivity.this, getString(R.string.date_order_error), Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
         });
 
+    }
+
+    private boolean dateOrderCorrect() {
+        boolean order = false;
+        int yearStart = startDate.get(Calendar.YEAR);
+        int yearEnd = endDate.get(Calendar.YEAR);
+        if(yearStart == yearEnd){
+            int start = startDate.get(Calendar.DAY_OF_YEAR);
+            int end = endDate.get(Calendar.DAY_OF_YEAR);
+            if(start < end){
+                order = true;
+            }
+        }
+        else{
+            if(yearStart < yearEnd){
+                order = true;
+            }
+        }
+        return order;
     }
 
 

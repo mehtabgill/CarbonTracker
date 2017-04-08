@@ -30,11 +30,9 @@
         <activity
             android:name=".TipsActivity"
             android:theme="@style/AppTheme.popUpWindowTheme" />
-
-        <service
-            android:name=".Notifications"
-            android:exported="false">
-        </service>
+        <activity android:name=".ViewJourneyActivity" />
+        <activity android:name=".EditJourneyActivity" />
+        <activity android:name=".OptionsActivity"></activity>
     </application>
 
 </manifest>
