@@ -15,9 +15,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenuActivity" />
-        <activity android:name=".SelectTransportationMode" />
-        <activity android:name=".CarSelectionActivity" />
+        <activity android:name=".MainMenuActivity" android:parentActivityName=".WelcomeScreenActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".WelcomeScreenActivity"/>
+        </activity>
+
+        <activity android:name=".SelectTransportationMode"
+            android:parentActivityName=".MainMenuActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainMenuActivity"/>
+        </activity>
+
+
+        <activity android:name=".CarSelectionActivity" android:parentActivityName=".SelectTransportationMode">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SelectTransportationMode"/>
+        </activity>
+
         <activity android:name=".ViewCarbonFootprintActivity" />
         <activity android:name=".SelectRouteActivity" />
         <activity android:name=".AddRouteActivity" />
@@ -33,6 +50,10 @@
         <activity android:name=".ViewJourneyActivity" />
         <activity android:name=".EditJourneyActivity" />
         <activity android:name=".OptionsActivity"></activity>
+        <service
+            android:name=".Notifications"
+            android:exported="false">
+        </service>
     </application>
 
 </manifest>
