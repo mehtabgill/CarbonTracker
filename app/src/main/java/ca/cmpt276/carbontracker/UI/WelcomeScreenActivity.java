@@ -149,8 +149,8 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
         recycle.setTranslationY(-2000f);
         model.setContext(context);
-        model.openDB(context);
-        model.loadDataFromDB();
+
+        model.loadDataFromDB(getApplicationContext());
 
 
         //notifications
@@ -190,7 +190,6 @@ public class WelcomeScreenActivity extends AppCompatActivity {
                     getString(R.string.load_car_completed), Toast.LENGTH_SHORT).show();
             carStorage.setTotalCarCollection(carCollection);
             DataReader.setFullDataLoaded();
-
         }
     }
 

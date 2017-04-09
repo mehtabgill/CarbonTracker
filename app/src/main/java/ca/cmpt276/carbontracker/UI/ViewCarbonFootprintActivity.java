@@ -46,6 +46,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
     private LineChart lineChart;
     private Menu menu;
     private Button switchButton;
+    private SingletonModel model = SingletonModel.getInstance();
 
     //Column for: Emission type, name of transportation/bill, carbon emission value
     private final int COL_NUM = 3;
@@ -178,7 +179,8 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                             textView.setText(getString(R.string.emission_name_header));
                             break;
                         case 2:
-                            textView.setText(getString(R.string.emission_value_header));
+                            String formattedString = String.format("%1$s (%2$s)", getString(R.string.emission_value_header), model.getUnit());
+                            textView.setText(getString(R.string.emission_value_header) + model.getUnit());
                             break;
                     }
                     currentRow.addView(textView);
@@ -191,7 +193,7 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
                             textView.setText(emissionNameList.get(arrayIndex));
                             break;
                         case 2:
-                            String formattedValue = String.format(getString(R.string.emission_value_formatted_string), carbonEmissionList.get(arrayIndex));
+                            String formattedValue = String.format("%.3f", carbonEmissionList.get(arrayIndex));
                             textView.setText(formattedValue);
                             break;
                     }
@@ -302,7 +304,8 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         ArrayList<Float> skytrainEmissionList = graphData.getSkytrainEmissionValue();
         ArrayList<Float> electricityBillEmissionList = graphData.getElectricityBillEmissionValue();
         ArrayList<Float> gasBillEmissionList = graphData.getGasBillEmissionValue();
-        for(int i = 0; i < graphData.getNumberOfEntries(); i++){
+        int numberOfEntries = graphData.getNumberOfEntries();
+        for(int i = 0; i < numberOfEntries; i++){
             carEntries.add(new Entry(i, carEmissionList.get(i)));
             busEntries.add(new Entry(i, busEmissionList.get(i)));
             skytrainEntries.add(new Entry(i, skytrainEmissionList.get(i)));
@@ -355,12 +358,12 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         float individualTarget = 0;
         float individualActual = 0;
         if(graphMode.equals(GraphDataRetriever.GRAPH_MODE.MONTH)){
-            individualTarget = graphData.getIndividualTarget();
-            individualActual = graphData.getIndividualActual();
+            individualTarget = graphData.getIndividualTarget() / model.getUnitConversionFactor();
+            individualActual = graphData.getIndividualActual() / model.getUnitConversionFactor();
         }
-        else{
-            individualTarget = graphData.getIndividualTarget() * 30;
-            individualActual = graphData.getIndividualActual() * 30;
+        else if(graphMode.equals(GraphDataRetriever.GRAPH_MODE.YEAR)){
+            individualTarget = graphData.getIndividualTarget() * 30 / model.getUnitConversionFactor();
+            individualActual = graphData.getIndividualActual() * 30 / model.getUnitConversionFactor();
         }
         ArrayList<Entry> totalEntries = new ArrayList<>();
         ArrayList<Entry> targetEntries = new ArrayList<>();
@@ -433,10 +436,10 @@ public class ViewCarbonFootprintActivity extends AppCompatActivity {
         Bundle extra = getIntent().getExtras();
         if(extra != null){
             String selected_mode = extra.getString(MainMenuActivity.MODE_KEY);
-            if (selected_mode.equals("1 DAY")){
+            if (selected_mode.equals(getString(R.string.mode_1_day))){
                 graphMode = GraphDataRetriever.GRAPH_MODE.DAY;;
             }
-            else if(selected_mode.equals("LAST 28 DAY")){
+            else if(selected_mode.equals(R.string.mode_28_day)){
                 graphMode = GraphDataRetriever.GRAPH_MODE.MONTH;
             }
             else{

@@ -26,36 +26,12 @@
         android:layout_marginTop="13dp" />
 
     <Button
-        android:text="@string/add_car_button_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_car_button"
-        android:layout_marginRight="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="28dp" />
-
-    <Button
-        android:id="@+id/edit_delete_car_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/add_car_button"
-        android:layout_alignBottom="@+id/add_car_button"
-        android:layout_marginEnd="25dp"
-        android:layout_marginRight="25dp"
-        android:layout_toLeftOf="@+id/add_car_button"
-        android:layout_toStartOf="@+id/add_car_button"
-        android:text="@string/edit_delete_car_button_text" />
-
-    <Button
         android:id="@+id/select_car_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/add_car_button"
-        android:layout_alignRight="@+id/add_car_button"
+        android:layout_marginTop="31dp"
+        android:text="@string/select_car_button_text"
         android:layout_below="@+id/select_car_spinner"
-        android:layout_marginTop="29dp"
-        android:text="@string/select_car_button_text" />
+        android:layout_alignRight="@+id/select_car_textView"
+        android:layout_alignEnd="@+id/select_car_textView" />
 </RelativeLayout>
