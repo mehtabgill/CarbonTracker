@@ -1,6 +1,8 @@
 package ca.cmpt276.carbontracker.UI;
 
+import android.app.ActivityManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,8 +14,14 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
+import ca.cmpt276.carbontracker.Model.CarCollection;
+import ca.cmpt276.carbontracker.Model.CarStorage;
+import ca.cmpt276.carbontracker.Model.DataReader;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 /*
@@ -42,7 +50,12 @@ public class CarSelectionActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
         if(id == R.id.plus_item){
-            startActivity(new Intent(CarSelectionActivity.this, AddCarActivity.class));
+            if(DataReader.isLoaded()){
+                startActivity(new Intent(CarSelectionActivity.this, AddCarActivity.class));
+            }
+            else{
+                Toast.makeText(CarSelectionActivity.this, getString(R.string.loading_car_notification), Toast.LENGTH_SHORT).show();
+            }
         }
         else if(id == R.id.edit_delete_item){
             if(currentCarListDescription.isEmpty()){
@@ -51,9 +64,14 @@ public class CarSelectionActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
             else{
-                Intent intent = new Intent(CarSelectionActivity.this, EditDeleteCarActivity.class);
-                intent.putExtra(DESCRIPTION_KEY, selectedCarIndex);
-                startActivity(intent);
+                if(DataReader.isLoaded()){
+                    Intent intent = new Intent(CarSelectionActivity.this, EditDeleteCarActivity.class);
+                    intent.putExtra(DESCRIPTION_KEY, selectedCarIndex);
+                    startActivity(intent);
+                }
+                else{
+                    Toast.makeText(CarSelectionActivity.this, getString(R.string.loading_car_notification), Toast.LENGTH_SHORT).show();
+                }
             }
         }
         return super.onOptionsItemSelected(item);
@@ -82,6 +100,7 @@ public class CarSelectionActivity extends AppCompatActivity {
             }
         });
         setupSpinnner();
+
     }
 
     @Override
@@ -110,4 +129,6 @@ public class CarSelectionActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

@@ -1,7 +1,9 @@
 package ca.cmpt276.carbontracker.UI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,11 +15,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import ca.cmpt276.carbontracker.Model.Bike;
 import ca.cmpt276.carbontracker.Model.Bus;
+import ca.cmpt276.carbontracker.Model.CarCollection;
+import ca.cmpt276.carbontracker.Model.CarStorage;
+import ca.cmpt276.carbontracker.Model.DataReader;
 import ca.cmpt276.carbontracker.Model.Route;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 import ca.cmpt276.carbontracker.Model.Skytrain;
@@ -28,6 +34,8 @@ public class SelectTransportationMode extends AppCompatActivity {
 
     String ModeSelected = "" ;
     ArrayList<String> TransportationModeList = new ArrayList<>() ;
+    CarStorage carStorage = CarStorage.getInstance();
+    private static Context context;
     Button btnOk ;
     Button btnCancel;
     //tips
@@ -38,14 +46,13 @@ public class SelectTransportationMode extends AppCompatActivity {
     String SKYTRAIN;
     String WALK;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_transportation_mode);
 
         SingletonModel model = SingletonModel.getInstance();
+        context = getApplicationContext();
         model.loadDataFromDB(getApplicationContext());
 
         CAR = getString(R.string.Car);
@@ -74,7 +81,6 @@ public class SelectTransportationMode extends AppCompatActivity {
                 ModeSelected = TransportationItems.getSelectedItem().toString();
 
                 if(ModeSelected.equals(CAR)){
-
 
                     dist.setVisibility(View.INVISIBLE);
                     distEntered.setVisibility(View.INVISIBLE);
@@ -166,42 +172,50 @@ public class SelectTransportationMode extends AppCompatActivity {
                 finish();
             }
         });
-
+        setupNotificationLaunch();
+    }
+    private void setupNotificationLaunch() {
+        if(getIntent().getExtras() != null){
+            Bundle bundle = getIntent().getExtras();
+            boolean startFromNotification = bundle.getBoolean(Notifications.START_ACTIVITY_FROM_NOTIFICATION);
+            if(startFromNotification){
+                if(!DataReader.isLoaded()){
+                    new SelectTransportationMode.LoadCarMakeTask().execute(getResources().openRawResource(R.raw.make_list_data));
+                    new SelectTransportationMode.LoadCarListTask().execute(getResources().openRawResource(R.raw.data));
+                    Toast.makeText(SelectTransportationMode.this, "Start loading", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
-
-
-    /* fix later on laptop
-    Spinner TransportationItems = (Spinner) findViewById(R.id.spinnerTranspportationMode);
-    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-            this, android.R.layout.simple_spinner_item, TransportationModeList);
-    TransportationItems.setAdapter(adapter);
-    TransportationItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            ModeSelected = TransportationItems.getSelectedItem().toString();
-        }
-
+    private class LoadCarMakeTask extends AsyncTask<InputStream, Integer, ArrayList<String>> {
         @Override
-        public void onNothingSelected(AdapterView<?> parent) {
+        protected ArrayList<String> doInBackground(InputStream... is) {
+            return DataReader.getCarMakeList(is[0]);
         }
-    });
 
-
-    EditText distEntered= (EditText)findViewById(R.id.distanceEntered);
-    TextView dist = (TextView)findViewById(R.id.distance);
-
-        if(ModeSelected.equals(CAR)){
-
-
-        dist.setVisibility(View.INVISIBLE);
-        distEntered.setVisibility(View.INVISIBLE);
+        protected void onPostExecute(ArrayList<String> carMakeList) {
+            Toast.makeText(context,
+                    getString(R.string.load_make_completed), Toast.LENGTH_SHORT).show();
+            carStorage.setCarMakeList(carMakeList);
+            DataReader.setMakeDataLoaded();
+        }
     }
-        if(ModeSelected.equals(BUS) || ModeSelected.equals(SKYTRAIN) || ModeSelected.equals(WALK) || ModeSelected.equals(BIKE)){
 
-        dist.setVisibility(View.VISIBLE);
-        distEntered.setVisibility(View.VISIBLE);
-    }*/
+    private class LoadCarListTask extends AsyncTask<InputStream, Integer, CarCollection>
+    {
+        @Override
+        protected CarCollection doInBackground(InputStream... is) {
+            return DataReader.getCarList(is[0]);
+        }
 
+        protected void onPostExecute(CarCollection carCollection){
+            Toast.makeText(context,
+                    getString(R.string.load_car_completed), Toast.LENGTH_SHORT).show();
+            carStorage.setTotalCarCollection(carCollection);
+            DataReader.setFullDataLoaded();
+        }
+    }
 }
 
 

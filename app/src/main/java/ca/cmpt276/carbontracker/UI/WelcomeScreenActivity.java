@@ -190,7 +190,6 @@ public class WelcomeScreenActivity extends AppCompatActivity {
                     getString(R.string.load_car_completed), Toast.LENGTH_SHORT).show();
             carStorage.setTotalCarCollection(carCollection);
             DataReader.setFullDataLoaded();
-
         }
     }
 
