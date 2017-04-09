@@ -30,17 +30,15 @@ public class SelectTransportationMode extends AppCompatActivity {
     ArrayList<String> TransportationModeList = new ArrayList<>() ;
     Button btnOk ;
     Button btnCancel;
-
     //tips
     static int counter = 0; //determines the priority
-
-
-
     String CAR;
     String BUS;
     String BIKE;
     String SKYTRAIN;
     String WALK;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +115,7 @@ public class SelectTransportationMode extends AppCompatActivity {
                     SingletonModel model = SingletonModel.getInstance();
 
                     //TODO: Just a substitute name, need to have layout for getting route name;
-                    String name = "name";
+                    String name = "unnamed";
                     if(ModeSelected.equals(WALK))
                     {
                         newTransportation = new Walk();

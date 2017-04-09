@@ -140,14 +140,7 @@ public final class GraphDataRetriever {
     private void populateDateList(Calendar startDate, Calendar endClone) {
         Calendar startClone = (Calendar) startDate.clone();
         switch (mode){
-            case MONTH:/*
-                while(!equalDate(startClone, endClone)){
-                    Calendar date = (Calendar) startClone.clone();
-                    dateList.add(sdf.format(date.getTime()));
-                    calendarArrayList.add(date);
-                    Log.d("Date added", sdf.format(date.getTime()));
-                    startClone.add(Calendar.DATE, 1);
-                }*/
+            case MONTH:
                 for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
                     Calendar date = (Calendar) startClone.clone();
                     int year = date.get(Calendar.YEAR);
@@ -227,6 +220,7 @@ public final class GraphDataRetriever {
                     busEmissionValue.add(busValueMonth);
                     skytrainEmissionValue.add(skytrainValueMonth);
                 }
+                //Fix this
                 int lastIndex = NUMBER_OF_ENTRIES - 1;
                 carEmissionValue.add(carEmissionValue.get(lastIndex - 1));
                 busEmissionValue.add(busEmissionValue.get(lastIndex - 1));
@@ -246,6 +240,7 @@ public final class GraphDataRetriever {
                 for(int i = 0; i < NUMBER_OF_ENTRIES - 1; i++){
                     getUtilitiesValueByMonth(calendarArrayList.get(i), calendarArrayList.get(i+1));
                 }
+                //Fix this
                 int lastIndex = NUMBER_OF_ENTRIES - 1;
                 electricityBillEmissionValue.add(electricityBillEmissionValue.get(lastIndex - 1));
                 gasBillEmissionValue.add(gasBillEmissionValue.get(lastIndex - 1));
@@ -324,26 +319,31 @@ public final class GraphDataRetriever {
         if(mode == GRAPH_MODE.MONTH){
             for(int i = 0; i < numberOfDays; i++){
                 if(electricValueArrayByMonth.get(i) == 0.0f){
-                    Utilities relativeUtilities = model.getRelativeUtilitiesValue(currentCalendarList.get(i), Utilities.BILL.ELECTRICITY);
-                    float value = relativeUtilities.getDailyAverageEmission();
-
-                    electricValueArrayByMonth.set(i, value);
+                    if(model.billWithTypeExist(Utilities.BILL.ELECTRICITY)){
+                        Utilities relativeUtilities = model.getRelativeUtilitiesValue(currentCalendarList.get(i), Utilities.BILL.ELECTRICITY);
+                        float value = relativeUtilities.getDailyAverageEmission();
+                        electricValueArrayByMonth.set(i, value);
+                    }
                 }
                 if(gasValueArrayByMonth.get(i) == 0.0f){
-                    Utilities relativeUtilities = model.getRelativeUtilitiesValue(currentCalendarList.get(i), Utilities.BILL.GAS);
-                    float value = relativeUtilities.getDailyAverageEmission();
-                    gasValueArrayByMonth.set(i, value);
+                    if(model.billWithTypeExist(Utilities.BILL.GAS)){
+                        Utilities relativeUtilities = model.getRelativeUtilitiesValue(currentCalendarList.get(i), Utilities.BILL.GAS);
+                        float value = relativeUtilities.getDailyAverageEmission();
+                        gasValueArrayByMonth.set(i, value);
+                    }
                 }
             }
             electricityBillEmissionValue = electricValueArrayByMonth;
             gasBillEmissionValue = gasValueArrayByMonth;
         }
         else if(mode.equals(GRAPH_MODE.YEAR)){
+
             int middleIndex = currentCalendarList.size()/2;
             Calendar middleDate = currentCalendarList.get(middleIndex);
-            float electricityRelativeValue = model.getRelativeUtilitiesValue(middleDate, Utilities.BILL.ELECTRICITY).getDailyAverageEmission();
-            float gasRelativeValue = model.getRelativeUtilitiesValue(middleDate, Utilities.BILL.GAS).getDailyAverageEmission();
-
+            float electricityRelativeValue = 0f;
+            float gasRelativeValue = 0f;
+            electricityRelativeValue = model.getRelativeUtilitiesValue(middleDate, Utilities.BILL.ELECTRICITY).getDailyAverageEmission();
+            gasRelativeValue = model.getRelativeUtilitiesValue(middleDate, Utilities.BILL.GAS).getDailyAverageEmission();
             for(int i = 0; i < numberOfDays; i++){
                 if(electricValueArrayByMonth.get(i) == 0){
                     electricityValueForYearEntries += electricityRelativeValue;
@@ -398,12 +398,6 @@ public final class GraphDataRetriever {
         }
         if(journeyCollection.size() > 0) {
             emissionNameList_Route = journeyCollection.getUniqueRouteNames();
-            for (String routeName : emissionNameList_Route) {
-                if (routeName.equals("name")) {
-                    int index = emissionNameList_Route.indexOf(routeName);
-                    emissionNameList_Route.set(index, "unnamed");
-                }
-            }
             for (int i = 0; i < emissionNameList_Route.size(); i++) {
                 Float routeValue = 0f;
                 for (Journey journey : journeyCollection) {
@@ -415,10 +409,11 @@ public final class GraphDataRetriever {
             }
         }
         if(!mode.equals(GRAPH_MODE.DAY)) {
-            for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
+            for(int i = 0; i < NUMBER_OF_ENTRIES - 1; i++){
                 electricityValue += electricityBillEmissionValue.get(i);
                 gasValue += gasBillEmissionValue.get(i);
             }
+
         }
         routeEmissionValue.add(electricityValue);
         routeEmissionValue.add(gasValue);
@@ -538,7 +533,12 @@ public final class GraphDataRetriever {
         Float electricityValue = 0f;
         Float gasValue = 0f;
 
-        for(int i = 0; i < NUMBER_OF_ENTRIES; i++){
+        int numberOfEntries = NUMBER_OF_ENTRIES;
+        if (mode.equals(GRAPH_MODE.YEAR)){
+            numberOfEntries--;
+        }
+
+        for(int i = 0; i < numberOfEntries; i++){
             carValue += carEmissionValue.get(i);
             busValue += busEmissionValue.get(i);
             skytrainValue += skytrainEmissionValue.get(i);

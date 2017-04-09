@@ -6,16 +6,22 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import ca.cmpt276.carbontracker.Model.ActivityConstants;
 import java.util.Calendar;
 
 import ca.cmpt276.carbontracker.Model.DataReader;
@@ -26,7 +32,7 @@ import ca.cmpt276.carbontracker.Model.SingletonModel;
  */
 public class MainMenuActivity extends AppCompatActivity {
 
-    private enum BUTTONS{CREATE_JOURNEY, CREATE_UTILITY_BILL, VIEW_CARBON_FOOTPRINT, EDIT_DELETE_UTILTITY, VIEW_JOURNEY, SETTINGS};
+    private enum BUTTONS{VIEW_CARBON_FOOTPRINT, VIEW_UTILITIES, VIEW_JOURNEY};
     private static int selected_year;
     private static int selected_month;
     private static int selected_date;
@@ -37,30 +43,66 @@ public class MainMenuActivity extends AppCompatActivity {
     public static final String SELECTED_YEAR_KEY = "SELECTED_YEAR";
     public static final String DAY_MODE_KEY = "DAY";
     public static final String MODE_KEY = "MODE";
+
+    BitmapDrawable journeyBackground;
+    BitmapDrawable utilitiesBackground;
+    BitmapDrawable viewDataBackground;
+
+    Button btnViewJourney;
+    Button editDeleteUtilityBillButton;
+    Button viewCarbonFootprintButton;
+    Menu menu;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_main_screen, menu);
+        this.menu = menu;
+        if(SingletonModel.getInstance().inTestingMode()){
+            menu.findItem(R.id.delete_all_data_item).setVisible(true);
+        }
+        else{
+            menu.findItem(R.id.delete_all_data_item).setVisible(false);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        switch (id){
+            case R.id.setting_item:
+                startActivity(new Intent(MainMenuActivity.this,OptionsActivity.class));
+                break;
+            case R.id.info_item:
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainMenuActivity.this);
+                builder.setTitle(getString(R.string.about_header));
+                builder.setMessage(getString(R.string.about));
+                builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+                break;
+            case R.id.delete_all_data_item:
+                if(SingletonModel.getInstance().inTestingMode()){
+                    SingletonModel.getInstance().deleteAllDataFromDB();
+                    Toast.makeText(MainMenuActivity.this, "All data deleted", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-        Button createJourneyButton = (Button) findViewById(R.id.createJourneyButton);
-        Button viewCarbonFootprintButton = (Button) findViewById(R.id.viewCarbonFootprintButton);
-        Button createUtilityBillButton = (Button) findViewById(R.id.create_utility_bill_button);
-        Button editDeleteUtilityBillButton = (Button) findViewById(R.id.edit_delete_utility_buitton);
-        Button btnViewJourney = (Button) findViewById(R.id.btn_View_Journey);
-        Button btnSettings = (Button) findViewById(R.id.btn_settings);
-        createJourneyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickMainMenuButton(BUTTONS.CREATE_JOURNEY);
-            }
-        });
-
-        createUtilityBillButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickMainMenuButton(BUTTONS.CREATE_JOURNEY.CREATE_UTILITY_BILL);
-            }
-        });
+        btnViewJourney = (Button) findViewById(R.id.btn_View_Journey);
+        editDeleteUtilityBillButton = (Button) findViewById(R.id.edit_delete_utility_buitton);
+        viewCarbonFootprintButton = (Button) findViewById(R.id.viewCarbonFootprintButton);
+        setUpButtonImage();
 
         viewCarbonFootprintButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +113,7 @@ public class MainMenuActivity extends AppCompatActivity {
         editDeleteUtilityBillButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickMainMenuButton(BUTTONS.EDIT_DELETE_UTILTITY);
+                clickMainMenuButton(BUTTONS.VIEW_UTILITIES);
             }
         });
         btnViewJourney.setOnClickListener(new View.OnClickListener() {
@@ -80,39 +122,37 @@ public class MainMenuActivity extends AppCompatActivity {
                 clickMainMenuButton(BUTTONS.VIEW_JOURNEY);
             }
         });
-        btnSettings.setOnClickListener(new View.OnClickListener() {
+    }
+
+    private void setUpButtonImage() {
+
+        final RelativeLayout mainMenuLayout = (RelativeLayout) findViewById(R.id.activity_main_menu);
+        ViewTreeObserver observer = mainMenuLayout.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
             @Override
-            public void onClick(View v) {
-                clickMainMenuButton(BUTTONS.SETTINGS);
+            public void onGlobalLayout() {
+                int newWidth = mainMenuLayout.getWidth();
+                int newHeight = (int) (mainMenuLayout.getHeight()/3.5);
+                Bitmap originalBitmap1 =  BitmapFactory.decodeResource(getResources(), R.drawable.journey_tab);
+                Bitmap originalBitmap2 =  BitmapFactory.decodeResource(getResources(), R.drawable.utilities_tab);
+                Bitmap originalBitmap3 =  BitmapFactory.decodeResource(getResources(), R.drawable.data_tab2);
+                Bitmap scaledBitmap1 =  Bitmap.createScaledBitmap(originalBitmap1, newWidth, newHeight, true);
+                Bitmap scaledBitmap2 =  Bitmap.createScaledBitmap(originalBitmap2, newWidth, newHeight, true);
+                Bitmap scaledBitmap3 =  Bitmap.createScaledBitmap(originalBitmap3, newWidth, newHeight, true);
+                journeyBackground = new BitmapDrawable(getResources(), scaledBitmap1);
+                utilitiesBackground = new BitmapDrawable(getResources(), scaledBitmap2);
+                viewDataBackground = new BitmapDrawable(getResources(), scaledBitmap3);
+                btnViewJourney.setBackgroundDrawable(journeyBackground);
+                editDeleteUtilityBillButton.setBackgroundDrawable(utilitiesBackground);
+                viewCarbonFootprintButton.setBackgroundDrawable(viewDataBackground);
             }
         });
-        if(SingletonModel.getInstance().inTestingMode()){
-            Button btnDeleteAll = (Button) findViewById(R.id.btn_delete_all);
-            btnDeleteAll.setVisibility(View.VISIBLE);
-            btnDeleteAll.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    SingletonModel.getInstance().deleteAllDataFromDB();
-                    Toast.makeText(MainMenuActivity.this, "All data deleted", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
+
     }
 
     private void clickMainMenuButton(BUTTONS function) {
         switch (function){
-            //Change this later
-            case CREATE_JOURNEY:
-                if(DataReader.isLoaded()){
-                    startActivity(new Intent(MainMenuActivity.this, SelectTransportationMode.class));
-                }
-                else{
-                    Toast.makeText(MainMenuActivity.this, "Still loading data", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case CREATE_UTILITY_BILL:
-                startActivity(new Intent(MainMenuActivity.this, AddUtilitiesBillActivity.class));
-                break;
             case VIEW_CARBON_FOOTPRINT:
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainMenuActivity.this, android.R.layout.select_dialog_singlechoice);
                 arrayAdapter.add(getString(R.string.mode_1_day));
@@ -164,14 +204,11 @@ public class MainMenuActivity extends AppCompatActivity {
                 });
                 builder.show();
                 break;
-            case EDIT_DELETE_UTILTITY:
+            case VIEW_UTILITIES:
                 startActivity(new Intent(MainMenuActivity.this, EditDeleteUtilitiesActivity.class));
                 break;
             case VIEW_JOURNEY:
                 startActivity(new Intent(MainMenuActivity.this, ViewJourneyActivity.class));
-                break;
-            case SETTINGS:
-                startActivity(new Intent(MainMenuActivity.this,OptionsActivity.class));
                 break;
         }
     }

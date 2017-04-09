@@ -33,11 +33,11 @@
         android:id="@+id/edit_make_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_below="@+id/edit_model_textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/edit_model_textView"
-        android:layout_marginTop="39dp"
-        android:layout_weight="1" />
+        android:layout_marginTop="42dp" />
 
     <Spinner
         android:id="@+id/edit_model_spinner"
@@ -45,11 +45,11 @@
         tools:layout_editor_absoluteY="222dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_below="@+id/edit_make_spinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/edit_make_spinner"
-        android:layout_marginTop="77dp"
-        android:layout_weight="1" />
+        android:layout_marginTop="92dp" />
 
     <Spinner
         android:id="@+id/edit_year_spinner"
@@ -57,39 +57,41 @@
         tools:layout_editor_absoluteY="286dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/delete_car_button"
+        android:layout_weight="1"
+        android:layout_below="@+id/edit_model_spinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="52dp"
-        android:layout_weight="1" />
+        android:layout_marginTop="83dp" />
 
     <Button
         android:id="@+id/delete_car_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/delete_text"
-        tools:layout_editor_absoluteX="65dp"
-        tools:layout_editor_absoluteY="447dp"
-        android:layout_marginRight="17dp"
-        android:layout_marginEnd="17dp"
         android:layout_alignBaseline="@+id/save_edited_button"
         android:layout_alignBottom="@+id/save_edited_button"
+        android:layout_marginEnd="17dp"
+        android:layout_marginRight="17dp"
         android:layout_toLeftOf="@+id/edit_nickname_editText"
-        android:layout_toStartOf="@+id/edit_nickname_editText" />
+        android:layout_toStartOf="@+id/edit_nickname_editText"
+        android:layout_weight="1"
+        android:text="@string/delete_text"
+        android:visibility="gone"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="447dp" />
 
     <Button
         android:id="@+id/save_edited_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/edit_nickname_editText"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/edit_nickname_editText"
+        android:layout_marginBottom="23dp"
         android:layout_weight="1"
         android:text="@string/save_car_info_button_text"
+        android:visibility="gone"
         tools:layout_editor_absoluteX="181dp"
-        tools:layout_editor_absoluteY="447dp"
-        android:layout_marginBottom="23dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/edit_nickname_editText"
-        android:layout_alignStart="@+id/edit_nickname_editText" />
+        tools:layout_editor_absoluteY="447dp" />
 
     <TextView
         android:id="@+id/edit_model_textView"

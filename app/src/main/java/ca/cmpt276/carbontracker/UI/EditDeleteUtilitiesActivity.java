@@ -4,11 +4,14 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,6 +40,7 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
     private int selectedBillIndex;
     private Utilities selectedBill;
 
+    private Menu menu;
     private Spinner selectBillTypeSpinner;
     private EditText billAmountEditText;
     private EditText numberOfPeopleEditText;
@@ -62,6 +66,23 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
     ArrayList<String> utilitiesBillList;
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_plus, menu);
+        this.menu = menu;
+        menu.findItem(R.id.edit_delete_item).setVisible(false);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == R.id.plus_item){
+            startActivity(new Intent(EditDeleteUtilitiesActivity.this, AddUtilitiesBillActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_delete_utilities_bill);
@@ -80,6 +101,12 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume(){
+        super.onResume();
+        setupUtilitiesBillListView();
+    }
+
+    @Override
     public void onBackPressed(){
         if(editBillLayout.getVisibility() == View.VISIBLE){
             selectBillLayout.setVisibility(View.VISIBLE);
@@ -89,6 +116,7 @@ public class EditDeleteUtilitiesActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
 
     private void setupUtilitiesBillListView() {
         editBillLayout.setVisibility(View.INVISIBLE);

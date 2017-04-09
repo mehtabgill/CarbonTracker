@@ -4,13 +4,13 @@
 
     <item
         android:id="@+id/edit"
-        android:icon="@android:drawable/ic_menu_edit"
+        android:icon="@drawable/tick_mark"
         android:title="Edit"
         android:visible="false"
         app:showAsAction="always" />
     <item
         android:id="@+id/delete"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/editing_delete_icon"
         android:title="Delete"
         app:showAsAction="always" />
     <item

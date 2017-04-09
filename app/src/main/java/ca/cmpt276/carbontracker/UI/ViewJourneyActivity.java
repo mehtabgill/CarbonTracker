@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,9 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import ca.cmpt276.carbontracker.Model.DataReader;
 import ca.cmpt276.carbontracker.Model.SingletonModel;
 
 
@@ -33,6 +37,30 @@ public class ViewJourneyActivity extends AppCompatActivity {
     public static int NUM_COLUMNS = 5;
 
     SingletonModel model = SingletonModel.getInstance();
+
+    private Menu menu;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_plus, menu);
+        this.menu = menu;
+        menu.findItem(R.id.edit_delete_item).setVisible(false);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if (id == R.id.plus_item){
+            if(DataReader.isLoaded()){
+                startActivity(new Intent(ViewJourneyActivity.this, SelectTransportationMode.class));
+            }
+            else{
+                Toast.makeText(ViewJourneyActivity.this, "Still loading data", Toast.LENGTH_SHORT).show();
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

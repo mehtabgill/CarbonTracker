@@ -2,13 +2,13 @@
     <string name="app_name">CarbonTracker</string>
     <string name="create_journey_button">CREATE NEW JOURNEY</string>
     <string name="create_utilities_bill_button">CREATE NEW UTILITY BILL</string>
-    <string name="view_utilities_bill_button">VIEW UTILITIES</string>
-    <string name="view_carbon_footprint_button">VIEW CARBON FOOTPRINT</string>\
+    <string name="view_utilities_bill_button">Utilites</string>
+    <string name="view_carbon_footprint_button">Carbon Footprint</string>\
     <string name="Additional_Info">Displacement vol: %1$f Transmission type: %2$s</string>
     <string name="Car_Description">%1$s $2$s %3$d %4$s</string>
     <string name="select_car_description">Select your car in this journey from the drop down list.
-        \nPress Edit/Delete Car to edit/delete selected car.
-        \nPress New Car to add new car to the list </string>
+        \nPress edit icon to edit/delete selected car.
+        \nPress plus icon to add new car to the list </string>
     <string name="select_car_button_text">SELECT CAR</string>
     <string name="add_car_button_text">NEW CAR</string>
     <string name="edit_delete_car_button_text">EDIT/DELETE CAR</string>
@@ -56,9 +56,9 @@
     <string name="journey_car_name_header">Car Name </string>
     <string name="emission_type_header">Emission Type</string>
     <string name="emission_name_header">Emission Name</string>
-    <string name="emission_value_header">Emission Value (kg)</string>
+    <string name="emission_value_header">Emission Value\n</string>
     <string name="emission_value_formatted_string">%.3f</string>
-    <string name="journey_carbon_emission_header">Carbon Emission\n(kg)</string>
+    <string name="journey_carbon_emission_header">Carbon Emission\n</string>
     <string name="switch_button">SWITCH TO PIE CHART/TABLE</string>
     <string name="existing_car_text">Existing Routes</string>
     <string name="no_existing_car_text">No Existing Routes</string>
@@ -78,7 +78,7 @@
     <string name="number_of_people_error">Error: Amount of people must be greater than 0</string>
     <string name="add_bill_button_error">Error: Not all entries required are filled</string>
     <string name="date_order_error">Error: Starting date of the bill must be before end date of the bill</string>
-    <string name="edit_delete_bill_description">Select the bill you want to retrieve information. Click on the bill and choose the action you want from the popup menu </string>
+    <string name="edit_delete_bill_description">Select the bill you want to retrieve information.\nClick on the bill and choose the action you want from the popup menu. Click plus icon to add new bill</string>
     <string name="select_bill_error">There are no bill to select</string>
     <string name="select_utilities_bill_popup_title">Select this bill for: </string>
     <string name="deleted_bill_confirmed">Bill Deleted</string>
@@ -92,7 +92,7 @@
     <string name="nextTip">Next Tip</string>
     <string name="KM">KM</string>
     <string name="KG">KG</string>
-    <string name="view_journey">View Journey</string>
+    <string name="view_journey">Journey</string>
     <string name="route">Route</string>
     <string name="Car">Car</string>
     <string name="Bus">Bus</string>
@@ -108,9 +108,9 @@
     <string name="Journey">Journey</string>
     <string name="Utilities">Utilities</string>
     <string name="select_time_range_popup">Select your time range:</string>
-    <string name="mode_1_day">1 DAY</string>
-    <string name="mode_28_day">LAST 28 DAY</string>
-    <string name="mode_365_day">LAST 365 DAY</string>
+    <string name="mode_1_day">1 Day</string>
+    <string name="mode_28_day">Last 28 Days</string>
+    <string name="mode_365_day">Last 365 Days</string>
     <string name="calendar_header">Select your date: </string>
     <string name="distance_hwy">Distance (Hwy):</string>
     <string name="distance_city">Distance (City):</string>
@@ -120,4 +120,21 @@
     <string name="edit_journey_title">Edit Journey</string>
     <string name="delete_all_data">Delete All Data</string>
     <string name="settings">Settings</string>
+    <string name="about">ABOUT:\nThis is an app
+        for tracking your daily activity and your carbon emission
+        count. It can calculate the carbon
+        amount you emitted based on your
+        transportation(using car/bike/public
+        transportation) and your use of
+        utilities(gas/electricity). From these
+        data, you can learn to be more conscious of your emission, reduce it,
+        and adapt to an enviromental-friendly lifestyle.\nGROUP:\nThe group
+        is 4 students that took CMPT276 course in Spring 2017 at SFU.
+        Our group name is Salmon\nLINK TO SFU COMPUTING SCIENCE
+        PAGE:\n<a href="https://www.sfu.ca/computing.html">https://www.sfu.ca/computing.html</a>\nRESOURCES:\nAll of our images do not belong to any member of the team and
+        are found using Google search.
+        All images belong to their rightful
+        owner/creator.
+    </string>
+    <string name="about_header">About</string>
 </resources>
