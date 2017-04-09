@@ -51,7 +51,10 @@ public class SingletonModel {
         database.close();
     }
 
-    public void loadDataFromDB() {
+    public void loadDataFromDB(Context context) {
+        if(database == null) {
+            openDB(context);
+        }
         loadCarsFromDB();
         loadRoutesFromDB();
         loadJourneysFromDB();

@@ -149,8 +149,8 @@ public class WelcomeScreenActivity extends AppCompatActivity {
 
         recycle.setTranslationY(-2000f);
         model.setContext(context);
-        model.openDB(context);
-        model.loadDataFromDB();
+
+        model.loadDataFromDB(getApplicationContext());
 
 
         //notifications
